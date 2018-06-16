@@ -1,0 +1,84 @@
+SERVICE_NAME=caifubao-service-all
+CMD=usage
+pwd_list="/data/jcpt/config/caifubao-config /data/jcpt/service/service-auth /data/jcpt/service/service-pingan"
+pwd_list=$pwd_list" /data/jcpt/service/service-tradecenter /data/jcpt/www/wi-tradecenter"
+pwd_list=$pwd_list" /data/jcpt/service/service-calculation /data/jcpt/www/web-calculation"
+pwd_list=$pwd_list" /data/jcpt/service/service-paycenter"
+pwd_list=$pwd_list" /data/jcpt/service/service-account /data/jcpt/www/wi-account /data/jcpt/www/web-account"
+pwd_list=$pwd_list" /data/jcpt/service/service-useraddress"
+pwd_list=$pwd_list" /data/jcpt/service/service-colour-invest /data/jcpt/www/wi-colour-invest"
+pwd_list=$pwd_list" /data/jcpt/www/web-schedule /data/jcpt/www/web-notice"
+
+
+usage() {
+    echo "service list,please confirm"
+    for xpwd in $pwd_list
+    do 
+      echo $xpwd
+      echo ${xpwd##*/}"-test.sh"
+    done
+    echo "Usage: sh "$SERVICE_NAME".sh [start|stop|check|deploy|kill]"
+    exit 1
+}
+changeV(){
+  for xpwd in $pwd_list
+    do 
+      cd $xpwd
+      cp ${xpwd##*/}"-test.sh" ${xpwd##*/}"-test.sh.bak"
+      sed -i s/${1}/${2}/ ${xpwd##*/}"-test.sh"
+      echo s/${1}/${2}/ ${xpwd##*/}"-test.sh"
+    done 
+    exit 1
+}
+
+do_cmd(){
+for xpwd in $pwd_list
+    do
+      #echo $xpwd
+      #echo ${xpwd##*/}
+      echo $CMD ${xpwd##*/} "start"
+      cd $xpwd
+      sh ${xpwd##*/}-test.sh $CMD
+      echo $CMD ${xpwd##*/} "finished-----------------------------"
+      sleep 2
+    done 
+#echo $CMD "caifubao-config start"
+ #cd /data/jcpt/config/caifubao-config
+ #sh caifubao-config-test.sh $CMD
+ #echo $CMD "caifubao-config finished"
+}
+
+
+case "$1" in
+    "start")
+        CMD=start
+        do_cmd
+        ;;
+    "stop")
+        CMD=stop
+        do_cmd
+        ;;
+    "check")
+        CMD=check
+        do_cmd
+        ;;
+    "kill")
+       CMD=kill
+        do_cmd
+        ;;
+    "deploy")
+        CMD=kill
+        do_cmd
+        CMD=deploy
+        do_cmd
+        ;;
+    "changeV")
+        CMD=changeV
+        changeV $2 $3
+        ;;
+    *)
+        CMD=usage
+        usage
+        ;;
+esac
+

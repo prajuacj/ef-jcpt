@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ef</groupId>
+    <artifactId>ef-jcpt</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.ef.jcpt</groupId>
+  <artifactId>jcpt-service</artifactId>
+  <packaging>pom</packaging>
+  <name>jcpt-service</name>
+  <description>service父项目</description>
+  <modules>
+  	<module>service-user</module>
+  	<module>service-tradecenter</module>
+  </modules>
+</project>
