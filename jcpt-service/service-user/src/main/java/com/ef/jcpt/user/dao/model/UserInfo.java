@@ -7,6 +7,8 @@ public class UserInfo {
 
     private String userName;
 
+    private String loginPassword;
+
     private String realName;
 
     private String certType;
@@ -39,6 +41,14 @@ public class UserInfo {
 
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword == null ? null : loginPassword.trim();
     }
 
     public String getRealName() {
