@@ -113,7 +113,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/login")
-	public @ResponseBody BasicServiceModel<Map<String, Object>> login(@RequestParam(value = "username") String username,
+	public @ResponseBody BasicServiceModel<Map<String, Object>> login(@RequestParam(value = "userName") String userName,
 			@RequestParam(value = "password") String password,
 			@RequestParam(value = "captcha", required = false) String captcha,
 			@RequestParam(value = "remember_me", required = false, defaultValue = "1") String remember_me,
@@ -124,19 +124,19 @@ public class UserController extends BaseController {
 																 * Subject subject = SecurityUtils.getSubject(); Session
 																 * session = subject.getSession();
 																 */
-		if (null == username) {
-			username = appID;
+		if (null == userName) {
+			userName = appID;
 		}
 		UserInfoBo member = new UserInfoBo();
-		member.setUserName(username);
+		member.setUserName(userName);
 
 		try {
-			boolean isLogin = userServiceImpl.login(username, password);
+			boolean isLogin = userServiceImpl.login(userName, password);
 			if (isLogin) {
 				TokenVo token = new TokenVo();
 				token.setUser(member);
-				String tokenKey = cacheUtil.setToken(token, username);
-				map.put("token", tokenKey);
+				String tokenKey = cacheUtil.setToken(token, userName);
+				map.put("tokenKey", tokenKey);
 				map.put("member", member);
 				result.setCode(ReqStatusConst.OK);
 				result.setData(map);
@@ -155,19 +155,19 @@ public class UserController extends BaseController {
 
 	@RequestMapping("/updatePwd")
 	public @ResponseBody BasicServiceModel<String> updatePwd(
-			@RequestParam(required = true, value = "username") String username,
+			@RequestParam(required = true, value = "userName") String userName,
 			@RequestParam(required = true, value = "newPasswd") String newPasswd,
 			@RequestParam(required = true, value = "mode") String mode,
 			@RequestParam(required = false, value = "oldPassword") String oldPassword,
 			@RequestParam(required = false, value = "validCode") String mobileCode) {
 		BasicServiceModel<String> result = new BasicServiceModel<String>();
 
-		UserInfoBo bo = userServiceImpl.findMemberExist(username);
+		UserInfoBo bo = userServiceImpl.findMemberExist(userName);
 		if (null != bo) {
 			try {
 				if (null != mode && mode.equals("1")) {
 					// mode=1:验证旧密码是否正确
-					boolean isLogin = userServiceImpl.login(username, oldPassword);
+					boolean isLogin = userServiceImpl.login(userName, oldPassword);
 					if (!isLogin) {
 						result.setCode(ReqStatusConst.FAIL);
 						result.setMsg("修改失败，原密码不正确！");
@@ -176,7 +176,7 @@ public class UserController extends BaseController {
 				} else if (null != mode && mode.equals("2")) {
 					// mode=2:验证手机验证码是否正确
 					String sessionValidCode = ToolSendSMSUtil
-							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + username);
+							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + userName);
 					if ((null == sessionValidCode) || (!sessionValidCode.equals(mobileCode))) {
 						result.setCode(ReqStatusConst.FAIL);
 						result.setMsg("修改失败，手机验证码错误！");
@@ -184,7 +184,7 @@ public class UserController extends BaseController {
 					}
 				}
 				// 修改密码
-				userServiceImpl.updatePwd(username, newPasswd);
+				userServiceImpl.updatePwd(userName, newPasswd);
 				result.setCode(ReqStatusConst.OK);
 				result.setData("修改密码成功");
 				return result;
