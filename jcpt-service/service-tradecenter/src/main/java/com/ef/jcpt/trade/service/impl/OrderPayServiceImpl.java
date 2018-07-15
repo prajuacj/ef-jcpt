@@ -43,4 +43,20 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		BeanUtils.copyProperties(payInfo, bo);
 		return bo;
 	}
+	
+	public PayInfoBo queryPayInfoByKey(String flowId) {
+		PayInfoBo bo = new PayInfoBo();
+		PayInfo info=payInfoMapper.selectByPrimaryKey(flowId);
+		BeanUtils.copyProperties(info, bo);
+		return bo;
+	}
+
+	@Override
+	public PayInfoBo queryPayInfoByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		PayInfoBo bo = new PayInfoBo();
+		PayInfo info = payInfoMapper.selectByOrderId(orderId);
+		BeanUtils.copyProperties(info, bo);
+		return bo;
+	}
 }

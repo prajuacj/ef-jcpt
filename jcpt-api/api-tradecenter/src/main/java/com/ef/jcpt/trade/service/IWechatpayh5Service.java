@@ -3,18 +3,21 @@ package com.ef.jcpt.trade.service;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ef.jcpt.trade.service.bo.SNSUserInfo;
 
 public interface IWechatpayh5Service {
 
 	// 微信进行首次链接验证确保正确的token
-	public String toPay(Map<String, String> requestParams);
+	public void toPay(HttpServletRequest request, HttpServletResponse response);
 
 	// 点击支付时提交
 	public Map<String, Object> submitwhchat(String paySn);
 
 	// 获得code后进行第二次跳转
-	public String toPay2(Map<String, String> requestParams) throws IOException;
+	public void toPay2(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
 	// 获取网页授权信息 appid 公众账号唯一标示 ，appsecret 公众账号的秘钥
 	public SNSUserInfo getOauth2AccessToken(String Appid, String appSecret, String code);
