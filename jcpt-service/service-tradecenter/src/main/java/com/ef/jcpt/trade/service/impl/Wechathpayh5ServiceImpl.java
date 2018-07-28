@@ -125,7 +125,7 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		String nonceStr2 = nonce_str;
 		String prepay_id2 = "prepay_id=" + prepay_id;
 		String packages = prepay_id2;
-		finalpackage.put("appId", appid2);
+		//finalpackage.put("appId", appid2);
 		finalpackage.put("timeStamp", timestamp2);
 		finalpackage.put("nonceStr", nonceStr2);
 		// packages=new String(packages.getBytes("ISO-8859-1"),"UTF-8");//转码

@@ -33,4 +33,10 @@ public class OrderTradeController extends BaseController {
 			@RequestParam(required = false, value = "memberType") String memberType) {
 		return null;
 	}
+
+	@RequestMapping("/toPay")
+	@ResponseBody
+	public BasicServiceModel<String> listOrder(@RequestParam(required = true, value = "userId") String userId) {
+		return null;
+	}
 }

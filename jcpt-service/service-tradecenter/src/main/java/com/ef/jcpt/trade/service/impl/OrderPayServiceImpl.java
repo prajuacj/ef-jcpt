@@ -2,6 +2,7 @@ package com.ef.jcpt.trade.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
@@ -103,5 +104,11 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			bsm.setMsg(e.getMessage());
 			return bsm;
 		}
+	}
+
+	@Override
+	public BasicServiceModel<List<OrderInfoBo>> listOrder(String userId) {
+		// TODO Auto-generated method stub
+		return orderInfoComponent.listOrder(userId);
 	}
 }
