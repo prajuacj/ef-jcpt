@@ -11,29 +11,33 @@ public class PayInfoBo implements Serializable {
 	 */
 	private static final long serialVersionUID = -6657815823991155742L;
 
-	private String flowId;
+	 private String flowId;
 
-	private String orderId;
+		private String orderId;
 
-	private BigDecimal payAmount;
+		private String userId;
 
-	private String payChannel;
+		private String orderContent;
 
-	private String payStatus;
+		private BigDecimal payAmount;
 
-	private BigDecimal handFee;
+		private String payChannel;
 
-	private String requestParam;
+		private String payStatus;
 
-	private String responseContent;
+		private BigDecimal handFee;
 
-	private String payMemo;
+		private String requestParam;
 
-	private String failReason;
+		private String responseContent;
 
-	private Date createTime;
+		private String payMemo;
 
-	private Date updateTime;
+		private String failReason;
+
+		private Date createTime;
+
+		private Date updateTime;
 
 	public String getFlowId() {
 		return flowId;
@@ -129,5 +133,21 @@ public class PayInfoBo implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getOrderContent() {
+		return orderContent;
+	}
+
+	public void setOrderContent(String orderContent) {
+		this.orderContent = orderContent;
 	}
 }

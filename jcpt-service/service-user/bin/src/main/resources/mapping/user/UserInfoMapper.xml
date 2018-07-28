@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ef.jcpt.user.dao.UserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.ef.jcpt.user.dao.model.UserInfo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
+		<result column="real_name" jdbcType="VARCHAR" property="realName" />
+		<result column="cert_type" jdbcType="VARCHAR" property="certType" />
+		<result column="cert_code" jdbcType="VARCHAR" property="certCode" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="sex" jdbcType="VARCHAR" property="sex" />
+		<result column="mifi_serial" jdbcType="VARCHAR" property="mifiSerial" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="country" jdbcType="VARCHAR" property="country" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_name, login_password, real_name, cert_type,
+		cert_code, mobile,
+		sex, mifi_serial,
+		create_time, update_time, country
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ef_user_info
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		ef_user_info
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
+		insert into ef_user_info (id,
+		user_name, login_password,
+		real_name, cert_type, cert_code,
+		mobile, sex,
+		mifi_serial,
+		create_time, update_time, country
+		)
+		values
+		(#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+		#{loginPassword,jdbcType=VARCHAR},
+		#{realName,jdbcType=VARCHAR},
+		#{certType,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
+		#{mifiSerial,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{country,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
+		insert into ef_user_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="loginPassword != null">
+				login_password,
+			</if>
+			<if test="realName != null">
+				real_name,
+			</if>
+			<if test="certType != null">
+				cert_type,
+			</if>
+			<if test="certCode != null">
+				cert_code,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="mifiSerial != null">
+				mifi_serial,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="country != null">
+				country,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="loginPassword != null">
+				#{loginPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="certType != null">
+				#{certType,jdbcType=VARCHAR},
+			</if>
+			<if test="certCode != null">
+				#{certCode,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="mifiSerial != null">
+				#{mifiSerial,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="country != null">
+				#{country,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
+		update ef_user_info
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="loginPassword != null">
+				login_password = #{loginPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="certType != null">
+				cert_type = #{certType,jdbcType=VARCHAR},
+			</if>
+			<if test="certCode != null">
+				cert_code = #{certCode,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="mifiSerial != null">
+				mifi_serial = #{mifiSerial,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="country != null">
+				country = #{country,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
+		update
+		ef_user_info
+		set user_name = #{userName,jdbcType=VARCHAR},
+		login_password = #{loginPassword,jdbcType=VARCHAR},
+		real_name =
+		#{realName,jdbcType=VARCHAR},
+		cert_type = #{certType,jdbcType=VARCHAR},
+		cert_code = #{certCode,jdbcType=VARCHAR},
+		mobile =
+		#{mobile,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=VARCHAR},
+		mifi_serial =
+		#{mifiSerial,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		country = #{country,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectCountByUserName" parameterType="java.lang.String"
+		resultType="int">
+		select count(*)
+		from ef_user_info
+		where user_name =
+		#{userName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectUserByUserName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ef_user_info
+		where user_name =
+		#{userName,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateUserPwd" parameterType="java.lang.String">
+		update
+		ef_user_info
+		set
+		login_password =#{loginPassword,jdbcType=VARCHAR}
+		where user_name =
+		#{userName,jdbcType=VARCHAR}
+	</update>
+</mapper>

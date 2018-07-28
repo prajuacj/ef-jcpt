@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.ef.jcpt.trade.dao.model.PayInfo">
     <id column="flow_id" jdbcType="VARCHAR" property="flowId" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="order_content" jdbcType="VARCHAR" property="orderContent" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="pay_channel" jdbcType="VARCHAR" property="payChannel" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
@@ -16,8 +18,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    flow_id, order_id, pay_amount, pay_channel, pay_status, hand_fee, request_param, 
-    response_content, pay_memo, fail_reason, create_time, update_time
+    flow_id, order_id, user_id, order_content, pay_amount, pay_channel, pay_status, hand_fee, 
+    request_param, response_content, pay_memo, fail_reason, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -30,16 +32,16 @@
     where flow_id = #{flowId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
-    insert into ef_pay_info (flow_id, order_id, pay_amount, 
-      pay_channel, pay_status, hand_fee, 
-      request_param, response_content, pay_memo, 
-      fail_reason, create_time, update_time
-      )
-    values (#{flowId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, 
-      #{payChannel,jdbcType=VARCHAR}, #{payStatus,jdbcType=VARCHAR}, #{handFee,jdbcType=DECIMAL}, 
-      #{requestParam,jdbcType=VARCHAR}, #{responseContent,jdbcType=VARCHAR}, #{payMemo,jdbcType=VARCHAR}, 
-      #{failReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into ef_pay_info (flow_id, order_id, user_id, 
+      order_content, pay_amount, pay_channel, 
+      pay_status, hand_fee, request_param, 
+      response_content, pay_memo, fail_reason, 
+      create_time, update_time)
+    values (#{flowId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{orderContent,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, #{payChannel,jdbcType=VARCHAR}, 
+      #{payStatus,jdbcType=VARCHAR}, #{handFee,jdbcType=DECIMAL}, #{requestParam,jdbcType=VARCHAR}, 
+      #{responseContent,jdbcType=VARCHAR}, #{payMemo,jdbcType=VARCHAR}, #{failReason,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
     insert into ef_pay_info
@@ -49,6 +51,12 @@
       </if>
       <if test="orderId != null">
         order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="orderContent != null">
+        order_content,
       </if>
       <if test="payAmount != null">
         pay_amount,
@@ -88,6 +96,12 @@
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
       </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderContent != null">
+        #{orderContent,jdbcType=VARCHAR},
+      </if>
       <if test="payAmount != null">
         #{payAmount,jdbcType=DECIMAL},
       </if>
@@ -126,6 +140,12 @@
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=VARCHAR},
       </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderContent != null">
+        order_content = #{orderContent,jdbcType=VARCHAR},
+      </if>
       <if test="payAmount != null">
         pay_amount = #{payAmount,jdbcType=DECIMAL},
       </if>
@@ -162,6 +182,8 @@
   <update id="updateByPrimaryKey" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
     update ef_pay_info
     set order_id = #{orderId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      order_content = #{orderContent,jdbcType=VARCHAR},
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       pay_channel = #{payChannel,jdbcType=VARCHAR},
       pay_status = #{payStatus,jdbcType=VARCHAR},

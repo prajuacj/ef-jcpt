@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderInfo {
-    private String orderId;
+
+	private String orderId;
 
     private String mobile;
 

@@ -1,19 +1,23 @@
 package com.ef.jcpt.trade.dao;
 
+import org.springframework.stereotype.Repository;
+
 import com.ef.jcpt.trade.dao.model.PayInfo;
 
+@Repository
 public interface PayInfoMapper {
-    int deleteByPrimaryKey(String flowId);
 
-    int insert(PayInfo record);
+	int deleteByPrimaryKey(String flowId);
 
-    int insertSelective(PayInfo record);
+	int insert(PayInfo record);
 
-    PayInfo selectByPrimaryKey(String flowId);
+	int insertSelective(PayInfo record);
 
-    int updateByPrimaryKeySelective(PayInfo record);
+	PayInfo selectByPrimaryKey(String flowId);
 
-    int updateByPrimaryKey(PayInfo record);
+	int updateByPrimaryKeySelective(PayInfo record);
+
+	int updateByPrimaryKey(PayInfo record);
 
 	PayInfo selectByOrderId(String orderId);
 }

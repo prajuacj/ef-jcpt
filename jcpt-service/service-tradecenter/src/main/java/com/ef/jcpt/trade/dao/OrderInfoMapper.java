@@ -1,17 +1,21 @@
 package com.ef.jcpt.trade.dao;
 
+import org.springframework.stereotype.Repository;
+
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 
+@Repository
 public interface OrderInfoMapper {
-    int deleteByPrimaryKey(String orderId);
 
-    int insert(OrderInfo record);
+	int deleteByPrimaryKey(String orderId);
 
-    int insertSelective(OrderInfo record);
+	int insert(OrderInfo record);
 
-    OrderInfo selectByPrimaryKey(String orderId);
+	int insertSelective(OrderInfo record);
 
-    int updateByPrimaryKeySelective(OrderInfo record);
+	OrderInfo selectByPrimaryKey(String orderId);
 
-    int updateByPrimaryKey(OrderInfo record);
+	int updateByPrimaryKeySelective(OrderInfo record);
+
+	int updateByPrimaryKey(OrderInfo record);
 }

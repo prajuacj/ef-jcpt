@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <properties>
+		<property name="dialect" value="MYSQL" />
+
+		<property name="encrypt_1" value="{'tableName':'user_info','colName':'real_name','paramName':'realName'}" />
+		<property name="encrypt_2" value="{'tableName':'user_info','colName':'cert_code','paramName':'certCode'}" />
+		<property name="encrypt_3" value="{'tableName':'user_info','colName':'cert_sha1','paramName':'certSha1','arithmetic':'SHA1'}" />
+		<property name="encrypt_4" value="{'tableName':'tied_card_info','colName':'card_user','paramName':'cardUser'}" />
+		<property name="encrypt_5" value="{'tableName':'tied_card_info','colName':'card_no','paramName':'cardNo'}" />
+
+		<property name="decrypt_tables" value="user_info,tied_card_info" />
+		<property name="decrypt_columnNames" value="real_name,cert_code,card_user,card_no" />
+		<property name="decrypt_properties" value="realName,certCode,cardUser,cardNo" />
+
+	</properties> -->
+	<settings>
+		<setting name="lazyLoadingEnabled" value="true" />
+		<!--延迟加载时按需加载属性 -->
+		<setting name="aggressiveLazyLoading" value="false" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.ObjectTypeHandler" />
+	</typeHandlers>
+
+	<!-- <plugins>
+		<plugin interceptor="com.caifubao.jcpt.core.mybatis.plugin.EncryptInterceptor" />
+		<plugin interceptor="com.caifubao.jcpt.core.mybatis.plugin.DecryptInterceptor" />
+		<plugin interceptor="com.caifubao.jcpt.core.mybatis.plugin.PaginationInterceptor" />
+	</plugins> -->
+</configuration>
