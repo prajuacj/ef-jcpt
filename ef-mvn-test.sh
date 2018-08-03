@@ -4,8 +4,8 @@ APP_NAME=caifubao-mvn-test
 #set java home
 export JAVA_HOME=/usr/local/java/jdk1.8.0_144
 MVN_HOME=/usr/local/maven
-GIT_BRANCH=test-mc
-#GIT_BRANCH=master
+#GIT_BRANCH=test-mc20180727
+GIT_BRANCH=master
 GIT_FOLDER="${COMPILE_DIR}/.git"
 
 #--------svn更新--------
@@ -17,7 +17,7 @@ svnupdate()
 echo $GIT_FOLDER;
 if [ ! -d "$GIT_FOLDER" ];then
 	echo "clone代码"
-	git clone --branch=$GIT_BRANCH --depth=1 git@10.50.10.214:jcpt/caifubao-jcpt.git $COMPILE_DIR
+	git clone --branch=$GIT_BRANCH --depth=1 https://github.com/prajuacj/xa-eb.git $COMPILE_DIR
 else
 	echo "pull代码"
 	git --git-dir=$GIT_FOLDER pull origin $GIT_BRANCH
