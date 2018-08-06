@@ -27,42 +27,14 @@ usage() {
     exit 1
 }
 
-#--------svn更新--------
-svnupdate()
- {
-  export LANG=zh_CN.UTF-8
-  rm -rf $COMPILE_DIR/
-# /usr/bin/svn export --username yuhh --password hhuayu http://10.50.10.205/svn/p2p/project/base-platform/source/caifubao-jcpt $COMPILE_DIR --force
-git clone --branch=$GIT_BRANCH --depth=1 git@10.50.10.214:jcpt/caifubao-jcpt.git $COMPILE_DIR
-
-   if [ $? -eq 0 ]
-     then
-     echo "svn update is ok!"
-   else
-    echo "svn update is faild!"
-    exit
-   fi
-}
-
-#----------mvn打包-------
-mvnpack()
- {
-	svnupdate
-    cd $COMPILE_DIR/  
-    $MVN_HOME/bin/mvn clean package install -Dmaven.test.skip=true
-
-   echo "mvn clean package is ok"
-}
-
 #----------mvn部署-------
 mvninstall()
  {
     cd $APP_DIR/
     rm -rf $APP_DIR/$APP_NAME-$APP_VER.jar
     rm -rf $APP_DIR/jar/*
-    mvnpack
     
-   cp $COMPILE_DIR/caifubao-service/$APP_NAME/target/$APP_NAME-$APP_VER.jar $APP_DIR/
+   cp $COMPILE_DIR/jcpt-service/$APP_NAME/target/$APP_NAME-$APP_VER.jar $APP_DIR/
    sleep 3
 	unzip $APP_DIR/$APP_NAME-$APP_VER.jar -d $APP_DIR/jar/
 

@@ -1,14 +1,8 @@
-SERVICE_NAME=caifubao-service-all
+SERVICE_NAME=ef-all
 CMD=usage
-pwd_list="/data/jcpt/config/caifubao-config /data/jcpt/service/service-auth /data/jcpt/service/service-pingan"
-pwd_list=$pwd_list" /data/jcpt/service/service-tradecenter /data/jcpt/www/wi-tradecenter"
-pwd_list=$pwd_list" /data/jcpt/service/service-calculation /data/jcpt/www/web-calculation"
-pwd_list=$pwd_list" /data/jcpt/service/service-paycenter"
-pwd_list=$pwd_list" /data/jcpt/service/service-account /data/jcpt/www/wi-account /data/jcpt/www/web-account"
-pwd_list=$pwd_list" /data/jcpt/service/service-useraddress"
-pwd_list=$pwd_list" /data/jcpt/service/service-colour-invest /data/jcpt/www/wi-colour-invest"
-pwd_list=$pwd_list" /data/jcpt/www/web-schedule /data/jcpt/www/web-notice"
-
+pwd_list="/data/jcpt/config"
+pwd_list=$pwd_list" /data/jcpt/service/service-tradecenter /data/jcpt/service/service-user"
+pwd_list=$pwd_list" /data/jcpt/wi/wi-tradecenter /data/jcpt/wi/wi-user"
 
 usage() {
     echo "service list,please confirm"

@@ -92,7 +92,7 @@ deploy() {
     rm -rf $APP_DIR/web/*
    
     
-    cp $COMPILE_DIR/caifubao-wi/$APP_NAME/target/$APP_NAME-$APP_VER.jar $APP_DIR/
+    cp $COMPILE_DIR/jcpt-wi/$APP_NAME/target/$APP_NAME-$APP_VER.jar $APP_DIR/
     sleep 3
 	unzip $APP_DIR/$APP_NAME-$APP_VER.jar -d $APP_DIR/web/
 

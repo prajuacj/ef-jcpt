@@ -1,6 +1,6 @@
 APP_DIR=$(cd `dirname $0`; pwd)
 COMPILE_DIR=/opt/jcpt/code
-APP_NAME=caifubao-config
+APP_NAME=jcpt-config
 APP_VER=0.0.1-SNAPSHOT
 APP_MAIN_CLASS=com.ef.jcpt.config.ConfigServerApplication
 

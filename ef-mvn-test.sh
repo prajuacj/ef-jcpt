@@ -1,6 +1,6 @@
 #!/bin/sh
 COMPILE_DIR=/opt/jcpt/code
-APP_NAME=caifubao-mvn-test
+APP_NAME=ef-mvn-test
 #set java home
 export JAVA_HOME=/usr/local/java/jdk1.8.0_144
 MVN_HOME=/usr/local/maven
@@ -17,7 +17,7 @@ svnupdate()
 echo $GIT_FOLDER;
 if [ ! -d "$GIT_FOLDER" ];then
 	echo "clone代码"
-	git clone --branch=$GIT_BRANCH --depth=1 https://github.com/prajuacj/xa-eb.git $COMPILE_DIR
+	git clone --branch=$GIT_BRANCH --depth=1 https://github.com/prajuacj/ef-jcpt.git $COMPILE_DIR
 else
 	echo "pull代码"
 	git --git-dir=$GIT_FOLDER pull origin $GIT_BRANCH
@@ -25,9 +25,9 @@ fi
 git --git-dir=$GIT_FOLDER checkout $GIT_BRANCH
    if [ $? -eq 0 ]
      then
-     echo "svn update is ok!"
+     echo "git update is ok!"
    else
-    echo "svn update is faild!"
+    echo "git update is faild!"
     exit
    fi
 }
