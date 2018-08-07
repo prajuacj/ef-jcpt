@@ -21,6 +21,7 @@ public class UserServiceImpl implements IUserService {
 		// TODO Auto-generated method stub
 		UserInfo info = new UserInfo();
 		BeanUtils.copyProperties(bo, info);
+		info.setLoginPassword(Digests.getSHA1(bo.getLoginPassword()));
 		int ret = userInfoComponentImpl.saveUserInfo(info);
 		if (ret == 1) {
 			return true;

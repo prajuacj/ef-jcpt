@@ -204,8 +204,9 @@ public class UserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("登录失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -280,7 +281,7 @@ public class UserController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("修改密码失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
