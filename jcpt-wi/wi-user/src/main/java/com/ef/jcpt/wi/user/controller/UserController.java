@@ -108,7 +108,7 @@ public class UserController extends BaseController {
 	/**
 	 * 獲取注册验证码
 	 */
-	@RequestMapping("/getRegistValidCode")
+	@RequestMapping("/getRegistValidCode.json")
 	@ResponseBody
 	public BasicServiceModel<String> getRegistValidCode(HttpServletRequest req, String sign, String params) {
 		String cmd = "UserController:getRegistValidCode";
@@ -151,7 +151,7 @@ public class UserController extends BaseController {
 		}
 	}
 
-	@RequestMapping("/login")
+	@RequestMapping("/login.json")
 	public @ResponseBody BasicServiceModel<String> login(HttpServletRequest req, String sign, String params) {
 		String cmd = "UserController:login";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
@@ -212,7 +212,7 @@ public class UserController extends BaseController {
 		}
 	}
 
-	@RequestMapping("/updatePwd")
+	@RequestMapping("/updatePwd.json")
 	public @ResponseBody BasicServiceModel<String> updatePwd(HttpServletRequest req, String sign, String params) {
 		String cmd = "UserController:updatePwd";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
