@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,19 +85,18 @@ public class Alipayh5ServiceImpl implements IAlipayh5Service {
 		// 建立请求
 		String sHtmlText = AlipaySubmit.buildRequest(sParaTemp, "get", "确认");
 
-		//cacheUtil.set(backurlcacheprefix + payCommon.getOutTradeNo(), show_url);
+		// cacheUtil.set(backurlcacheprefix + payCommon.getOutTradeNo(), show_url);
 		return sHtmlText;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Map<String, Object> payfront(HttpServletRequest request) {
+	public Map<String, Object> payfront(Map<String, Object> requestParams) {
 		String out_trade_no = "";
 		Map<String, Object> payMap = new HashMap<String, Object>();
 		payMap.put("paystate", "fail");
 		try {
 			// 获取支付宝GET过来反馈信息
 			Map<String, String> params = new HashMap<String, String>();
-			Map requestParams = request.getParameterMap();
 			for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
 				String name = (String) iter.next();
 				String[] values = (String[]) requestParams.get(name);
@@ -114,15 +111,16 @@ public class Alipayh5ServiceImpl implements IAlipayh5Service {
 			}
 			// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
 			// 商户订单号
-			out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+			out_trade_no = new String(((String) requestParams.get("out_trade_no")).getBytes("ISO-8859-1"), "UTF-8");
 
 			// 支付宝交易号
-			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+			String trade_no = new String(((String) requestParams.get("trade_no")).getBytes("ISO-8859-1"), "UTF-8");
 			// 交易状态
-			String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
+			String trade_status = new String(((String) requestParams.get("trade_status")).getBytes("ISO-8859-1"),
+					"UTF-8");
 
 			// 交易金额
-			String total_fee = new String(request.getParameter("total_fee").getBytes("ISO-8859-1"), "UTF-8");
+			String total_fee = new String(((String) requestParams.get("total_fee")).getBytes("ISO-8859-1"), "UTF-8");
 			// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
 			// 计算得出通知验证结果
 			boolean verify_result = AlipayNotify.verify(params);
@@ -161,14 +159,13 @@ public class Alipayh5ServiceImpl implements IAlipayh5Service {
 	}
 
 	@Override
-	public Map<String, Object> payback(HttpServletRequest request) {
+	public Map<String, Object> payback(Map<String, Object> requestParams) {
 		// TODO Auto-generated method stub
 		// 获取支付宝POST过来反馈信息
 		Map<String, Object> payMap = new HashMap<String, Object>();
 		payMap.put("paystate", "fail");
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			Map requestParams = request.getParameterMap();
 			for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
 				String name = (String) iter.next();
 				String[] values = (String[]) requestParams.get(name);
@@ -183,13 +180,15 @@ public class Alipayh5ServiceImpl implements IAlipayh5Service {
 			}
 			// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
 			// 商户订单号
-			String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+			String out_trade_no = new String(((String) requestParams.get("out_trade_no")).getBytes("ISO-8859-1"),
+					"UTF-8");
 			// 支付宝交易号
-			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+			String trade_no = new String(((String) requestParams.get("trade_no")).getBytes("ISO-8859-1"), "UTF-8");
 			// 交易状态
-			String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
+			String trade_status = new String(((String) requestParams.get("trade_status")).getBytes("ISO-8859-1"),
+					"UTF-8");
 			// 交易金额
-			String total_fee = new String(request.getParameter("total_fee").getBytes("ISO-8859-1"), "UTF-8");
+			String total_fee = new String(((String) requestParams.get("total_fee")).getBytes("ISO-8859-1"), "UTF-8");
 			// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
 			if (AlipayNotify.verify(params)) {// 验证成功
 				// ////////////////////////////////////////////////////////////////////////////////////////

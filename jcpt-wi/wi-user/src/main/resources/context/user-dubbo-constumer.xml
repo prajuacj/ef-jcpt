@@ -11,28 +11,11 @@
 	<!-- 提供方应用信息，用于计算依赖关系 -->
 	<dubbo:application name="user-dubbo-constumer" />
 
-	<dubbo:consumer check="false" timeout=${dubbo.provider.user.timeout} />
+	<dubbo:consumer check="false" timeout="${dubbo.provider.user.timeout}" />
 
 	<!-- 使用zookeeper注册中心暴露服务地址 -->
 	<dubbo:registry protocol="zookeeper" address="${dubbo.regist.address}" />
 
-	<dubbo:reference interface="com.caifubao.jcpt.account.service.IAccountService"
-		id="accountService" />
-
-	<dubbo:reference
-		interface="com.caifubao.jcpt.account.service.IAccountTradeService" id="accountTradeService" />
-	<dubbo:reference
-		interface="com.caifubao.jcpt.tradecenter.service.bid.IOrderInfoService"
-		id="orderInfoService" />
-
-	<dubbo:reference
-		interface="com.caifubao.jcpt.tradecenter.service.debt.IInvestRepaymentService"
-		id="investRepaymentService" />
-
-	<dubbo:reference check="false"
-		interface="com.caifubao.jcpt.tradecenter.service.debt.IInvestDetailService"
-		id="tradeInvestDetailService" />
-
-	<dubbo:reference check="false"
-		interface="com.caifubao.jcpt.account.service.PAAccountService" id="pAAccountService" />
+	<dubbo:reference check="false" interface="com.ef.jcpt.user.service.IUserService"
+		id="userServiceImpl" />
 </beans>

@@ -59,7 +59,7 @@
 
 	<!-- Mapper扫描配置器 -->
 	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.caifubao.jcpt.trade.dao" />
+		<property name="basePackage" value="com.ef.jcpt.trade.dao" />
 		<property name="annotationClass" value="org.springframework.stereotype.Repository" />
 	</bean>
 
