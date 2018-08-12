@@ -1,6 +1,8 @@
 package com.ef.jcpt.core.sms;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -27,15 +29,16 @@ public class ToolSendSMSUtil {
 
 	private static String appkey = CloudPropertiesUtil.getProperty("wechat.sms.appkey");
 
+	private static String smsSign = "东流科技";
+
+	private static int templateId = CloudPropertiesUtil.getPropertyInt("wechat.sms.templateId");
+
 	/**
 	 * 发送验证码（用户注册）
 	 * 
-	 * @param phone
-	 *            发送号码
-	 * @param time
-	 *            失效时间（分钟）
-	 * @param prefix
-	 *            业务前缀，防止同一手机号码在不同业务入口调用多次此方法而导致验证码被覆盖
+	 * @param phone  发送号码
+	 * @param time   失效时间（分钟）
+	 * @param prefix 业务前缀，防止同一手机号码在不同业务入口调用多次此方法而导致验证码被覆盖
 	 * @return true：发送成功 false:发送失败
 	 */
 	public static boolean sendSMS(String phone, String time, String prefix, String content) {
@@ -51,10 +54,12 @@ public class ToolSendSMSUtil {
 
 	public static boolean wechatSMS(String phone, String validCode) {
 		String cmd = "ToolSendSMSUtil:sendSMS";
+		ArrayList<String> params = new ArrayList<String>(2);
+		params.add(0, validCode);
+		params.add(1, "3");
 		try {
 			SmsSingleSender ssender = new SmsSingleSender(appId, appkey);
-			SmsSingleSenderResult result = ssender.send(0, "86", phone, validCode + "为您的登录验证码，请于3分钟内填写。如非本人操作，请忽略本短信。",
-					"", "");
+			SmsSingleSenderResult result = ssender.sendWithParam("86", phone, templateId, params, null, "", "");
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, String.valueOf(result.result),
 					result.errMsg + ",validCode=" + validCode));
 			if (0 == result.result) {
@@ -95,12 +100,9 @@ public class ToolSendSMSUtil {
 	/**
 	 * 将验证码放入到内存，并通过线程管理销毁
 	 * 
-	 * @param phoneNum
-	 *            发送的号码
-	 * @param authCode
-	 *            验证码
-	 * @param ExperiterTime
-	 *            失效时间
+	 * @param phoneNum      发送的号码
+	 * @param authCode      验证码
+	 * @param ExperiterTime 失效时间
 	 */
 	public static void putAuthCodeToMem(final String phoneNum, String authCode, final int ExperiterTime) {
 		authMap.put(phoneNum, authCode);

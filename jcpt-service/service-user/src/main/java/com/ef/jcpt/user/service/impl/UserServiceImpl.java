@@ -30,6 +30,7 @@ public class UserServiceImpl implements IUserService {
 		Date curDate = new Date(System.currentTimeMillis());
 		UserInfo info = new UserInfo();
 		BeanUtils.copyProperties(bo, info);
+		info.setUserName(bo.getMobile());
 		info.setLoginPassword(Digests.getSHA1(bo.getLoginPassword()));
 		info.setCreateTime(curDate);
 		info.setUpdateTime(curDate);
@@ -39,7 +40,7 @@ public class UserServiceImpl implements IUserService {
 			relationInfo.setCreateTime(curDate);
 			relationInfo.setMifiSerial(bo.getMifiSerial());
 			relationInfo.setUpdateTime(curDate);
-			relationInfo.setUserName(bo.getUserName());
+			relationInfo.setUserName(bo.getMobile());
 			relationInfo.setUseStatus("00");
 			int miRet = userMifiRelationComponent.saveUserInfo(relationInfo);
 			if (miRet == 1) {

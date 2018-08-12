@@ -11,8 +11,6 @@ public class UserInfoBo extends BaseBo {
 	 */
 	private static final long serialVersionUID = -6411950055608239019L;
 
-	private String userName;
-
 	private String loginPassword;
 
 	private String realName;
@@ -32,14 +30,6 @@ public class UserInfoBo extends BaseBo {
 	private Date updateTime;
 
 	private String country;
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 
 	public String getLoginPassword() {
 		return loginPassword;

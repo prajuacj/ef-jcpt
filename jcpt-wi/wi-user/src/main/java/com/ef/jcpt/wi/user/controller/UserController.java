@@ -61,18 +61,18 @@ public class UserController extends BaseController {
 					JSONObject jsonObj = JSONObject.parseObject(params);
 					String mobile = bo.getMobile();
 					String registValidCode = jsonObj.getString("validCode");
-					String sessionValidCode = ToolSendSMSUtil
-							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
-					if ((null == sessionValidCode) || (!sessionValidCode.equals(registValidCode))) {
-						bsm.setCode(ReqStatusConst.FAIL);
-						bsm.setMsg("手机验证码错误！");
-						logger.error(
-								LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-						return bsm;
-					} else {
-						ToolSendSMSUtil.removeAuthCode(mobile);
-					}
-					Integer membercount = userServiceImpl.findMemberExistCount(bo.getUserName());
+//					String sessionValidCode = ToolSendSMSUtil
+//							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
+//					if ((null == sessionValidCode) || (!sessionValidCode.equals(registValidCode))) {
+//						bsm.setCode(ReqStatusConst.FAIL);
+//						bsm.setMsg("手机验证码错误！");
+//						logger.error(
+//								LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//						return bsm;
+//					} else {
+//						ToolSendSMSUtil.removeAuthCode(mobile);
+//					}
+					Integer membercount = userServiceImpl.findMemberExistCount(bo.getMobile());
 					if (membercount > 0) {
 						bsm.setCode(ReqStatusConst.FAIL);
 						bsm.setMsg("该用户已存在！");
@@ -178,7 +178,7 @@ public class UserController extends BaseController {
 					String loginType = bo.getLoginType();
 					String password = bo.getPassword();
 					UserInfoBo member = new UserInfoBo();
-					member.setUserName(userName);
+					member.setMobile(userName);
 
 					boolean isLogin = userServiceImpl.login(userName, password, loginType);
 					if (isLogin) {
@@ -227,39 +227,26 @@ public class UserController extends BaseController {
 							LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
 					return bsm;
 				} else {
-					String userName = bo.getUserName();
-					String mode = bo.getMode();
-					String oldPassword = bo.getOldPassword();
+					String mobile = bo.getMobile();
 					String mobileCode = bo.getValidCode();
 					String newPasswd = bo.getNewPasswd();
 
-					UserInfoBo uio = userServiceImpl.findMemberExist(userName);
+					UserInfoBo uio = userServiceImpl.findMemberExist(mobile);
 					if (null != uio) {
+//						String sessionValidCode = ToolSendSMSUtil
+//								.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
+//						if ((null == sessionValidCode) || (!sessionValidCode.equals(mobileCode))) {
+//							result.setCode(ReqStatusConst.FAIL);
+//							result.setMsg("修改失败，手机验证码错误！");
+//							logger.error(LogTemplate.genCommonSysLogStr(cmd, result.getCode(),
+//									result.getMsg() + ",data=" + params));
+//							return result;
+//						} else {
+//							ToolSendSMSUtil.removeAuthCode(mobile);
+//						}
 
-						if (null != mode && mode.equals("1")) {
-							// mode=1:验证旧密码是否正确
-							boolean isLogin = userServiceImpl.login(userName, oldPassword, "2");
-							if (!isLogin) {
-								result.setCode(ReqStatusConst.FAIL);
-								result.setMsg("修改失败，原密码不正确！");
-								logger.error(LogTemplate.genCommonSysLogStr(cmd, result.getCode(),
-										result.getMsg() + ",data=" + params));
-								return result;
-							}
-						} else if (null != mode && mode.equals("2")) {
-							// mode=2:验证手机验证码是否正确
-							String sessionValidCode = ToolSendSMSUtil
-									.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + userName);
-							if ((null == sessionValidCode) || (!sessionValidCode.equals(mobileCode))) {
-								result.setCode(ReqStatusConst.FAIL);
-								result.setMsg("修改失败，手机验证码错误！");
-								logger.error(LogTemplate.genCommonSysLogStr(cmd, result.getCode(),
-										result.getMsg() + ",data=" + params));
-								return result;
-							}
-						}
 						// 修改密码
-						userServiceImpl.updatePwd(userName, newPasswd);
+						userServiceImpl.updatePwd(mobile, newPasswd);
 						result.setCode(ReqStatusConst.OK);
 						result.setData("修改密码成功");
 						return result;
