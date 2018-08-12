@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ef.jcpt.user.dao.UserInfoMapper">
 	<resultMap id="BaseResultMap" type="com.ef.jcpt.user.dao.model.UserInfo">
-		<id column="id" jdbcType="INTEGER" property="id" />
-		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<id column="user_name" jdbcType="VARCHAR" property="userName" />
 		<result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
 		<result column="real_name" jdbcType="VARCHAR" property="realName" />
 		<result column="cert_type" jdbcType="VARCHAR" property="certType" />
@@ -14,50 +13,42 @@
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 		<result column="country" jdbcType="VARCHAR" property="country" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="wechat_id" jdbcType="VARCHAR" property="wechatId" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, user_name, login_password, real_name, cert_type,
-		cert_code, mobile,
-		sex, mifi_serial,
-		create_time, update_time, country
+		user_name, login_password, real_name, cert_type, cert_code, mobile, sex,
+		mifi_serial,
+		create_time, update_time, country, app_id, wechat_id
 	</sql>
-	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from ef_user_info
-		where id = #{id,jdbcType=INTEGER}
+		where user_name = #{userName,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from
-		ef_user_info
-		where id = #{id,jdbcType=INTEGER}
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from ef_user_info
+		where user_name = #{userName,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
-		insert into ef_user_info (id,
-		user_name, login_password,
-		real_name, cert_type, cert_code,
-		mobile, sex,
-		mifi_serial,
-		create_time, update_time, country
-		)
-		values
-		(#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-		#{loginPassword,jdbcType=VARCHAR},
+		insert into ef_user_info (user_name, login_password, real_name,
+		cert_type, cert_code, mobile,
+		sex, mifi_serial, create_time,
+		update_time, country, app_id,
+		wechat_id)
+		values (#{userName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR},
 		#{realName,jdbcType=VARCHAR},
-		#{certType,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR},
-		#{mobile,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
-		#{mifiSerial,jdbcType=VARCHAR},
+		#{certType,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR}, #{mifiSerial,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP},
-		#{updateTime,jdbcType=TIMESTAMP}, #{country,jdbcType=VARCHAR}
-		)
+		#{updateTime,jdbcType=TIMESTAMP}, #{country,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR},
+		#{wechatId,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
 		insert into ef_user_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				id,
-			</if>
 			<if test="userName != null">
 				user_name,
 			</if>
@@ -91,11 +82,14 @@
 			<if test="country != null">
 				country,
 			</if>
+			<if test="appId != null">
+				app_id,
+			</if>
+			<if test="wechatId != null">
+				wechat_id,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				#{id,jdbcType=INTEGER},
-			</if>
 			<if test="userName != null">
 				#{userName,jdbcType=VARCHAR},
 			</if>
@@ -129,14 +123,17 @@
 			<if test="country != null">
 				#{country,jdbcType=VARCHAR},
 			</if>
+			<if test="appId != null">
+				#{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="wechatId != null">
+				#{wechatId,jdbcType=VARCHAR},
+			</if>
 		</trim>
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
 		update ef_user_info
 		<set>
-			<if test="userName != null">
-				user_name = #{userName,jdbcType=VARCHAR},
-			</if>
 			<if test="loginPassword != null">
 				login_password = #{loginPassword,jdbcType=VARCHAR},
 			</if>
@@ -167,29 +164,30 @@
 			<if test="country != null">
 				country = #{country,jdbcType=VARCHAR},
 			</if>
+			<if test="appId != null">
+				app_id = #{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="wechatId != null">
+				wechat_id = #{wechatId,jdbcType=VARCHAR},
+			</if>
 		</set>
-		where id = #{id,jdbcType=INTEGER}
+		where user_name = #{userName,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.ef.jcpt.user.dao.model.UserInfo">
-		update
-		ef_user_info
-		set user_name = #{userName,jdbcType=VARCHAR},
-		login_password = #{loginPassword,jdbcType=VARCHAR},
-		real_name =
-		#{realName,jdbcType=VARCHAR},
+		update ef_user_info
+		set login_password = #{loginPassword,jdbcType=VARCHAR},
+		real_name = #{realName,jdbcType=VARCHAR},
 		cert_type = #{certType,jdbcType=VARCHAR},
 		cert_code = #{certCode,jdbcType=VARCHAR},
-		mobile =
-		#{mobile,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
 		sex = #{sex,jdbcType=VARCHAR},
-		mifi_serial =
-		#{mifiSerial,jdbcType=VARCHAR},
-		create_time =
-		#{createTime,jdbcType=TIMESTAMP},
-		update_time =
-		#{updateTime,jdbcType=TIMESTAMP},
-		country = #{country,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=INTEGER}
+		mifi_serial = #{mifiSerial,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		country = #{country,jdbcType=VARCHAR},
+		app_id = #{appId,jdbcType=VARCHAR},
+		wechat_id = #{wechatId,jdbcType=VARCHAR}
+		where user_name = #{userName,jdbcType=VARCHAR}
 	</update>
 
 	<select id="selectCountByUserName" parameterType="java.lang.String"
@@ -207,6 +205,15 @@
 		from ef_user_info
 		where user_name =
 		#{userName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectUserByWechatId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ef_user_info
+		where wechat_id =
+		#{wechatId,jdbcType=VARCHAR}
 	</select>
 
 	<update id="updateUserPwd" parameterType="java.lang.String">

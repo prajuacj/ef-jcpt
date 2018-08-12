@@ -1,12 +1,17 @@
 package com.ef.jcpt.user.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ef.jcpt.core.digest.Digests;
 import com.ef.jcpt.user.component.IUserInfoComponent;
+import com.ef.jcpt.user.component.IUserMifiRelationComponent;
 import com.ef.jcpt.user.dao.model.UserInfo;
+import com.ef.jcpt.user.dao.model.UserMifiRelation;
 import com.ef.jcpt.user.service.IUserService;
 import com.ef.jcpt.user.service.bo.UserInfoBo;
 
@@ -16,15 +21,32 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	IUserInfoComponent userInfoComponentImpl;
 
+	@Autowired
+	IUserMifiRelationComponent userMifiRelationComponent;
+
 	@Override
 	public boolean regist(UserInfoBo bo) {
 		// TODO Auto-generated method stub
+		Date curDate = new Date(System.currentTimeMillis());
 		UserInfo info = new UserInfo();
 		BeanUtils.copyProperties(bo, info);
 		info.setLoginPassword(Digests.getSHA1(bo.getLoginPassword()));
+		info.setCreateTime(curDate);
+		info.setUpdateTime(curDate);
 		int ret = userInfoComponentImpl.saveUserInfo(info);
 		if (ret == 1) {
-			return true;
+			UserMifiRelation relationInfo = new UserMifiRelation();
+			relationInfo.setCreateTime(curDate);
+			relationInfo.setMifiSerial(bo.getMifiSerial());
+			relationInfo.setUpdateTime(curDate);
+			relationInfo.setUserName(bo.getUserName());
+			relationInfo.setUseStatus("00");
+			int miRet = userMifiRelationComponent.saveUserInfo(relationInfo);
+			if (miRet == 1) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -36,19 +58,32 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean login(String username, String password) {
+	public boolean login(String username, String password, String loginType) {
 		// TODO Auto-generated method stub
-		String orgPwd = Digests.getSHA1(password);
-		UserInfo ui = userInfoComponentImpl.findUserByUserName(username);
-		if (null != ui) {
-			String dbPwd = ui.getLoginPassword();
-			if (orgPwd.equalsIgnoreCase(dbPwd)) {
-				return true;
-			} else {
+		if ("1".equals(loginType)) {
+			try {
+				List<UserInfo> list = userInfoComponentImpl.findUserByWechatId(username);
+				if ((null != list) && (list.size() == 1)) {
+					return true;
+				} else {
+					return false;
+				}
+			} catch (Exception e) {
 				return false;
 			}
+		} else {
+			String orgPwd = Digests.getSHA1(password);
+			UserInfo ui = userInfoComponentImpl.findUserByUserName(username);
+			if (null != ui) {
+				String dbPwd = ui.getLoginPassword();
+				if (orgPwd.equalsIgnoreCase(dbPwd)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			return false;
 		}
-		return false;
 	}
 
 	@Override

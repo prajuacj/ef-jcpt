@@ -1,5 +1,6 @@
 package com.ef.jcpt.core.sms;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -7,90 +8,24 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
-import com.cloopen.rest.sdk.CCPRestSmsSDK;
+import com.alibaba.fastjson.JSONException;
+import com.ef.jcpt.common.log.LogTemplate;
+import com.ef.jcpt.common.util.CloudPropertiesUtil;
+import com.github.qcloudsms.SmsSingleSender;
+import com.github.qcloudsms.SmsSingleSenderResult;
+import com.github.qcloudsms.httpclient.HTTPException;
 
 public class ToolSendSMSUtil {
 
 	private static Logger logger = Logger.getLogger(ToolSendSMSUtil.class);
 
-	// private static String username;
-	// private static String password;
-	// private static String APP_ID;
-	// public static String MSG_VAL_TEMPLATEID;
-	// public static String MSG_NOTICE_TEMPLATEID;
-	// /**
-	// * 任务预约
-	// */
-	// public static String JOB_APPOINTMENT;
-	// /**
-	// * 任务取消预约
-	// */
-	// public static String JOB_CANCEL_APPOINTMENT;
-	// private static String appServer_url;
-	// private static String appServer_port;
-	//
 	private static ExecutorService authPool = Executors.newCachedThreadPool();
-	private static Map<String, Object> authMap = new HashMap<String, Object>();
-	//
-	// static
-	// {
-	// // 取出对应的参数值
-	// username = (String) PropertiesPlugin.getParamMapValue(DictKeys.account_sid);
-	// password = (String) PropertiesPlugin.getParamMapValue(DictKeys.AUTH_TOKEN);
-	// APP_ID = (String) PropertiesPlugin.getParamMapValue(DictKeys.APP_ID);
-	// appServer_url = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.appServer_url);
-	// appServer_port = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.appServer_port);
-	//// username = AESUtil.Decrypt((String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.account_sid));
-	//// password = AESUtil.Decrypt((String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.AUTH_TOKEN));
-	//// APP_ID = AESUtil.Decrypt((String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.APP_ID));
-	// // 短信验证码
-	// MSG_VAL_TEMPLATEID = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.MSG_VAL_TEMPLATEID);
-	// MSG_NOTICE_TEMPLATEID = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.MSG_NOTICE_TEMPLATEID);
-	// JOB_APPOINTMENT = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.JOB_APPOINTMENT);
-	// JOB_CANCEL_APPOINTMENT = (String)
-	// PropertiesPlugin.getParamMapValue(DictKeys.JOB_CANCEL_APPOINTMENT);
-	// }
 
-	/**
-	 * 发送短信通知文本内容
-	 * 
-	 * @param phone
-	 *            发送号码
-	 * @param templateId
-	 *            发送的模板id
-	 * @param datas
-	 *            发送的文本占位符内容
-	 * @return true：发送成功 false:发送失败
-	 */
-	// public static boolean sendTextSMS(String phone, String templateId, String[]
-	// datas)
-	// {
-	// HashMap<String, Object> result = null;
-	// CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
-	// restAPI.init(appServer_url, appServer_port);
-	// restAPI.setAccount(username, password);
-	// restAPI.setAppId(APP_ID);
-	// result = restAPI.sendTemplateSMS(phone, templateId, datas);
-	// if ("000000".equals(result.get("statusCode")))
-	// {
-	// // putAuthCodeToMem(phone, content, Integer.valueOf(time));
-	// return true;
-	// }
-	// else
-	// {
-	// logger.info("错误码=" + result.get("statusCode") + " 错误信息= " +
-	// result.get("statusMsg"));
-	// return false;
-	// }
-	// }
+	private static Map<String, Object> authMap = new HashMap<String, Object>();
+
+	private static int appId = CloudPropertiesUtil.getPropertyInt("wechat.sms.appid");
+
+	private static String appkey = CloudPropertiesUtil.getProperty("wechat.sms.appkey");
 
 	/**
 	 * 发送验证码（用户注册）
@@ -104,65 +39,43 @@ public class ToolSendSMSUtil {
 	 * @return true：发送成功 false:发送失败
 	 */
 	public static boolean sendSMS(String phone, String time, String prefix, String content) {
-		HashMap<String, Object> result = null;
-
-		// 初始化SDK
-		CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
-
-		// ******************************注释*********************************************
-		// *初始化服务器地址和端口 *
-		// *沙盒环境（用于应用开发调试）：restAPI.init("sandboxapp.cloopen.com", "8883");*
-		// *生产环境（用户应用上线使用）：restAPI.init("app.cloopen.com", "8883"); *
-		// *******************************************************************************
-		restAPI.init("app.cloopen.com", "8883");
-		// restAPI.init(appServer_url, appServer_port);
-
-		// ******************************注释*********************************************
-		// *初始化主帐号和主帐号令牌,对应官网开发者主账号下的ACCOUNT SID和AUTH TOKEN *
-		// *ACOUNT SID和AUTH TOKEN在登陆官网后，在“应用-管理控制台”中查看开发者主账号获取*
-		// *参数顺序：第一个参数是ACOUNT SID，第二个参数是AUTH TOKEN。 *
-		// ******************8a48b5515335f736015336b0da3002c8*************************************************************
-		restAPI.setAccount("8a48b5515335f736015336b0da3002c8", "39646588d91146b4a29099b4cbfbb0c1");
-		// restAPI.setAccount(username, password);
-
-		// ******************************注释*********************************************
-		// *初始化应用ID *
-		// *测试开发可使用“测试Demo”的APP ID，正式上线需要使用自己创建的应用的App ID *
-		// *应用ID的获取：登陆官网，在“应用-应用列表”，点击应用名称，看应用详情获取APP ID*
-		// **************aaf98f895388dae5015397db4de31616*****************************************************************
-		restAPI.setAppId("aaf98f895388dae5015397db4de31616");
-		// restAPI.setAppId(APP_ID);
-
-		// ******************************注释****************************************************************
-		// *调用发送模板短信的接口发送短信 *
-		// *参数顺序说明： *
-		// *第一个参数:是要发送的手机号码，可以用逗号分隔，一次最多支持100个手机号 *
-		// *第二个参数:是模板ID，在平台上创建的短信模板的ID值；测试的时候可以使用系统的默认模板，id为1。 *
-		// *系统默认模板的内容为“【云通讯】您使用的是云通讯短信模板，您的验证码是{1}，请于{2}分钟内正确输入”*
-		// *第三个参数是要替换的内容数组。 *
-		// **************************************************************************************************
-
-		// **************************************举例说明***********************************************************************
-		// *假设您用测试Demo的APP ID，则需使用默认模板ID 1，发送手机号是13800000000，传入参数为6532和5，则调用方式为 *
-		// *result = restAPI.sendTemplateSMS("13800000000","1" ,new
-		// String[]{"6532","5"}); *
-		// *则13800000000手机号收到的短信内容是：【云通讯】您使用的是云通讯短信模板，您的验证码是6532，请于5分钟内正确输入 *
-		// *********************************************************************************************************************
-		// result = restAPI.sendTemplateSMS(phone, "1", new String[] { content, time });
-		result = restAPI.sendTemplateSMS(phone, "75861", new String[] { content, time });
-		// result = restAPI.sendTemplateSMS(phone, MSG_VAL_TEMPLATEID, new String[] {
-		// content, time });
-
-		System.out.println("SDKTestGetSubAccounts result=" + result);
-		if ("000000".equals(result.get("statusCode"))) {
+		boolean sendRet = wechatSMS(phone, content);
+		if (sendRet) {
 			// 设置到内存中，用线程管理销毁该验证码
 			putAuthCodeToMem(prefix + phone, content, Integer.valueOf(time));
 			return true;
 		} else {
-			// 异常返回输出错误码和错误信息
-			logger.info("错误码=" + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
 			return false;
 		}
+	}
+
+	public static boolean wechatSMS(String phone, String validCode) {
+		String cmd = "ToolSendSMSUtil:sendSMS";
+		try {
+			SmsSingleSender ssender = new SmsSingleSender(appId, appkey);
+			SmsSingleSenderResult result = ssender.send(0, "86", phone, validCode + "为您的登录验证码，请于3分钟内填写。如非本人操作，请忽略本短信。",
+					"", "");
+			logger.info(LogTemplate.genCommonSysLogStr(cmd, String.valueOf(result.result),
+					result.errMsg + ",validCode=" + validCode));
+			if (0 == result.result) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (HTTPException e) {
+			// HTTP响应码错误
+			e.printStackTrace();
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, e.getMessage(), e.getMessage()));
+		} catch (JSONException e) {
+			// json解析错误
+			e.printStackTrace();
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, e.getMessage(), e.getMessage()));
+		} catch (IOException e) {
+			// 网络IO错误
+			e.printStackTrace();
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, e.getMessage(), e.getMessage()));
+		}
+		return false;
 	}
 
 	/**

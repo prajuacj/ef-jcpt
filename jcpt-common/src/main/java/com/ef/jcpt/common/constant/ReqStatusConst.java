@@ -27,6 +27,11 @@ public class ReqStatusConst {
 	public static final String TIME_OUT = "TIME_OUT";
 
 	/**
+	 * 会话过期
+	 */
+	public static final String SESSION_EXPIRED = "SESSION_EXPIRED";
+
+	/**
 	 * 操作成功，符合预期。
 	 */
 	public static final String OK = "OK";

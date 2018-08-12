@@ -9,7 +9,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库链接地址账号密码-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://10.50.10.202:3306/hhn_user" userId="xiezb" password="xzb321">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://203.195.136.192:3306/ef_jcpt" userId="ef" password="ydpay_!@#$%^&amp;8">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="true"/>
@@ -29,6 +29,6 @@
         </javaClientGenerator>
         <!--生成对应表及类名-->
         <table tableName="ef_user_info" domainObjectName="UserInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
-        
+		<table tableName="ef_user_mifi_relation" domainObjectName="UserMifiRelation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>        
     </context>
 </generatorConfiguration>

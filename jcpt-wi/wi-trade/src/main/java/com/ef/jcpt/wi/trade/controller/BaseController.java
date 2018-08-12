@@ -15,8 +15,8 @@ public class BaseController {
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public BasicServiceModel validateSign(String sign, String params) {
-		BasicServiceModel result = new BasicServiceModel();
+	public BasicServiceModel<String> validateSign(String sign, String params) {
+		BasicServiceModel<String> result = new BasicServiceModel<String>();
 		// if (StringUtil.isEmpty(sign) || StringUtil.isEmpty(params)) {
 		// result.setCode(ReqStatusConst.FAIL);
 		// result.setErrorCode(ReqStatusConst.VALUE_NOT_NULL);
@@ -47,7 +47,6 @@ public class BaseController {
 		return url.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void setRequestToParamMap(HttpServletRequest request, StringBuffer params)
 			throws UnsupportedEncodingException {
 		Enumeration<String> keyNames = request.getParameterNames();

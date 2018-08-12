@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.FrontH5DataConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
@@ -57,21 +58,20 @@ public class UserController extends BaseController {
 							LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
 					return bsm;
 				} else {
-					// JSONObject jsonObj = JSONObject.parseObject(params);
-					// String mobile = bo.getMobile();
-					// String registValidCode = jsonObj.getString("registValidCode");
-					// String sessionValidCode = ToolSendSMSUtil
-					// .getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX +
-					// mobile);
-					// if ((null == sessionValidCode) ||
-					// (!sessionValidCode.equals(registValidCode))) {
-					// bsm.setCode(ReqStatusConst.FAIL);
-					// bsm.setMsg("手机验证码错误！");
-					// logger.error(
-					// LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" +
-					// params));
-					// return bsm;
-					// }
+					JSONObject jsonObj = JSONObject.parseObject(params);
+					String mobile = bo.getMobile();
+					String registValidCode = jsonObj.getString("validCode");
+					String sessionValidCode = ToolSendSMSUtil
+							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
+					if ((null == sessionValidCode) || (!sessionValidCode.equals(registValidCode))) {
+						bsm.setCode(ReqStatusConst.FAIL);
+						bsm.setMsg("手机验证码错误！");
+						logger.error(
+								LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+						return bsm;
+					} else {
+						ToolSendSMSUtil.removeAuthCode(mobile);
+					}
 					Integer membercount = userServiceImpl.findMemberExistCount(bo.getUserName());
 					if (membercount > 0) {
 						bsm.setCode(ReqStatusConst.FAIL);
@@ -121,16 +121,14 @@ public class UserController extends BaseController {
 						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
 				return result;
 			} else {
-				// JSONObject jsonObj = JSONObject.parseObject(params);
-				// String phone = jsonObj.getString("phone");
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String phone = jsonObj.getString("phone");
 
 				String sendCode = ToolSendSMSUtil.generateRandom6BitNumStr(6);
 				logger.info("产生的验证码为：" + sendCode);
-				boolean sendResult = true/*
-											 * ToolSendSMSUtil.sendSMS(phone,
-											 * FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_CACHETIME,
-											 * FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX, sendCode)
-											 */;
+				boolean sendResult = ToolSendSMSUtil.sendSMS(phone,
+						FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_CACHETIME,
+						FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX, sendCode);
 				if (sendResult) {
 					bsm.setCode(ReqStatusConst.OK);
 					bsm.setMsg("注册验证短信发生成功！");
@@ -177,15 +175,12 @@ public class UserController extends BaseController {
 					return bsm;
 				} else {
 					String userName = bo.getUserName();
-					String appID = bo.getAppID();
+					String loginType = bo.getLoginType();
 					String password = bo.getPassword();
-					if (null == userName) {
-						userName = appID;
-					}
 					UserInfoBo member = new UserInfoBo();
 					member.setUserName(userName);
 
-					boolean isLogin = userServiceImpl.login(userName, password);
+					boolean isLogin = userServiceImpl.login(userName, password, loginType);
 					if (isLogin) {
 						TokenVo token = new TokenVo();
 						token.setUser(member);
@@ -243,7 +238,7 @@ public class UserController extends BaseController {
 
 						if (null != mode && mode.equals("1")) {
 							// mode=1:验证旧密码是否正确
-							boolean isLogin = userServiceImpl.login(userName, oldPassword);
+							boolean isLogin = userServiceImpl.login(userName, oldPassword, "2");
 							if (!isLogin) {
 								result.setCode(ReqStatusConst.FAIL);
 								result.setMsg("修改失败，原密码不正确！");
@@ -285,5 +280,9 @@ public class UserController extends BaseController {
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
+	}
+
+	public static void main(String[] args) {
+		ToolSendSMSUtil.wechatSMS("13076922539", "123987");
 	}
 }

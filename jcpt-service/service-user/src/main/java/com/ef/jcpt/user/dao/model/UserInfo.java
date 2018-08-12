@@ -3,123 +3,134 @@ package com.ef.jcpt.user.dao.model;
 import java.util.Date;
 
 public class UserInfo {
-    private Integer id;
-
+	
     private String userName;
 
-    private String loginPassword;
+	private String loginPassword;
 
-    private String realName;
+	private String realName;
 
-    private String certType;
+	private String certType;
 
-    private String certCode;
+	private String certCode;
 
-    private String mobile;
+	private String mobile;
 
-    private String sex;
+	private String sex;
 
-    private String mifiSerial;
+	private String mifiSerial;
 
-    private Date createTime;
+	private Date createTime;
 
-    private Date updateTime;
+	private Date updateTime;
 
-    private String country;
+	private String country;
 
-    public Integer getId() {
-        return id;
-    }
+	private String appId;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	private String wechatId;
 
-    public String getUserName() {
-        return userName;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
+	public void setUserName(String userName) {
+		this.userName = userName == null ? null : userName.trim();
+	}
 
-    public String getLoginPassword() {
-        return loginPassword;
-    }
+	public String getLoginPassword() {
+		return loginPassword;
+	}
 
-    public void setLoginPassword(String loginPassword) {
-        this.loginPassword = loginPassword == null ? null : loginPassword.trim();
-    }
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword == null ? null : loginPassword.trim();
+	}
 
-    public String getRealName() {
-        return realName;
-    }
+	public String getRealName() {
+		return realName;
+	}
 
-    public void setRealName(String realName) {
-        this.realName = realName == null ? null : realName.trim();
-    }
+	public void setRealName(String realName) {
+		this.realName = realName == null ? null : realName.trim();
+	}
 
-    public String getCertType() {
-        return certType;
-    }
+	public String getCertType() {
+		return certType;
+	}
 
-    public void setCertType(String certType) {
-        this.certType = certType == null ? null : certType.trim();
-    }
+	public void setCertType(String certType) {
+		this.certType = certType == null ? null : certType.trim();
+	}
 
-    public String getCertCode() {
-        return certCode;
-    }
+	public String getCertCode() {
+		return certCode;
+	}
 
-    public void setCertCode(String certCode) {
-        this.certCode = certCode == null ? null : certCode.trim();
-    }
+	public void setCertCode(String certCode) {
+		this.certCode = certCode == null ? null : certCode.trim();
+	}
 
-    public String getMobile() {
-        return mobile;
-    }
+	public String getMobile() {
+		return mobile;
+	}
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
-    }
+	public void setMobile(String mobile) {
+		this.mobile = mobile == null ? null : mobile.trim();
+	}
 
-    public String getSex() {
-        return sex;
-    }
+	public String getSex() {
+		return sex;
+	}
 
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
-    }
+	public void setSex(String sex) {
+		this.sex = sex == null ? null : sex.trim();
+	}
 
-    public String getMifiSerial() {
-        return mifiSerial;
-    }
+	public String getMifiSerial() {
+		return mifiSerial;
+	}
 
-    public void setMifiSerial(String mifiSerial) {
-        this.mifiSerial = mifiSerial == null ? null : mifiSerial.trim();
-    }
+	public void setMifiSerial(String mifiSerial) {
+		this.mifiSerial = mifiSerial == null ? null : mifiSerial.trim();
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public Date getUpdateTime() {
+		return updateTime;
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    public void setCountry(String country) {
-        this.country = country == null ? null : country.trim();
-    }
+	public void setCountry(String country) {
+		this.country = country == null ? null : country.trim();
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId == null ? null : appId.trim();
+	}
+
+	public String getWechatId() {
+		return wechatId;
+	}
+
+	public void setWechatId(String wechatId) {
+		this.wechatId = wechatId == null ? null : wechatId.trim();
+	}
 }

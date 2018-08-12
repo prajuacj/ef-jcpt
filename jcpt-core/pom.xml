@@ -71,13 +71,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.cloopen</groupId>
-			<artifactId>rest</artifactId>
-			<version>2.6.3</version>
-			<scope>system</scope>
-			<systemPath>
-                ${project.basedir}/../lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar
-            </systemPath>
+			<groupId>com.github.qcloudsms</groupId>
+			<artifactId>qcloudsms</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 </project>

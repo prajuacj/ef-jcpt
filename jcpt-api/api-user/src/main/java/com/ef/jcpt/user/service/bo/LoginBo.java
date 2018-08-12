@@ -14,7 +14,7 @@ public class LoginBo extends BaseBo implements Serializable {
 	private String password;// 是 string 密码
 	private String captcha;// 是 string 短信验证码
 	private String rememberMe;// 是 string 是否记住我（1：记住）
-	private String appID;
+	private String loginType;
 
 	public String getUserName() {
 		return userName;
@@ -48,11 +48,11 @@ public class LoginBo extends BaseBo implements Serializable {
 		this.rememberMe = rememberMe;
 	}
 
-	public String getAppID() {
-		return appID;
+	public String getLoginType() {
+		return loginType;
 	}
 
-	public void setAppID(String appID) {
-		this.appID = appID;
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
 	}
 }

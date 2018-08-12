@@ -8,7 +8,7 @@ public interface IUserService {
 
 	public Integer findMemberExistCount(String userName);
 
-	public boolean login(String username, String password);
+	public boolean login(String username, String password, String loginType);
 
 	public UserInfoBo findMemberExist(String username);
 
