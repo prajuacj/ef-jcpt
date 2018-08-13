@@ -61,17 +61,17 @@ public class UserController extends BaseController {
 					JSONObject jsonObj = JSONObject.parseObject(params);
 					String mobile = bo.getMobile();
 					String registValidCode = jsonObj.getString("validCode");
-//					String sessionValidCode = ToolSendSMSUtil
-//							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
-//					if ((null == sessionValidCode) || (!sessionValidCode.equals(registValidCode))) {
-//						bsm.setCode(ReqStatusConst.FAIL);
-//						bsm.setMsg("手机验证码错误！");
-//						logger.error(
-//								LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-//						return bsm;
-//					} else {
-//						ToolSendSMSUtil.removeAuthCode(mobile);
-//					}
+					String sessionValidCode = ToolSendSMSUtil
+							.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
+					if ((null == sessionValidCode) || (!sessionValidCode.equals(registValidCode))) {
+						bsm.setCode(ReqStatusConst.FAIL);
+						bsm.setMsg("手机验证码错误！");
+						logger.error(
+								LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+						return bsm;
+					} else {
+						ToolSendSMSUtil.removeAuthCode(mobile);
+					}
 					Integer membercount = userServiceImpl.findMemberExistCount(bo.getMobile());
 					if (membercount > 0) {
 						bsm.setCode(ReqStatusConst.FAIL);
@@ -233,17 +233,17 @@ public class UserController extends BaseController {
 
 					UserInfoBo uio = userServiceImpl.findMemberExist(mobile);
 					if (null != uio) {
-//						String sessionValidCode = ToolSendSMSUtil
-//								.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
-//						if ((null == sessionValidCode) || (!sessionValidCode.equals(mobileCode))) {
-//							result.setCode(ReqStatusConst.FAIL);
-//							result.setMsg("修改失败，手机验证码错误！");
-//							logger.error(LogTemplate.genCommonSysLogStr(cmd, result.getCode(),
-//									result.getMsg() + ",data=" + params));
-//							return result;
-//						} else {
-//							ToolSendSMSUtil.removeAuthCode(mobile);
-//						}
+						String sessionValidCode = ToolSendSMSUtil
+								.getAuthCodeByMem(FrontH5DataConst.FRONTH5_REGIST_VALIIDCODE_PREFIX + mobile);
+						if ((null == sessionValidCode) || (!sessionValidCode.equals(mobileCode))) {
+							result.setCode(ReqStatusConst.FAIL);
+							result.setMsg("修改失败，手机验证码错误！");
+							logger.error(LogTemplate.genCommonSysLogStr(cmd, result.getCode(),
+									result.getMsg() + ",data=" + params));
+							return result;
+						} else {
+							ToolSendSMSUtil.removeAuthCode(mobile);
+						}
 
 						// 修改密码
 						userServiceImpl.updatePwd(mobile, newPasswd);

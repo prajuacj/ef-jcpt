@@ -41,7 +41,7 @@ public class OrderTradeController extends BaseController {
 				TokenVo token = cacheUtil.getToken(tokenKey);
 				if (null != token) {
 					UserInfoBo bo = token.getUser();
-					String bo.getUserName();
+					String userName = bo.getMobile();
 				} else {
 					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
 					bsm.setMsg("会话已过期，请重新登录！");
@@ -55,6 +55,7 @@ public class OrderTradeController extends BaseController {
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
+		return bsm;
 	}
 
 	@RequestMapping("/listOrder.json")

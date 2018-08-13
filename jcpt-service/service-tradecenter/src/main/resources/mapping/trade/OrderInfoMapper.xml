@@ -13,13 +13,18 @@
     <result column="discount_amount" jdbcType="DECIMAL" property="discountAmount" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="operator_nation_code" jdbcType="VARCHAR" property="operatorNationCode" />
+    <result column="operator_nation_name" jdbcType="VARCHAR" property="operatorNationName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     order_id, mobile, user_id, product_id, product_name, price, product_num, total_amount, 
-    discount_amount, pay_amount, order_status, remark, create_time, update_time
+    discount_amount, pay_amount, order_status, operator_id, operator_name, operator_nation_code, 
+    operator_nation_name, remark, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -35,13 +40,17 @@
     insert into ef_order_info (order_id, mobile, user_id, 
       product_id, product_name, price, 
       product_num, total_amount, discount_amount, 
-      pay_amount, order_status, remark, 
-      create_time, update_time)
+      pay_amount, order_status, operator_id, 
+      operator_name, operator_nation_code, operator_nation_name, 
+      remark, create_time, update_time
+      )
     values (#{orderId,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
       #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
       #{productNum,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{discountAmount,jdbcType=DECIMAL}, 
-      #{payAmount,jdbcType=DECIMAL}, #{orderStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{payAmount,jdbcType=DECIMAL}, #{orderStatus,jdbcType=VARCHAR}, #{operatorId,jdbcType=INTEGER}, 
+      #{operatorName,jdbcType=VARCHAR}, #{operatorNationCode,jdbcType=VARCHAR}, #{operatorNationName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.trade.dao.model.OrderInfo">
     insert into ef_order_info
@@ -78,6 +87,18 @@
       </if>
       <if test="orderStatus != null">
         order_status,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="operatorNationCode != null">
+        operator_nation_code,
+      </if>
+      <if test="operatorNationName != null">
+        operator_nation_name,
       </if>
       <if test="remark != null">
         remark,
@@ -123,6 +144,18 @@
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=VARCHAR},
       </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorNationCode != null">
+        #{operatorNationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorNationName != null">
+        #{operatorNationName,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -167,6 +200,18 @@
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=VARCHAR},
       </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorNationCode != null">
+        operator_nation_code = #{operatorNationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorNationName != null">
+        operator_nation_name = #{operatorNationName,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -191,6 +236,10 @@
       discount_amount = #{discountAmount,jdbcType=DECIMAL},
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       order_status = #{orderStatus,jdbcType=VARCHAR},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      operator_nation_code = #{operatorNationCode,jdbcType=VARCHAR},
+      operator_nation_name = #{operatorNationName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

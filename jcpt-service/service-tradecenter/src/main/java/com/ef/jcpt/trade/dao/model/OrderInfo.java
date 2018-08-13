@@ -7,141 +7,181 @@ public class OrderInfo {
 
 	private String orderId;
 
-    private String mobile;
+	private String mobile;
 
-    private String userId;
+	private String userId;
 
-    private String productId;
+	private String productId;
 
-    private String productName;
+	private String productName;
 
-    private BigDecimal price;
+	private BigDecimal price;
 
-    private Integer productNum;
+	private Integer productNum;
 
-    private BigDecimal totalAmount;
+	private BigDecimal totalAmount;
 
-    private BigDecimal discountAmount;
+	private BigDecimal discountAmount;
 
-    private BigDecimal payAmount;
+	private BigDecimal payAmount;
 
-    private String orderStatus;
+	private String orderStatus;
 
-    private String remark;
+	private Integer operatorId;
 
-    private Date createTime;
+	private String operatorName;
 
-    private Date updateTime;
+	private String operatorNationCode;
 
-    public String getOrderId() {
-        return orderId;
-    }
+	private String operatorNationName;
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
-    }
+	private String remark;
 
-    public String getMobile() {
-        return mobile;
-    }
+	private Date createTime;
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
-    }
+	private Date updateTime;
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getOrderId() {
+		return orderId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
-    }
+	public void setOrderId(String orderId) {
+		this.orderId = orderId == null ? null : orderId.trim();
+	}
 
-    public String getProductId() {
-        return productId;
-    }
+	public String getMobile() {
+		return mobile;
+	}
 
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
-    }
+	public void setMobile(String mobile) {
+		this.mobile = mobile == null ? null : mobile.trim();
+	}
 
-    public String getProductName() {
-        return productName;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
-    }
+	public void setUserId(String userId) {
+		this.userId = userId == null ? null : userId.trim();
+	}
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+	public String getProductId() {
+		return productId;
+	}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+	public void setProductId(String productId) {
+		this.productId = productId == null ? null : productId.trim();
+	}
 
-    public Integer getProductNum() {
-        return productNum;
-    }
+	public String getProductName() {
+		return productName;
+	}
 
-    public void setProductNum(Integer productNum) {
-        this.productNum = productNum;
-    }
+	public void setProductName(String productName) {
+		this.productName = productName == null ? null : productName.trim();
+	}
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
+	public BigDecimal getPrice() {
+		return price;
+	}
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
-    public BigDecimal getDiscountAmount() {
-        return discountAmount;
-    }
+	public Integer getProductNum() {
+		return productNum;
+	}
 
-    public void setDiscountAmount(BigDecimal discountAmount) {
-        this.discountAmount = discountAmount;
-    }
+	public void setProductNum(Integer productNum) {
+		this.productNum = productNum;
+	}
 
-    public BigDecimal getPayAmount() {
-        return payAmount;
-    }
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
 
-    public void setPayAmount(BigDecimal payAmount) {
-        this.payAmount = payAmount;
-    }
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 
-    public String getOrderStatus() {
-        return orderStatus;
-    }
+	public BigDecimal getDiscountAmount() {
+		return discountAmount;
+	}
 
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus == null ? null : orderStatus.trim();
-    }
+	public void setDiscountAmount(BigDecimal discountAmount) {
+		this.discountAmount = discountAmount;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public BigDecimal getPayAmount() {
+		return payAmount;
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public void setPayAmount(BigDecimal payAmount) {
+		this.payAmount = payAmount;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public String getOrderStatus() {
+		return orderStatus;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus == null ? null : orderStatus.trim();
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public Integer getOperatorId() {
+		return operatorId;
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public void setOperatorId(Integer operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName == null ? null : operatorName.trim();
+	}
+
+	public String getOperatorNationCode() {
+		return operatorNationCode;
+	}
+
+	public void setOperatorNationCode(String operatorNationCode) {
+		this.operatorNationCode = operatorNationCode == null ? null : operatorNationCode.trim();
+	}
+
+	public String getOperatorNationName() {
+		return operatorNationName;
+	}
+
+	public void setOperatorNationName(String operatorNationName) {
+		this.operatorNationName = operatorNationName == null ? null : operatorNationName.trim();
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

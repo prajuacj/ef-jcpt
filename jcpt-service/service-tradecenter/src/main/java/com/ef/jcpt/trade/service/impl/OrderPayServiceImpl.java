@@ -1,6 +1,7 @@
 package com.ef.jcpt.trade.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +18,17 @@ import com.ef.jcpt.common.util.BeanUtil;
 import com.ef.jcpt.core.redis.IDProvider;
 import com.ef.jcpt.trade.component.OrderInfoComponent;
 import com.ef.jcpt.trade.component.PayInfoComponent;
+import com.ef.jcpt.trade.component.PhoneSupportOperatorComponent;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
 import com.ef.jcpt.trade.dao.PayInfoMapper;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 import com.ef.jcpt.trade.dao.model.PayInfo;
+import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
 import com.ef.jcpt.trade.service.IOrderPayService;
 import com.ef.jcpt.trade.service.IWechatpayh5Service;
 import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 import com.ef.jcpt.trade.service.bo.PayInfoBo;
+import com.ef.jcpt.trade.service.bo.PhoneSupportOperatorBo;
 
 @Service
 public class OrderPayServiceImpl implements IOrderPayService {
@@ -34,6 +38,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 
 	@Autowired
 	private OrderInfoComponent orderInfoComponent;
+
+	@Autowired
+	private PhoneSupportOperatorComponent phoneSupportOperatorComponent;
 
 	@Autowired
 	private PayInfoComponent payInfoComponent;
@@ -110,5 +117,31 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	public BasicServiceModel<List<OrderInfoBo>> listOrder(String userId) {
 		// TODO Auto-generated method stub
 		return orderInfoComponent.listOrder(userId);
+	}
+
+	@Override
+	public BasicServiceModel<List<PhoneSupportOperatorBo>> listOperator(String phoneModel, String nationCode) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<List<PhoneSupportOperatorBo>> bsm = new BasicServiceModel<List<PhoneSupportOperatorBo>>();
+
+		BasicServiceModel<List<PhoneSupportOperator>> bsmRet = phoneSupportOperatorComponent.listOperator(phoneModel,
+				nationCode);
+		if ((null != bsmRet) && (ReqStatusConst.OK.equals(bsmRet.getCode()))) {
+			List<PhoneSupportOperator> list = bsmRet.getData();
+			if (null != list) {
+				List<PhoneSupportOperatorBo> boList = new ArrayList<PhoneSupportOperatorBo>();
+				for (PhoneSupportOperator info : list) {
+					PhoneSupportOperatorBo bo = new PhoneSupportOperatorBo();
+					BeanUtils.copyProperties(info, bo);
+					boList.add(bo);
+				}
+				bsm.setData(boList);
+			}
+			bsm.setCode(ReqStatusConst.OK);
+		} else {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg(bsmRet.getMsg());
+		}
+		return bsm;
 	}
 }
