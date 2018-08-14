@@ -16,16 +16,20 @@ import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.BeanUtil;
 import com.ef.jcpt.core.redis.IDProvider;
+import com.ef.jcpt.trade.component.FlowProductComponent;
 import com.ef.jcpt.trade.component.OrderInfoComponent;
 import com.ef.jcpt.trade.component.PayInfoComponent;
 import com.ef.jcpt.trade.component.PhoneSupportOperatorComponent;
+import com.ef.jcpt.trade.dao.OperatorInfoMapper;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
 import com.ef.jcpt.trade.dao.PayInfoMapper;
+import com.ef.jcpt.trade.dao.model.OperatorInfo;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 import com.ef.jcpt.trade.dao.model.PayInfo;
 import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
 import com.ef.jcpt.trade.service.IOrderPayService;
 import com.ef.jcpt.trade.service.IWechatpayh5Service;
+import com.ef.jcpt.trade.service.bo.FlowProductBo;
 import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 import com.ef.jcpt.trade.service.bo.PayInfoBo;
 import com.ef.jcpt.trade.service.bo.PhoneSupportOperatorBo;
@@ -37,7 +41,13 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	private OrderInfoMapper orderInfoMapper;
 
 	@Autowired
+	private OperatorInfoMapper operatorInfoMapper;
+
+	@Autowired
 	private OrderInfoComponent orderInfoComponent;
+
+	@Autowired
+	private FlowProductComponent flowProductComponent;
 
 	@Autowired
 	private PhoneSupportOperatorComponent phoneSupportOperatorComponent;
@@ -114,9 +124,73 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	}
 
 	@Override
-	public BasicServiceModel<List<OrderInfoBo>> listOrder(String userId) {
+	public int countProductByPage(String userNationCode, String buyNationCode, String productType) {
 		// TODO Auto-generated method stub
-		return orderInfoComponent.listOrder(userId);
+		return flowProductComponent.countOrderByPage(userNationCode, buyNationCode, productType);
+
+	}
+
+	@Override
+	public BasicServiceModel<List<FlowProductBo>> listProductByPage(String userNationCode, String buyNationCode,
+			String productType, int indexPage, int pageSize) {
+		BasicServiceModel<List<FlowProductBo>> bsm = new BasicServiceModel<List<FlowProductBo>>();
+		// TODO Auto-generated method stub
+		int start = (indexPage - 1) * pageSize;
+		if (start < 0) {
+			start = 0;
+		}
+		List<Map> list = flowProductComponent.listProductByPage(userNationCode, buyNationCode, productType, start,
+				pageSize);
+		if (null != list) {
+			List<FlowProductBo> boList = new ArrayList<FlowProductBo>();
+			for (Map map : list) {
+				FlowProductBo bo = new FlowProductBo();
+				bo.setId((Integer) map.get("id"));
+				bo.setProductName((String) map.get("product_name"));
+				bo.setProductType((String) map.get("product_type"));
+				bo.setPrice((BigDecimal) map.get("price"));
+				bo.setPreferentialPrice((BigDecimal) map.get("discount_price"));
+				bo.setProductTerm((Date) map.get("product_term"));
+				bo.setProductInstruction((String) map.get("product_instruction"));
+				bo.setRemark((String) map.get("remark"));
+				boList.add(bo);
+			}
+			bsm.setData(boList);
+		}
+		bsm.setCode(ReqStatusConst.OK);
+
+		return bsm;
+	}
+
+	@Override
+	public int countOrderByPage(String userName, String nationCode, String orderStatus) {
+		// TODO Auto-generated method stub
+		return orderInfoComponent.countOrderByPage(userName, nationCode, orderStatus);
+
+	}
+
+	@Override
+	public BasicServiceModel<List<OrderInfoBo>> listOrderByPage(String userName, String nationCode, String orderStatus,
+			int indexPage, int pageSize) {
+		BasicServiceModel<List<OrderInfoBo>> bsm = new BasicServiceModel<List<OrderInfoBo>>();
+		// TODO Auto-generated method stub
+		int start = (indexPage - 1) * pageSize;
+		if (start < 0) {
+			start = 0;
+		}
+		List<OrderInfo> list = orderInfoComponent.listOrderByPage(userName, nationCode, orderStatus, start, pageSize);
+		if (null != list) {
+			List<OrderInfoBo> boList = new ArrayList<OrderInfoBo>();
+			for (OrderInfo info : list) {
+				OrderInfoBo bo = new OrderInfoBo();
+				BeanUtils.copyProperties(info, bo);
+				boList.add(bo);
+			}
+			bsm.setData(boList);
+		}
+		bsm.setCode(ReqStatusConst.OK);
+
+		return bsm;
 	}
 
 	@Override
@@ -141,6 +215,25 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		} else {
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg(bsmRet.getMsg());
+		}
+		return bsm;
+	}
+
+	@Override
+	public BasicServiceModel<String> updateOrderOperatorByOrderId(String orderId, int operatorId) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		OperatorInfo operInfo = operatorInfoMapper.selectByPrimaryKey(operatorId);
+		String operatorName = "";
+		if (null != operInfo) {
+			operatorName = operInfo.getOperatorName();
+		}
+		int ret = orderInfoComponent.updateOrderOperatorByOrderId(orderId, operatorId, operatorName);
+		if (ret == 1) {
+			bsm.setCode(ReqStatusConst.OK);
+		} else {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("修改失败");
 		}
 		return bsm;
 	}

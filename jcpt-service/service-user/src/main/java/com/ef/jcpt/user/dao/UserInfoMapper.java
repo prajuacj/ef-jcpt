@@ -26,7 +26,7 @@ public interface UserInfoMapper {
 
 	UserInfo selectUserByUserName(@Param("userName") String userName);
 
-	void updateUserPwd(@Param("username") String username, @Param("loginPassword") String orgPwd);
+	void updateUserPwd(@Param("userName") String userName, @Param("loginPassword") String orgPwd);
 
 	List<UserInfo> selectUserByWechatId(@Param("wechatId") String wechatId);
 }

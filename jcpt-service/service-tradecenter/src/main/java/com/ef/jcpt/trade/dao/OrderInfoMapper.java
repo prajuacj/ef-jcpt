@@ -2,11 +2,10 @@ package com.ef.jcpt.trade.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
-import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 
 @Repository
 public interface OrderInfoMapper {
@@ -23,5 +22,12 @@ public interface OrderInfoMapper {
 
 	int updateByPrimaryKey(OrderInfo record);
 
-	BasicServiceModel<List<OrderInfoBo>> listOrderByUserId(String userId);
+	List<OrderInfo> listOrderByPage(@Param("userId") String userId, @Param("nationCode") String nationCode,
+			@Param("orderStatus") String orderStatus, @Param("start") int start, @Param("pageSize") int pageSize);
+
+	int updateOrderOperatorByOrderId(@Param("orderId") String orderId, @Param("operatorId") String operatorId,
+			@Param("operatorName") String operatorName);
+
+	int countOrderByPage(@Param("userId") String userId, @Param("nationCode") String nationCode,
+			@Param("orderStatus") String orderStatus);
 }

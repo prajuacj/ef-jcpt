@@ -8,12 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.ef.jcpt.common.constant.FlowKeyConst;
 import com.ef.jcpt.common.constant.OrderStatusConst;
-import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.BeanUtil;
 import com.ef.jcpt.core.redis.IDProvider;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
-import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 
 @Component
 public class OrderInfoComponent {
@@ -35,8 +33,24 @@ public class OrderInfoComponent {
 		return info;
 	}
 
-	public BasicServiceModel<List<OrderInfoBo>> listOrder(String userId) {
+	public List<OrderInfo> listOrderByPage(String userId, String nationCode, String orderStatus, int start,
+			int pageSize) {
 		// TODO Auto-generated method stub
-		return orderInfoMapper.listOrderByUserId(userId);
+		return orderInfoMapper.listOrderByPage(userId, nationCode, orderStatus, start, pageSize);
+	}
+
+	public int updateOrderOperatorByOrderId(String orderId, int operatorId, String operatorName) {
+		// TODO Auto-generated method stub
+		OrderInfo info = new OrderInfo();
+		info.setOrderId(orderId);
+		info.setOperatorId(operatorId);
+		info.setOperatorName(operatorName);
+		info.setUpdateTime(new Date(System.currentTimeMillis()));
+		return orderInfoMapper.updateByPrimaryKeySelective(info);
+	}
+
+	public int countOrderByPage(String userName, String nationCode, String orderStatus) {
+		// TODO Auto-generated method stub
+		return orderInfoMapper.countOrderByPage(userName, nationCode, orderStatus);
 	}
 }

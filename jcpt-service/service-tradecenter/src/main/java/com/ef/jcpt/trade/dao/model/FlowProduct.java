@@ -12,11 +12,15 @@ public class FlowProduct {
 
     private BigDecimal price;
 
+    private String productType;
+
     private String productInstruction;
 
     private Date productTerm;
 
     private BigDecimal preferentialPrice;
+
+    private String useArea;
 
     private String productStatus;
 
@@ -25,8 +29,6 @@ public class FlowProduct {
     private Date createTime;
 
     private Date updateTime;
-
-    private byte[] useArea;
 
     public Integer getId() {
         return id;
@@ -60,6 +62,14 @@ public class FlowProduct {
         this.price = price;
     }
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType == null ? null : productType.trim();
+    }
+
     public String getProductInstruction() {
         return productInstruction;
     }
@@ -82,6 +92,14 @@ public class FlowProduct {
 
     public void setPreferentialPrice(BigDecimal preferentialPrice) {
         this.preferentialPrice = preferentialPrice;
+    }
+
+    public String getUseArea() {
+        return useArea;
+    }
+
+    public void setUseArea(String useArea) {
+        this.useArea = useArea == null ? null : useArea.trim();
     }
 
     public String getProductStatus() {
@@ -114,13 +132,5 @@ public class FlowProduct {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public byte[] getUseArea() {
-        return useArea;
-    }
-
-    public void setUseArea(byte[] useArea) {
-        this.useArea = useArea;
     }
 }
