@@ -17,6 +17,8 @@ public class PhoneSupportOperatorBo implements Serializable {
 	private String userNationCode;
 
 	private Integer supportOperator;
+	
+	private String operatoryName;
 
 	private String operatorStatus;
 
@@ -88,5 +90,13 @@ public class PhoneSupportOperatorBo implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getOperatoryName() {
+		return operatoryName;
+	}
+
+	public void setOperatoryName(String operatoryName) {
+		this.operatoryName = operatoryName;
 	}
 }
