@@ -215,25 +215,19 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
-		BasicServiceModel<List<PhoneSupportOperator>> bsmRet = phoneSupportOperatorComponent.listOperator(phoneModel,
-				nationCode);
-		if ((null != bsmRet) && (ReqStatusConst.OK.equals(bsmRet.getCode()))) {
-			List<PhoneSupportOperator> list = bsmRet.getData();
-			if (null != list) {
-				List<PhoneSupportOperatorBo> boList = new ArrayList<PhoneSupportOperatorBo>();
-				for (PhoneSupportOperator info : list) {
-					PhoneSupportOperatorBo bo = new PhoneSupportOperatorBo();
-					BeanUtils.copyProperties(info, bo);
-					boList.add(bo);
-				}
-				String listStr = JSONObject.toJSONString(boList);
-				bsm.setData(listStr);
+		List<PhoneSupportOperator> list = phoneSupportOperatorComponent.listOperator(phoneModel, nationCode);
+
+		if (null != list) {
+			List<PhoneSupportOperatorBo> boList = new ArrayList<PhoneSupportOperatorBo>();
+			for (PhoneSupportOperator info : list) {
+				PhoneSupportOperatorBo bo = new PhoneSupportOperatorBo();
+				BeanUtils.copyProperties(info, bo);
+				boList.add(bo);
 			}
-			bsm.setCode(ReqStatusConst.OK);
-		} else {
-			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg(bsmRet.getMsg());
+			String listStr = JSONObject.toJSONString(boList);
+			bsm.setData(listStr);
 		}
+		bsm.setCode(ReqStatusConst.OK);
 		return bsm;
 	}
 

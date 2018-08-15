@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.trade.dao.PhoneSupportOperatorMapper;
 import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
 
@@ -15,7 +14,7 @@ public class PhoneSupportOperatorComponent {
 	@Autowired
 	private PhoneSupportOperatorMapper phoneSupportOperatorMapper;
 
-	public BasicServiceModel<List<PhoneSupportOperator>> listOperator(String phoneModel, String nationCode) {
+	public List<PhoneSupportOperator> listOperator(String phoneModel, String nationCode) {
 		// TODO Auto-generated method stub
 		return phoneSupportOperatorMapper.seletOperatorByPhoneModelAndNationCode(phoneModel, nationCode);
 	}

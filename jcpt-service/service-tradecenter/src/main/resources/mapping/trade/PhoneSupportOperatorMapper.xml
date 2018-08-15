@@ -144,7 +144,7 @@
 	</update>
 
 	<select id="seletOperatorByPhoneModelAndNationCode"
-		parameterType="java.lang.String">
+		parameterType="java.lang.String" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from ef_phone_support_operator

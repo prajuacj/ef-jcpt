@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
 
 @Repository
@@ -22,6 +21,6 @@ public interface PhoneSupportOperatorMapper {
 
 	int updateByPrimaryKey(PhoneSupportOperator record);
 
-	BasicServiceModel<List<PhoneSupportOperator>> seletOperatorByPhoneModelAndNationCode(
-			@Param("phoneModel") String phoneModel, @Param("nationCode") String nationCode);
+	List<PhoneSupportOperator> seletOperatorByPhoneModelAndNationCode(@Param("phoneModel") String phoneModel,
+			@Param("nationCode") String nationCode);
 }

@@ -43,19 +43,19 @@ public class OrderTradeController extends BaseController {
 			} else {
 				JSONObject jsonObj = JSONObject.parseObject(params);
 				String tokenKey = jsonObj.getString("tokenKey");
-				TokenVo token = cacheUtil.getToken(tokenKey);
-				if (null != token) {
-					UserInfoBo bo = token.getUser();
-					String userName = bo.getMobile();
+//				TokenVo token = cacheUtil.getToken(tokenKey);
+//				if (null != token) {
+//					UserInfoBo bo = token.getUser();
+//					String userName = bo.getMobile();
 
 					String phoneModel = jsonObj.getString("mobileModel");
 					return orderPayServiceImpl.listOperator(phoneModel, "86");
-				} else {
-					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
-					bsm.setMsg("会话已过期，请重新登录！");
-					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-					return bsm;
-				}
+//				} else {
+//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+//					bsm.setMsg("会话已过期，请重新登录！");
+//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//					return bsm;
+//				}
 
 			}
 		} catch (Exception e) {
