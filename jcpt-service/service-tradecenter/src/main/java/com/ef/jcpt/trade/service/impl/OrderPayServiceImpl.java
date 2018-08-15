@@ -158,7 +158,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			List<FlowProductBo> boList = new ArrayList<FlowProductBo>();
 			for (Map map : list) {
 				FlowProductBo bo = new FlowProductBo();
-				bo.setId((Integer) map.get("id"));
+				bo.setId((Long) map.get("id"));
 				bo.setProductName((String) map.get("product_name"));
 				bo.setProductType((String) map.get("product_type"));
 				bo.setPrice((BigDecimal) map.get("price"));

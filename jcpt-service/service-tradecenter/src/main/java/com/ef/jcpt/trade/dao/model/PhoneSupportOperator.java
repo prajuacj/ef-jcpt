@@ -5,81 +5,91 @@ import java.util.Date;
 public class PhoneSupportOperator {
     private Integer id;
 
-    private String phoneModel;
+	private String phoneModel;
 
-    private String userNationCode;
+	private String userNationCode;
 
-    private Integer supportOperator;
+	private Integer supportOperator;
 
-    private String operatorStatus;
+	private String operatoryName;
 
-    private String remark;
+	private String operatorStatus;
 
-    private Date createTime;
+	private String remark;
 
-    private Date updateTime;
+	private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+	private Date updateTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getPhoneModel() {
-        return phoneModel;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setPhoneModel(String phoneModel) {
-        this.phoneModel = phoneModel == null ? null : phoneModel.trim();
-    }
+	public String getPhoneModel() {
+		return phoneModel;
+	}
 
-    public String getUserNationCode() {
-        return userNationCode;
-    }
+	public void setPhoneModel(String phoneModel) {
+		this.phoneModel = phoneModel == null ? null : phoneModel.trim();
+	}
 
-    public void setUserNationCode(String userNationCode) {
-        this.userNationCode = userNationCode == null ? null : userNationCode.trim();
-    }
+	public String getUserNationCode() {
+		return userNationCode;
+	}
 
-    public Integer getSupportOperator() {
-        return supportOperator;
-    }
+	public void setUserNationCode(String userNationCode) {
+		this.userNationCode = userNationCode == null ? null : userNationCode.trim();
+	}
 
-    public void setSupportOperator(Integer supportOperator) {
-        this.supportOperator = supportOperator;
-    }
+	public Integer getSupportOperator() {
+		return supportOperator;
+	}
 
-    public String getOperatorStatus() {
-        return operatorStatus;
-    }
+	public void setSupportOperator(Integer supportOperator) {
+		this.supportOperator = supportOperator;
+	}
 
-    public void setOperatorStatus(String operatorStatus) {
-        this.operatorStatus = operatorStatus == null ? null : operatorStatus.trim();
-    }
+	public String getOperatoryName() {
+		return operatoryName;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public void setOperatoryName(String operatoryName) {
+		this.operatoryName = operatoryName == null ? null : operatoryName.trim();
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public String getOperatorStatus() {
+		return operatorStatus;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setOperatorStatus(String operatorStatus) {
+		this.operatorStatus = operatorStatus == null ? null : operatorStatus.trim();
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

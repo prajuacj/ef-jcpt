@@ -212,7 +212,7 @@
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
-	<select id="listProductByPage" resultMap="java.util.Map">
+	<select id="listProductByPage" resultType="java.util.Map">
 		SELECT
 		product.id,
 		product.product_name,

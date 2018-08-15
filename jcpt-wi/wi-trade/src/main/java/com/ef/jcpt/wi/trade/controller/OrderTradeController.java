@@ -60,7 +60,7 @@ public class OrderTradeController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("获取运营商信息失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -104,7 +104,7 @@ public class OrderTradeController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("支付失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -164,7 +164,7 @@ public class OrderTradeController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("获取订单信息失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -202,7 +202,7 @@ public class OrderTradeController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("修改订单运营商失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -223,10 +223,10 @@ public class OrderTradeController extends BaseController {
 			} else {
 				JSONObject jsonObj = JSONObject.parseObject(params);
 				String tokenKey = jsonObj.getString("tokenKey");
-				TokenVo token = cacheUtil.getToken(tokenKey);
-				if (null != token) {
-					UserInfoBo bo = token.getUser();
-					String userName = bo.getMobile();
+//				TokenVo token = cacheUtil.getToken(tokenKey);
+//				if (null != token) {
+//					UserInfoBo bo = token.getUser();
+//					String userName = bo.getMobile();
 
 					String orderNationCode = jsonObj.getString("orderNationCode");
 					String productType = jsonObj.getString("productType");
@@ -253,16 +253,16 @@ public class OrderTradeController extends BaseController {
 						bsm.setMsg(productBsm.getMsg());
 						return bsm;
 					}
-				} else {
-					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
-					bsm.setMsg("会话已过期，请重新登录！");
-					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-					return bsm;
-				}
+//				} else {
+//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+//					bsm.setMsg("会话已过期，请重新登录！");
+//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//					return bsm;
+//				}
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("注册失败！" + e.getMessage());
+			bsm.setMsg("获取产品信息失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}

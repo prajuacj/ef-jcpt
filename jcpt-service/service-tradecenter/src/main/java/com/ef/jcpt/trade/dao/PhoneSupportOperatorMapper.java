@@ -9,6 +9,7 @@ import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
 
 @Repository
 public interface PhoneSupportOperatorMapper {
+
 	int deleteByPrimaryKey(Integer id);
 
 	int insert(PhoneSupportOperator record);
