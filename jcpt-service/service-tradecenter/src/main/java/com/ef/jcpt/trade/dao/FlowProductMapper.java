@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.ef.jcpt.trade.dao.model.FlowProduct;
 
+@Repository
 public interface FlowProductMapper {
 	int deleteByPrimaryKey(Integer id);
 
