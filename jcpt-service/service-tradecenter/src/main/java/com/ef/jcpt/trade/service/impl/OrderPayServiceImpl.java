@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.FlowKeyConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
@@ -98,9 +99,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	}
 
 	@Override
-	public BasicServiceModel<Map<String, String>> toPay(OrderInfoBo origBo, String code, String ip) {
+	public BasicServiceModel<String> toPay(OrderInfoBo origBo, String code, String ip) {
 		// TODO Auto-generated method stub
-		BasicServiceModel<Map<String, String>> bsm = new BasicServiceModel<Map<String, String>>();
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {
 			OrderInfo info = new OrderInfo();
@@ -112,9 +113,21 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			BeanUtil.copyProperties(payInfo, payBo);
 
 			Map<String, String> map = wechathpayh5ServiceImpl.toPay(payBo, code, ip);
-			bsm.setCode(ReqStatusConst.OK);
-			bsm.setData(map);
-			return bsm;
+			if (null != map) {
+				bsm.setCode(ReqStatusConst.OK);
+				JSONObject json = new JSONObject();
+				json.put("timeStamp", map.get("timeStamp"));
+				json.put("nonceStr", map.get("timeStamp"));
+				json.put("package", map.get("timeStamp"));
+				json.put("signType", map.get("timeStamp"));
+				json.put("paySign", map.get("timeStamp"));
+				bsm.setData(json.toString());
+				return bsm;
+			} else {
+				bsm.setCode(ReqStatusConst.FAIL);
+				bsm.setMsg("获取支付数据失败！");
+				return bsm;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
@@ -131,9 +144,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	}
 
 	@Override
-	public BasicServiceModel<List<FlowProductBo>> listProductByPage(String userNationCode, String buyNationCode,
-			String productType, int indexPage, int pageSize) {
-		BasicServiceModel<List<FlowProductBo>> bsm = new BasicServiceModel<List<FlowProductBo>>();
+	public BasicServiceModel<String> listProductByPage(String userNationCode, String buyNationCode, String productType,
+			int indexPage, int pageSize) {
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		// TODO Auto-generated method stub
 		int start = (indexPage - 1) * pageSize;
 		if (start < 0) {
@@ -155,7 +168,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				bo.setRemark((String) map.get("remark"));
 				boList.add(bo);
 			}
-			bsm.setData(boList);
+			JSONObject data = new JSONObject();
+			data.put("data", boList);
+			bsm.setData(data.toString());
 		}
 		bsm.setCode(ReqStatusConst.OK);
 
@@ -170,9 +185,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	}
 
 	@Override
-	public BasicServiceModel<List<OrderInfoBo>> listOrderByPage(String userName, String nationCode, String orderStatus,
+	public BasicServiceModel<String> listOrderByPage(String userName, String nationCode, String orderStatus,
 			int indexPage, int pageSize) {
-		BasicServiceModel<List<OrderInfoBo>> bsm = new BasicServiceModel<List<OrderInfoBo>>();
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		// TODO Auto-generated method stub
 		int start = (indexPage - 1) * pageSize;
 		if (start < 0) {
@@ -186,7 +201,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				BeanUtils.copyProperties(info, bo);
 				boList.add(bo);
 			}
-			bsm.setData(boList);
+			JSONObject data = new JSONObject();
+			data.put("data", boList);
+			bsm.setData(data.toString());
 		}
 		bsm.setCode(ReqStatusConst.OK);
 
@@ -194,9 +211,9 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	}
 
 	@Override
-	public BasicServiceModel<List<PhoneSupportOperatorBo>> listOperator(String phoneModel, String nationCode) {
+	public BasicServiceModel<String> listOperator(String phoneModel, String nationCode) {
 		// TODO Auto-generated method stub
-		BasicServiceModel<List<PhoneSupportOperatorBo>> bsm = new BasicServiceModel<List<PhoneSupportOperatorBo>>();
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		BasicServiceModel<List<PhoneSupportOperator>> bsmRet = phoneSupportOperatorComponent.listOperator(phoneModel,
 				nationCode);
@@ -209,7 +226,8 @@ public class OrderPayServiceImpl implements IOrderPayService {
 					BeanUtils.copyProperties(info, bo);
 					boList.add(bo);
 				}
-				bsm.setData(boList);
+				String listStr = JSONObject.toJSONString(boList);
+				bsm.setData(listStr);
 			}
 			bsm.setCode(ReqStatusConst.OK);
 		} else {
