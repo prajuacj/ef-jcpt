@@ -2,6 +2,7 @@ package com.ef.jcpt.trade.service.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class OrderInfoBo implements Serializable {
 
@@ -11,28 +12,40 @@ public class OrderInfoBo implements Serializable {
 	private static final long serialVersionUID = 6793403933712125626L;
 
 	private String orderId;
-	
+
 	private String mobile;
 
-    private String userId;
+	private String userId;
 
-    private String productId;
+	private String productId;
 
-    private String productName;
+	private String productName;
 
-    private BigDecimal price;
+	private BigDecimal price;
 
-    private Integer productNum;
+	private Integer productNum;
 
-    private BigDecimal totalAmount;
+	private BigDecimal totalAmount;
 
-    private BigDecimal discountAmount;
+	private BigDecimal discountAmount;
 
-    private BigDecimal payAmount;
+	private BigDecimal payAmount;
 
-    private String orderStatus;
+	private String orderStatus;
+
+	private Integer operatorId;
+
+	private String operatorName;
+
+	private String operatorNationCode;
+
+	private String operatorNationName;
 
 	private String remark;
+
+	private Date createTime;
+
+	private Date updateTime;
 
 	public String getMobile() {
 		return mobile;
@@ -128,5 +141,53 @@ public class OrderInfoBo implements Serializable {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	public Integer getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Integer operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
+	}
+
+	public String getOperatorNationCode() {
+		return operatorNationCode;
+	}
+
+	public void setOperatorNationCode(String operatorNationCode) {
+		this.operatorNationCode = operatorNationCode;
+	}
+
+	public String getOperatorNationName() {
+		return operatorNationName;
+	}
+
+	public void setOperatorNationName(String operatorNationName) {
+		this.operatorNationName = operatorNationName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }
