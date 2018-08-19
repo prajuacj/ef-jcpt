@@ -23,7 +23,7 @@ public class FlowProductBo implements Serializable {
 
 	private String productInstruction;
 
-	private Long productTerm;
+	private int productTerm;
 
 	private BigDecimal preferentialPrice;
 
@@ -133,11 +133,11 @@ public class FlowProductBo implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Long getProductTerm() {
+	public int getProductTerm() {
 		return productTerm;
 	}
 
-	public void setProductTerm(Long productTerm) {
+	public void setProductTerm(int productTerm) {
 		this.productTerm = productTerm;
 	}
 }

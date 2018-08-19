@@ -49,7 +49,8 @@ public class OrderTradeController extends BaseController {
 					String userName = bo.getMobile();
 
 					String phoneModel = jsonObj.getString("mobileModel");
-					return orderPayServiceImpl.listOperator(phoneModel, "86");
+					String nationCode = jsonObj.getString("nationCode");
+					return orderPayServiceImpl.listOperator(phoneModel, nationCode);
 				} else {
 					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
 					bsm.setMsg("会话已过期，请重新登录！");
@@ -81,31 +82,31 @@ public class OrderTradeController extends BaseController {
 			} else {
 				JSONObject jsonObj = JSONObject.parseObject(params);
 				String tokenKey = jsonObj.getString("tokenKey");
-				TokenVo token = cacheUtil.getToken(tokenKey);
-				if (null != token) {
-					UserInfoBo bo = token.getUser();
-					String userName = bo.getMobile();
-					String userNationCode = bo.getNationCode();
-					OrderInfoBo orderBo = new OrderInfoBo();
-					orderBo.setProductId(jsonObj.getString("productId"));
-					orderBo.setProductName(jsonObj.getString("productName"));
-					orderBo.setDiscountAmount(jsonObj.getBigDecimal("discountPrice"));
-					orderBo.setProductNum(jsonObj.getIntValue("productNum"));
-					orderBo.setPayAmount(jsonObj.getBigDecimal("payAmount"));
-					orderBo.setUserId(userName);
-					orderBo.setMobile(userName);
-					orderBo.setUserNationCode(userNationCode);
-					orderBo.setProductNationCode(jsonObj.getString("productNationCode"));
-					String code = jsonObj.getString("code");
-					String ip = jsonObj.getString("ip");
+//				TokenVo token = cacheUtil.getToken(tokenKey);
+//				if (null != token) {
+//					UserInfoBo bo = token.getUser();
+				String userName = "13076922539";// bo.getMobile();
+				String userNationCode = "156";// bo.getNationCode();
+				OrderInfoBo orderBo = new OrderInfoBo();
+				orderBo.setProductId(jsonObj.getString("productId"));
+				orderBo.setProductName(jsonObj.getString("productName"));
+				orderBo.setDiscountAmount(jsonObj.getBigDecimal("discountPrice"));
+				orderBo.setProductNum(jsonObj.getIntValue("productNum"));
+				orderBo.setPayAmount(jsonObj.getBigDecimal("payAmount"));
+				orderBo.setUserId(userName);
+				orderBo.setMobile(userName);
+				orderBo.setUserNationCode(userNationCode);
+				orderBo.setProductNationCode(jsonObj.getString("productNationCode"));
+				String code = jsonObj.getString("code");
+				String ip = jsonObj.getString("ip");
 
-					return orderPayServiceImpl.toPay(orderBo, code, ip);
-				} else {
-					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
-					bsm.setMsg("会话已过期，请重新登录！");
-					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-					return bsm;
-				}
+				return orderPayServiceImpl.toPay(orderBo, code, ip);
+//				} else {
+//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+//					bsm.setMsg("会话已过期，请重新登录！");
+//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//					return bsm;
+//				}
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
@@ -232,6 +233,7 @@ public class OrderTradeController extends BaseController {
 				if (null != token) {
 					UserInfoBo bo = token.getUser();
 					String userName = bo.getMobile();
+					String userNationCode = bo.getNationCode();
 
 					String orderNationCode = jsonObj.getString("orderNationCode");
 					String productType = jsonObj.getString("productType");
@@ -239,10 +241,10 @@ public class OrderTradeController extends BaseController {
 					int pageSize = jsonObj.getIntValue("pageSize");
 					int total = 0;
 					if (pageIndex == 1) {
-						total = orderPayServiceImpl.countProductByPage("86", orderNationCode, productType);
+						total = orderPayServiceImpl.countProductByPage(userNationCode, orderNationCode, productType);
 					}
-					BasicServiceModel<String> productBsm = orderPayServiceImpl.listProductByPage("86", orderNationCode,
-							productType, pageIndex, pageSize);
+					BasicServiceModel<String> productBsm = orderPayServiceImpl.listProductByPage(userNationCode,
+							orderNationCode, productType, pageIndex, pageSize);
 					if ((null != productBsm) && (ReqStatusConst.OK.equals(productBsm.getCode()))) {
 						String listProStr = productBsm.getData();
 						JSONObject listjson = JSONObject.parseObject(listProStr);

@@ -122,8 +122,8 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				String productType = (String) prodMap.get("product_type");
 				BigDecimal productPrice = (BigDecimal) prodMap.get("price");
 				BigDecimal poductDisPrice = (BigDecimal) prodMap.get("discount_price");
-				long productTerm = (Long) prodMap.get("product_term");
-				long productFlows = (Long) prodMap.get("product_num");
+				int productTerm = (int) prodMap.get("product_term");
+				int productFlows = (int) prodMap.get("product_num");
 				String productInstruction = (String) prodMap.get("product_instruction");
 
 				BigDecimal payAmount = poductDisPrice.multiply(BigDecimal.valueOf(productNum));
@@ -223,7 +223,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				bo.setProductType((String) map.get("product_type"));
 				bo.setPrice((BigDecimal) map.get("price"));
 				bo.setPreferentialPrice((BigDecimal) map.get("discount_price"));
-				bo.setProductTerm((Long) map.get("product_term"));
+				bo.setProductTerm((int) map.get("product_term"));
 				bo.setProductInstruction((String) map.get("product_instruction"));
 				bo.setRemark((String) map.get("remark"));
 				boList.add(bo);

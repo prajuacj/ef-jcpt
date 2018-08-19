@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.DigestSignatureSpi.MD5;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,7 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		}
 		String currTime = TenpayUtil.getCurrTime();
 		// 8位日期
-		String strTime = currTime.substring(8, currTime.length());
+		String strTime = currTime.substring(0, 8);
 		// 四位随机数
 		String strRandom = TenpayUtil.buildRandom(4) + "";
 		// 10位序列号,可以自行调整。
@@ -83,17 +84,22 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 
 		String trade_type = "JSAPI";
 		String openid = openId;
+		String outTraeNo = payBo.getOrderId();
+		String body = "东流交易中心-" + outTraeNo;
+		String attach = payBo.getFlowId();
+		String payAmtStr = String.valueOf(payBo.getPayAmount());
 
 		SortedMap<String, String> packageParams = new TreeMap<String, String>();
 		packageParams.put("appid", appid);
 		packageParams.put("mch_id", mch_id);
 		packageParams.put("device_info", "WEB");
 		packageParams.put("nonce_str", nonce_str);
-		packageParams.put("body", "东流交易中心-" + payBo.getOrderContent());
-		packageParams.put("attach", payBo.getUserId());
-		packageParams.put("out_trade_no", payBo.getOrderId());
+		packageParams.put("sign_type", "MD5");
+		packageParams.put("body", body);
+		packageParams.put("attach", attach);
+		packageParams.put("out_trade_no", outTraeNo);
 		packageParams.put("fee_type", "CNY");
-		packageParams.put("total_fee", String.valueOf(payBo.getPayAmount()));
+		packageParams.put("total_fee", payAmtStr);
 		packageParams.put("spbill_create_ip", ip);
 		packageParams.put("notify_url", notify_url);
 		packageParams.put("trade_type", trade_type);
@@ -102,12 +108,11 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		String sign = createSign(packageParams);
 		String xml = "<xml>" + "<appid>" + appid + "</appid>" + "<mch_id>" + mch_id + "</mch_id>"
 				+ "<device_info>WEB</device_info>" + "<nonce_str>" + nonce_str + "</nonce_str>" + "<sign>" + sign
-				+ "</sign>" + "<sign_type>MD5</sign_type>" + "<body><![CDATA[" + "东流交易中心-" + payBo.getOrderContent()
-				+ "]]></body>" + "<attach>" + payBo.getUserId() + "</attach>" + "<out_trade_no>" + payBo.getOrderId()
-				+ "</out_trade_no>" + "<fee_type>CNY</fee_type>" + "<total_fee>" + String.valueOf(payBo.getPayAmount())
-				+ "</total_fee>" + "<spbill_create_ip>" + ip + "</spbill_create_ip>" + "<notify_url>" + notify_url
-				+ "</notify_url>" + "<trade_type>" + trade_type + "</trade_type>" + "<openid>" + openid + "</openid>"
-				+ "</xml>";
+				+ "</sign>" + "<sign_type>MD5</sign_type>" + "<body><![CDATA[" + body + "]]></body>" + "<attach>"
+				+ attach + "</attach>" + "<out_trade_no>" + outTraeNo + "</out_trade_no>" + "<fee_type>CNY</fee_type>"
+				+ "<total_fee>" + payAmtStr + "</total_fee>" + "<spbill_create_ip>" + ip + "</spbill_create_ip>"
+				+ "<notify_url>" + notify_url + "</notify_url>" + "<trade_type>" + trade_type + "</trade_type>"
+				+ "<openid>" + openid + "</openid>" + "</xml>";
 
 		String createOrderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 		String prepay_id = "";
@@ -125,7 +130,7 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		String nonceStr2 = nonce_str;
 		String prepay_id2 = "prepay_id=" + prepay_id;
 		String packages = prepay_id2;
-		//finalpackage.put("appId", appid2);
+		// finalpackage.put("appId", appid2);
 		finalpackage.put("timeStamp", timestamp2);
 		finalpackage.put("nonceStr", nonceStr2);
 		// packages=new String(packages.getBytes("ISO-8859-1"),"UTF-8");//转码
@@ -150,7 +155,13 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		}
 		sb.append("key=" + apikey);
 		// LogUtil.info("md5 sb:" + sb);
-		String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+		String sign = null;
+		try {
+			sign = MD5Util.MD5Encode(sb.toString(), "utf-8").toUpperCase();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// LogUtil.info("packge签名:" + sign);
 		return sign;
 
