@@ -177,23 +177,26 @@ public class UserController extends BaseController {
 					String userName = bo.getUserName();
 					String loginType = bo.getLoginType();
 					String password = bo.getPassword();
-					UserInfoBo member = new UserInfoBo();
-					member.setMobile(userName);
 
-					boolean isLogin = userServiceImpl.login(userName, password, loginType);
-					if (isLogin) {
+					BasicServiceModel<UserInfoBo> logBsm = userServiceImpl.login(userName, password, loginType);
+					if ((null != logBsm) && (ReqStatusConst.OK.equals(logBsm.getCode()))) {
+						UserInfoBo retBo = logBsm.getData();
 						TokenVo token = new TokenVo();
-						token.setUser(member);
+						token.setUser(retBo);
 						String tokenKey = cacheUtil.setToken(token, userName);
 						map.put("tokenKey", tokenKey);
-						map.put("member", member);
+						map.put("member", retBo);
 						String retStr = JSON.toJSONString(map);
 						result.setCode(ReqStatusConst.OK);
 						result.setData(retStr);
 						return result;
 					} else {
 						result.setCode(ReqStatusConst.FAIL);
-						result.setMsg("登录失败，账户或者密码不正确！");
+						if (null != logBsm) {
+							result.setMsg(logBsm.getMsg());
+						} else {
+							result.setMsg("登录失败，账户或者密码不正确！");
+						}
 						return result;
 					}
 				}

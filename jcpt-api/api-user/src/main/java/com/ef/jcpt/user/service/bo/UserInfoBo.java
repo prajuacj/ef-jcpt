@@ -30,6 +30,8 @@ public class UserInfoBo extends BaseBo {
 	private Date updateTime;
 
 	private String country;
+	
+	private String nationCode;
 
 	public String getLoginPassword() {
 		return loginPassword;
@@ -109,5 +111,13 @@ public class UserInfoBo extends BaseBo {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getNationCode() {
+		return nationCode;
+	}
+
+	public void setNationCode(String nationCode) {
+		this.nationCode = nationCode;
 	}
 }

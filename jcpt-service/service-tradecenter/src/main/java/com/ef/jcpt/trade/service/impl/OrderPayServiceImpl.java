@@ -16,6 +16,7 @@ import com.ef.jcpt.common.constant.FlowKeyConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.BeanUtil;
+import com.ef.jcpt.common.util.DateUtil;
 import com.ef.jcpt.core.redis.IDProvider;
 import com.ef.jcpt.trade.component.FlowProductComponent;
 import com.ef.jcpt.trade.component.OrderInfoComponent;
@@ -104,28 +105,87 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {
-			OrderInfo info = new OrderInfo();
-			BeanUtil.copyProperties(origBo, info);
-			OrderInfo orderInfo = orderInfoComponent.genOrderInfo(info);
+			String productId = origBo.getProductId();
+			BigDecimal origdiscountPrice = origBo.getDiscountAmount();
+			int productNum = origBo.getProductNum();
+			BigDecimal origpayAmount = origBo.getPayAmount();
+			String userNationCode = origBo.getUserNationCode();
+			String productNationCode = origBo.getProductNationCode();
+			String userId = origBo.getUserId();
+			String mobile = origBo.getMobile();
 
-			PayInfo payInfo = payInfoComponent.genPayInfo(orderInfo);
-			PayInfoBo payBo = new PayInfoBo();
-			BeanUtil.copyProperties(payInfo, payBo);
+			List<Map> productList = flowProductComponent.selectProductAndPrice(userNationCode, productNationCode,
+					Integer.parseInt(productId));
+			if ((null != productList) && (productList.size() == 1)) {
+				Map prodMap = productList.get(0);
+				String productName = (String) prodMap.get("product_name");
+				String productType = (String) prodMap.get("product_type");
+				BigDecimal productPrice = (BigDecimal) prodMap.get("price");
+				BigDecimal poductDisPrice = (BigDecimal) prodMap.get("discount_price");
+				long productTerm = (Long) prodMap.get("product_term");
+				long productFlows = (Long) prodMap.get("product_num");
+				String productInstruction = (String) prodMap.get("product_instruction");
 
-			Map<String, String> map = wechathpayh5ServiceImpl.toPay(payBo, code, ip);
-			if (null != map) {
-				bsm.setCode(ReqStatusConst.OK);
-				JSONObject json = new JSONObject();
-				json.put("timeStamp", map.get("timeStamp"));
-				json.put("nonceStr", map.get("timeStamp"));
-				json.put("package", map.get("timeStamp"));
-				json.put("signType", map.get("timeStamp"));
-				json.put("paySign", map.get("timeStamp"));
-				bsm.setData(json.toString());
-				return bsm;
+				BigDecimal payAmount = poductDisPrice.multiply(BigDecimal.valueOf(productNum));
+				long remainFlow = productFlows * productNum;
+				BigDecimal totalAmount = productPrice.multiply(BigDecimal.valueOf(productNum));
+
+				OrderInfo info = new OrderInfo();
+				info.setDiscountAmount(poductDisPrice);
+				info.setMobile(mobile);
+				// info.setOperatorId(operatorId);
+				// info.setOperatorName(operatorName);
+				info.setOperatorNationCode(productNationCode);
+				// info.setOperatorNationName(operatorNationName);
+				info.setPayAmount(payAmount);
+				// info.setPayTime(payTime);
+				info.setPrice(productPrice);
+				info.setProductId(productId);
+				info.setProductName(productName);
+				info.setProductNum(productNum);
+				info.setRemainFlow(BigDecimal.valueOf(remainFlow));
+				info.setTotalAmount(totalAmount);
+				info.setUserId(userId);
+				// info.setValidTime(validTime);
+
+				OrderInfo retOrder = null;
+				try {
+					retOrder = orderInfoComponent.genOrderInfo(info);
+
+					PayInfo payInfo = payInfoComponent.genPayInfo(retOrder);
+					PayInfoBo payBo = new PayInfoBo();
+					BeanUtil.copyProperties(payInfo, payBo);
+
+					Map<String, String> map = wechathpayh5ServiceImpl.toPay(payBo, code, ip);
+					if (null != map) {
+						bsm.setCode(ReqStatusConst.OK);
+						JSONObject json = new JSONObject();
+						json.put("timeStamp", map.get("timeStamp"));
+						json.put("nonceStr", map.get("timeStamp"));
+						json.put("package", map.get("timeStamp"));
+						json.put("signType", map.get("timeStamp"));
+						json.put("paySign", map.get("timeStamp"));
+						bsm.setData(json.toString());
+
+						Date curDate = new Date(System.currentTimeMillis());
+						retOrder.setPayTime(curDate);
+						retOrder.setValidTime(DateUtil.addDay(curDate, (int) productTerm));
+						orderInfoComponent.updateOrderInfo(retOrder);
+						return bsm;
+					} else {
+						bsm.setCode(ReqStatusConst.FAIL);
+						bsm.setMsg("获取支付数据失败！");
+						return bsm;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					bsm.setCode(ReqStatusConst.FAIL);
+					bsm.setMsg(e.getMessage());
+					return bsm;
+				}
 			} else {
 				bsm.setCode(ReqStatusConst.FAIL);
-				bsm.setMsg("获取支付数据失败！");
+				bsm.setMsg("购买的产品不正确！");
 				return bsm;
 			}
 		} catch (Exception e) {
@@ -163,7 +223,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				bo.setProductType((String) map.get("product_type"));
 				bo.setPrice((BigDecimal) map.get("price"));
 				bo.setPreferentialPrice((BigDecimal) map.get("discount_price"));
-				bo.setProductTerm((Date) map.get("product_term"));
+				bo.setProductTerm((Long) map.get("product_term"));
 				bo.setProductInstruction((String) map.get("product_instruction"));
 				bo.setRemark((String) map.get("remark"));
 				boList.add(bo);

@@ -7,6 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ef.jcpt.common.constant.ReqStatusConst;
+import com.ef.jcpt.common.entity.BasicServiceModel;
+import com.ef.jcpt.common.util.BeanUtil;
 import com.ef.jcpt.core.digest.Digests;
 import com.ef.jcpt.user.component.IUserInfoComponent;
 import com.ef.jcpt.user.component.IUserMifiRelationComponent;
@@ -59,18 +62,29 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean login(String username, String password, String loginType) {
+	public BasicServiceModel<UserInfoBo> login(String username, String password, String loginType) {
 		// TODO Auto-generated method stub
+		BasicServiceModel<UserInfoBo> bsm = new BasicServiceModel<UserInfoBo>();
 		if ("1".equals(loginType)) {
 			try {
 				List<UserInfo> list = userInfoComponentImpl.findUserByWechatId(username);
 				if ((null != list) && (list.size() == 1)) {
-					return true;
+					bsm.setCode(ReqStatusConst.OK);
+					UserInfoBo bo = new UserInfoBo();
+					UserInfo info = list.get(0);
+					BeanUtil.copyProperties(info, bo);
+					bsm.setData(bo);
+					return bsm;
 				} else {
-					return false;
+					bsm.setCode(ReqStatusConst.FAIL);
+					bsm.setMsg("用户名不正确！");
+					return bsm;
 				}
 			} catch (Exception e) {
-				return false;
+				e.printStackTrace();
+				bsm.setCode(ReqStatusConst.FAIL);
+				bsm.setMsg(e.getMessage());
+				return bsm;
 			}
 		} else {
 			String orgPwd = Digests.getSHA1(password);
@@ -78,12 +92,20 @@ public class UserServiceImpl implements IUserService {
 			if (null != ui) {
 				String dbPwd = ui.getLoginPassword();
 				if (orgPwd.equalsIgnoreCase(dbPwd)) {
-					return true;
+					bsm.setCode(ReqStatusConst.OK);
+					UserInfoBo bo = new UserInfoBo();
+					BeanUtil.copyProperties(ui, bo);
+					bsm.setData(bo);
+					return bsm;
 				} else {
-					return false;
+					bsm.setCode(ReqStatusConst.FAIL);
+					bsm.setMsg("密码不正确！");
+					return bsm;
 				}
 			}
-			return false;
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("用户名不正确！");
+			return bsm;
 		}
 	}
 

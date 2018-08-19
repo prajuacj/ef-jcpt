@@ -1,5 +1,6 @@
 package com.ef.jcpt.user.service;
 
+import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.user.service.bo.UserInfoBo;
 
 public interface IUserService {
@@ -8,7 +9,7 @@ public interface IUserService {
 
 	public Integer findMemberExistCount(String userName);
 
-	public boolean login(String username, String password, String loginType);
+	public BasicServiceModel<UserInfoBo> login(String username, String password, String loginType);
 
 	public UserInfoBo findMemberExist(String username);
 

@@ -30,6 +30,8 @@ public class UserInfo {
 
 	private String wechatId;
 
+	private String nationCode;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -132,5 +134,13 @@ public class UserInfo {
 
 	public void setWechatId(String wechatId) {
 		this.wechatId = wechatId == null ? null : wechatId.trim();
+	}
+
+	public String getNationCode() {
+		return nationCode;
+	}
+
+	public void setNationCode(String nationCode) {
+		this.nationCode = nationCode == null ? null : nationCode.trim();
 	}
 }

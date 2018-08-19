@@ -28,4 +28,7 @@ public interface FlowProductMapper {
 	List<Map> listProductByPage(@Param("userNationCode") String userNationCode,
 			@Param("buyNationCode") String buyNationCode, @Param("productType") String productType,
 			@Param("start") int start, @Param("pageSize") int pageSize);
+
+	List<Map> selectProductAndPrice(@Param("userNationCode") String userNationCode,
+			@Param("buyNationCode") String buyNationCode, @Param("productId") int productId);
 }

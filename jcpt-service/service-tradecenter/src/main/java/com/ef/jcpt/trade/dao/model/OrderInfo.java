@@ -35,6 +35,12 @@ public class OrderInfo {
 
 	private String operatorNationName;
 
+	private Date payTime;
+
+	private Date validTime;
+
+	private BigDecimal remainFlow;
+
 	private String remark;
 
 	private Date createTime;
@@ -159,6 +165,30 @@ public class OrderInfo {
 
 	public void setOperatorNationName(String operatorNationName) {
 		this.operatorNationName = operatorNationName == null ? null : operatorNationName.trim();
+	}
+
+	public Date getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(Date payTime) {
+		this.payTime = payTime;
+	}
+
+	public Date getValidTime() {
+		return validTime;
+	}
+
+	public void setValidTime(Date validTime) {
+		this.validTime = validTime;
+	}
+
+	public BigDecimal getRemainFlow() {
+		return remainFlow;
+	}
+
+	public void setRemainFlow(BigDecimal remainFlow) {
+		this.remainFlow = remainFlow;
 	}
 
 	public String getRemark() {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ef.jcpt.trade.dao.FlowProductMapper;
+import com.ef.jcpt.trade.dao.model.FlowProduct;
 
 @Component
 public class FlowProductComponent {
@@ -23,6 +24,11 @@ public class FlowProductComponent {
 			int pageSize) {
 		// TODO Auto-generated method stub
 		return flowProductMapper.listProductByPage(userNationCode, buyNationCode, productType, start, pageSize);
+	}
+
+	public List<Map> selectProductAndPrice(String userNationCode, String buyNationCode, int productId) {
+		// TODO Auto-generated method stub
+		return flowProductMapper.selectProductAndPrice(userNationCode, buyNationCode, productId);
 	}
 
 }

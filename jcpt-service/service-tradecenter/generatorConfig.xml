@@ -3,7 +3,7 @@
 <generatorConfiguration>
 	<!--数据库驱动 -->
 	<classPathEntry
-		location="D:\mysql\mysql-connector-java-5.1.44\mysql-connector-java-5.1.44-bin.jar" />
+		location="D:\chenj\java\mysql-connector-java-5.1.44\mysql-connector-java-5.1.44-bin.jar" />
 	<context id="account" targetRuntime="MyBatis3">
 		<commentGenerator>
 			<property name="suppressDate" value="true" />
@@ -34,10 +34,11 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		<!--生成对应表及类名 -->
-		<table tableName="ef_flow_product" domainObjectName="FlowProduct" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> 
-		<!--<table tableName="ef_operator_info" domainObjectName="OperatorInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> <table 
+		<!--<table tableName="ef_flow_product" domainObjectName="FlowProduct" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> 
+		<table tableName="ef_operator_info" domainObjectName="OperatorInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> <table 
 			tableName="ef_order_info" domainObjectName="OrderInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> 
 			<table tableName="ef_pay_info" domainObjectName="PayInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> 
-			<table tableName="ef_phone_support_operator" domainObjectName="PhoneSupportOperator" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+			 <table tableName="ef_phone_support_operator" domainObjectName="PhoneSupportOperator" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
+			 <table tableName="ef_order_info" domainObjectName="OrderInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
 	</context>
 </generatorConfiguration>

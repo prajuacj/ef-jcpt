@@ -41,11 +41,21 @@ public class OrderInfoBo implements Serializable {
 
 	private String operatorNationName;
 
+	private Date payTime;
+
+	private Date validTime;
+
+	private BigDecimal remainFlow;
+
 	private String remark;
 
 	private Date createTime;
 
 	private Date updateTime;
+	
+	private String userNationCode;
+	
+	private String productNationCode;
 
 	public String getMobile() {
 		return mobile;
@@ -175,6 +185,30 @@ public class OrderInfoBo implements Serializable {
 		this.operatorNationName = operatorNationName;
 	}
 
+	public Date getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(Date payTime) {
+		this.payTime = payTime;
+	}
+
+	public Date getValidTime() {
+		return validTime;
+	}
+
+	public void setValidTime(Date validTime) {
+		this.validTime = validTime;
+	}
+
+	public BigDecimal getRemainFlow() {
+		return remainFlow;
+	}
+
+	public void setRemainFlow(BigDecimal remainFlow) {
+		this.remainFlow = remainFlow;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -189,5 +223,21 @@ public class OrderInfoBo implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getUserNationCode() {
+		return userNationCode;
+	}
+
+	public void setUserNationCode(String userNationCode) {
+		this.userNationCode = userNationCode;
+	}
+
+	public String getProductNationCode() {
+		return productNationCode;
+	}
+
+	public void setProductNationCode(String productNationCode) {
+		this.productNationCode = productNationCode;
 	}
 }
