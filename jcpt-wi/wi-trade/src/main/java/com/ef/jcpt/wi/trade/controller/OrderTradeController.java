@@ -81,11 +81,11 @@ public class OrderTradeController extends BaseController {
 			} else {
 				JSONObject jsonObj = JSONObject.parseObject(params);
 				String tokenKey = jsonObj.getString("tokenKey");
-//				TokenVo token = cacheUtil.getToken(tokenKey);
-//				if (null != token) {
-//					UserInfoBo bo = token.getUser();
-					String userName = "13076922539";//bo.getMobile();
-					String userNationCode = "156";//bo.getNationCode();
+				TokenVo token = cacheUtil.getToken(tokenKey);
+				if (null != token) {
+					UserInfoBo bo = token.getUser();
+					String userName = bo.getMobile();
+					String userNationCode = bo.getNationCode();
 					OrderInfoBo orderBo = new OrderInfoBo();
 					orderBo.setProductId(jsonObj.getString("productId"));
 					orderBo.setProductName(jsonObj.getString("productName"));
@@ -100,12 +100,12 @@ public class OrderTradeController extends BaseController {
 					String ip = jsonObj.getString("ip");
 
 					return orderPayServiceImpl.toPay(orderBo, code, ip);
-//				} else {
-//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
-//					bsm.setMsg("会话已过期，请重新登录！");
-//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
-//					return bsm;
-//				}
+				} else {
+					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+					bsm.setMsg("会话已过期，请重新登录！");
+					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+					return bsm;
+				}
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
