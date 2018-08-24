@@ -1,12 +1,12 @@
 package com.ef.jcpt.trade.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.bouncycastle.jcajce.provider.asymmetric.rsa.DigestSignatureSpi.MD5;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ public class Wechathpayh5ServiceImpl implements IWechatpayh5Service {
 		String outTraeNo = payBo.getOrderId();
 		String body = "东流交易中心-" + outTraeNo;
 		String attach = payBo.getFlowId();
-		String payAmtStr = String.valueOf(payBo.getPayAmount());
+		String payAmtStr = String.valueOf((payBo.getPayAmount().multiply(new BigDecimal(100))).intValue());
 
 		SortedMap<String, String> packageParams = new TreeMap<String, String>();
 		packageParams.put("appid", appid);
