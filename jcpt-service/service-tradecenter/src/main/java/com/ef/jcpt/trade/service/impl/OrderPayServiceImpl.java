@@ -161,10 +161,10 @@ public class OrderPayServiceImpl implements IOrderPayService {
 						bsm.setCode(ReqStatusConst.OK);
 						JSONObject json = new JSONObject();
 						json.put("timeStamp", map.get("timeStamp"));
-						json.put("nonceStr", map.get("timeStamp"));
-						json.put("package", map.get("timeStamp"));
-						json.put("signType", map.get("timeStamp"));
-						json.put("paySign", map.get("timeStamp"));
+						json.put("nonceStr", map.get("nonceStr"));
+						json.put("package", map.get("package"));
+						json.put("signType", map.get("signType"));
+						json.put("paySign", map.get("paySign"));
 						bsm.setData(json.toString());
 
 						Date curDate = new Date(System.currentTimeMillis());
