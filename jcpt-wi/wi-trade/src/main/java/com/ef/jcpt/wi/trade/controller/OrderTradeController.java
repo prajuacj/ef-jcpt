@@ -1,9 +1,19 @@
 package com.ef.jcpt.wi.trade.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +24,7 @@ import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.log.LogTemplate;
 import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.entity.TokenVo;
+import com.ef.jcpt.core.wechatpay.WXPayUtil;
 import com.ef.jcpt.trade.service.IOrderPayService;
 import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 import com.ef.jcpt.user.service.bo.UserInfoBo;
@@ -27,6 +38,9 @@ public class OrderTradeController extends BaseController {
 
 	@Autowired
 	private CacheUtil cacheUtil;
+
+	@Value("${wechat.pay.apikey}")
+	private String apikey;
 
 	@RequestMapping(value = "/getOperatorInfo.json", method = RequestMethod.POST)
 	@ResponseBody
@@ -272,6 +286,66 @@ public class OrderTradeController extends BaseController {
 			bsm.setMsg("获取产品信息失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
+		}
+	}
+
+	// 微信支付回调
+	@RequestMapping(value = "/wechatPayResult.json")
+	@ResponseBody
+	public void wechatPayResult(HttpServletRequest request, HttpServletResponse response, Model model)
+			throws IOException, DocumentException {
+		String cmd = "OrderTradeController:wechatPayResult";
+		PrintWriter out = null;
+		// 创建支付应答对象
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			String xmlStr = sb.toString();
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, "Ok", "data=" + xmlStr));
+			out = response.getWriter();
+
+			Map<String, String> retData = WXPayUtil.xmlToMap(xmlStr);
+			// 签名验证
+			if (WXPayUtil.isSignatureValid(retData, apikey)) {
+				// 根据反过来支付信息修改订单状态
+				String result_code = retData.get("result_code");// 业务结果
+				if ("SUCCESS".equals(result_code)) {
+					// 订单支付金额
+					String orderAmt = retData.get("total_fee");
+					String settleAmt = retData.get("settlement_total_fee");
+					String sn = retData.get("out_trade_no");
+					String wxorderid = retData.get("transaction_id");
+					String endTime = retData.get("time_end");
+
+					BasicServiceModel<String> bsm = orderPayServiceImpl.updateWXPayResult(sn, orderAmt, settleAmt,
+							wxorderid, endTime);// 公共平台支付
+					if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
+						out.print("SUCCESS");
+					} else {
+						out.print("FAIL");
+					}
+				} else {
+					out.print("FAIL");
+				}
+			} else {
+				out.print("FAIL");// 给微信系统发送成功信息，微信系统收到此结果后不再进行后续通知
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.print("FAIL");// 给微信系统发送成功信息，微信系统收到此结果后不再进行后续通知
+		} finally {
+			if (null != reader) {
+				reader.close();
+			}
+			if (null != out) {
+				out.close();
+			}
 		}
 	}
 }

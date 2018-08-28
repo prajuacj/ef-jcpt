@@ -29,6 +29,8 @@ public class PayInfo {
 
 	private String failReason;
 
+	private String returnFlow;
+
 	private Date createTime;
 
 	private Date updateTime;
@@ -127,6 +129,14 @@ public class PayInfo {
 
 	public void setFailReason(String failReason) {
 		this.failReason = failReason == null ? null : failReason.trim();
+	}
+
+	public String getReturnFlow() {
+		return returnFlow;
+	}
+
+	public void setReturnFlow(String returnFlow) {
+		this.returnFlow = returnFlow == null ? null : returnFlow.trim();
 	}
 
 	public Date getCreateTime() {

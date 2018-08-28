@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.FlowKeyConst;
+import com.ef.jcpt.common.constant.OrderStatusConst;
+import com.ef.jcpt.common.constant.PayChannelConst;
+import com.ef.jcpt.common.constant.PayStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.BeanUtil;
@@ -307,6 +310,41 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg("修改失败");
 		}
+		return bsm;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public BasicServiceModel<String> updateWXPayResult(String sn, String orderAmtStr, String settleAmtStr,
+			String wxorderid, String endTime) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(sn);
+		PayInfo payInfo = payInfoMapper.selectByOrderId(sn);
+
+		if ((null != payInfo) && (null != orderInfo)) {
+			BigDecimal payAmt = payInfo.getPayAmount();
+			BigDecimal settleAmt = new BigDecimal(settleAmtStr).divide(BigDecimal.valueOf(100));
+			if (payAmt.compareTo(settleAmt) == 0) {
+				payInfo.setPayChannel(PayChannelConst.WX);
+				payInfo.setReturnFlow(wxorderid);
+				payInfo.setUpdateTime(new Date(System.currentTimeMillis()));
+				payInfo.setPayStatus(PayStatusConst.SUCCESS);
+
+				payInfoMapper.updateByPrimaryKeySelective(payInfo);
+
+				orderInfo.setOrderStatus(OrderStatusConst.PAYED);
+				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+
+				bsm.setCode(ReqStatusConst.OK);
+				return bsm;
+			}
+		}
+
+		bsm.setCode(ReqStatusConst.FAIL);
+		bsm.setMsg("修改失败");
+
 		return bsm;
 	}
 }

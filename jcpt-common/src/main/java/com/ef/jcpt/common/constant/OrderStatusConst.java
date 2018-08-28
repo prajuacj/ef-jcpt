@@ -13,4 +13,7 @@ public class OrderStatusConst {
 
 	/** 订单状态：未支付。 */
 	public static final String CANCEL = "03";
+	
+	/** 订单状态：未支付。 */
+	public static final String USEING = "09";
 }

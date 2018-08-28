@@ -14,12 +14,14 @@
     <result column="response_content" jdbcType="VARCHAR" property="responseContent" />
     <result column="pay_memo" jdbcType="VARCHAR" property="payMemo" />
     <result column="fail_reason" jdbcType="VARCHAR" property="failReason" />
+    <result column="return_flow" jdbcType="VARCHAR" property="returnFlow" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     flow_id, order_id, user_id, order_content, pay_amount, pay_channel, pay_status, hand_fee, 
-    request_param, response_content, pay_memo, fail_reason, create_time, update_time
+    request_param, response_content, pay_memo, fail_reason, return_flow, create_time, 
+    update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -36,12 +38,14 @@
       order_content, pay_amount, pay_channel, 
       pay_status, hand_fee, request_param, 
       response_content, pay_memo, fail_reason, 
-      create_time, update_time)
+      return_flow, create_time, update_time
+      )
     values (#{flowId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
       #{orderContent,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, #{payChannel,jdbcType=VARCHAR}, 
       #{payStatus,jdbcType=VARCHAR}, #{handFee,jdbcType=DECIMAL}, #{requestParam,jdbcType=VARCHAR}, 
       #{responseContent,jdbcType=VARCHAR}, #{payMemo,jdbcType=VARCHAR}, #{failReason,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{returnFlow,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
     insert into ef_pay_info
@@ -81,6 +85,9 @@
       </if>
       <if test="failReason != null">
         fail_reason,
+      </if>
+      <if test="returnFlow != null">
+        return_flow,
       </if>
       <if test="createTime != null">
         create_time,
@@ -126,6 +133,9 @@
       <if test="failReason != null">
         #{failReason,jdbcType=VARCHAR},
       </if>
+      <if test="returnFlow != null">
+        #{returnFlow,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -170,6 +180,9 @@
       <if test="failReason != null">
         fail_reason = #{failReason,jdbcType=VARCHAR},
       </if>
+      <if test="returnFlow != null">
+        return_flow = #{returnFlow,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -192,6 +205,7 @@
       response_content = #{responseContent,jdbcType=VARCHAR},
       pay_memo = #{payMemo,jdbcType=VARCHAR},
       fail_reason = #{failReason,jdbcType=VARCHAR},
+      return_flow = #{returnFlow,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where flow_id = #{flowId,jdbcType=VARCHAR}
