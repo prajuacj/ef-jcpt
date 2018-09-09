@@ -317,13 +317,13 @@ public class OrderTradeController extends BaseController {
 				if ("SUCCESS".equals(result_code)) {
 					// 订单支付金额
 					String orderAmt = retData.get("total_fee");
-					String settleAmt = retData.get("settlement_total_fee");
+					String bankType = retData.get("bank_type");
 					String sn = retData.get("out_trade_no");
 					String wxorderid = retData.get("transaction_id");
 					String endTime = retData.get("time_end");
 
-					BasicServiceModel<String> bsm = orderPayServiceImpl.updateWXPayResult(sn, orderAmt, settleAmt,
-							wxorderid, endTime);// 公共平台支付
+					BasicServiceModel<String> bsm = orderPayServiceImpl.updateWXPayResult(sn, orderAmt, orderAmt,
+							wxorderid, endTime,bankType);// 公共平台支付
 					if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
 						out.print("SUCCESS");
 					} else {

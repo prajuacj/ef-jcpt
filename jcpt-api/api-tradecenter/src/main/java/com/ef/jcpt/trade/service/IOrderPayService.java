@@ -29,5 +29,5 @@ public interface IOrderPayService {
 			int indexPage, int pageSize);
 
 	BasicServiceModel<String> updateWXPayResult(String sn, String orderAmt, String settleAmt, String wxorderid,
-			String endTime);
+			String endTime, String bankType);
 }

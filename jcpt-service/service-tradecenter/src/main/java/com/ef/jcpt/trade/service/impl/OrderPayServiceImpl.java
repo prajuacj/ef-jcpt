@@ -316,7 +316,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public BasicServiceModel<String> updateWXPayResult(String sn, String orderAmtStr, String settleAmtStr,
-			String wxorderid, String endTime) {
+			String wxorderid, String endTime, String bankType) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
@@ -331,10 +331,12 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				payInfo.setReturnFlow(wxorderid);
 				payInfo.setUpdateTime(new Date(System.currentTimeMillis()));
 				payInfo.setPayStatus(PayStatusConst.SUCCESS);
+				payInfo.setPayMemo(bankType);
 
 				payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
 				orderInfo.setOrderStatus(OrderStatusConst.PAYED);
+				orderInfo.setPayTime(new Date(System.currentTimeMillis()));
 				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 
 				bsm.setCode(ReqStatusConst.OK);
