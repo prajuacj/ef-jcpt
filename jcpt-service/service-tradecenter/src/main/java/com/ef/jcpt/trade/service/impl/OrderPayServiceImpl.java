@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,8 @@ import com.ef.jcpt.trade.service.bo.PhoneSupportOperatorBo;
 
 @Service
 public class OrderPayServiceImpl implements IOrderPayService {
+
+	private Logger logger = LoggerFactory.getLogger(OrderPayServiceImpl.class);
 
 	@Autowired
 	private OrderInfoMapper orderInfoMapper;
@@ -324,21 +328,30 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		PayInfo payInfo = payInfoMapper.selectByOrderId(sn);
 
 		if ((null != payInfo) && (null != orderInfo)) {
-			BigDecimal payAmt = payInfo.getPayAmount();
-			BigDecimal settleAmt = new BigDecimal(settleAmtStr).divide(BigDecimal.valueOf(100));
-			if (payAmt.compareTo(settleAmt) == 0) {
-				payInfo.setPayChannel(PayChannelConst.WX);
-				payInfo.setReturnFlow(wxorderid);
-				payInfo.setUpdateTime(new Date(System.currentTimeMillis()));
-				payInfo.setPayStatus(PayStatusConst.SUCCESS);
-				payInfo.setPayMemo(bankType);
+			String payStatus = payInfo.getPayStatus();
+			String orderStatus = orderInfo.getOrderStatus();
+			if ((PayStatusConst.INIT.equals(payStatus)) && (OrderStatusConst.INIT.equals(orderStatus))) {
 
-				payInfoMapper.updateByPrimaryKeySelective(payInfo);
+				BigDecimal payAmt = payInfo.getPayAmount();
+				BigDecimal settleAmt = new BigDecimal(settleAmtStr).divide(BigDecimal.valueOf(100));
+				if (payAmt.compareTo(settleAmt) == 0) {
+					payInfo.setPayChannel(PayChannelConst.WX);
+					payInfo.setReturnFlow(wxorderid);
+					payInfo.setUpdateTime(new Date(System.currentTimeMillis()));
+					payInfo.setPayStatus(PayStatusConst.SUCCESS);
+					payInfo.setPayMemo(bankType);
 
-				orderInfo.setOrderStatus(OrderStatusConst.PAYED);
-				orderInfo.setPayTime(new Date(System.currentTimeMillis()));
-				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+					payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
+					orderInfo.setOrderStatus(OrderStatusConst.PAYED);
+					orderInfo.setPayTime(new Date(System.currentTimeMillis()));
+					orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+
+					bsm.setCode(ReqStatusConst.OK);
+					return bsm;
+				}
+			} else {
+				logger.info("已经更新了支付结果：updateWXPayResult:" + payStatus);
 				bsm.setCode(ReqStatusConst.OK);
 				return bsm;
 			}
