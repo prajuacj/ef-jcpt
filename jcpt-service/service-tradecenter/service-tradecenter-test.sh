@@ -12,7 +12,7 @@ GIT_FOLDER="${COMPILE_DIR}/.git"
 export JAVA_HOME=/usr/local/java/jdk1.8.0_144
 MVN_HOME=/usr/local/maven
 
-JAVA_OPTS=" -Dspring.cloud.config.profile=test -Dspring.cloud.config.uri=http://localhost:8888/ -Xdebug -Xrunjdwp:transport=dt_socket,address=28101,server=y,suspend=n"
+JAVA_OPTS=" -Dspring.cloud.config.profile=test -Dspring.cloud.config.uri=http://localhost:8888/"
 
 JAVA_MEM_OPTS=""
 BITS=`java -version 2>&1 | grep -i 64-bit`
