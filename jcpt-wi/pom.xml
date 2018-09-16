@@ -12,5 +12,6 @@
   <modules>
   	<module>wi-user</module>
   	<module>wi-trade</module>
+  	<module>wi-manage</module>
   </modules>
 </project>
