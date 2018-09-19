@@ -1,9 +1,9 @@
 #!/bin/sh
 APP_DIR=$(cd `dirname $0`; pwd)
 COMPILE_DIR=/opt/jcpt/code
-APP_NAME=wi-trade
+APP_NAME=wi-manage
 APP_VER=0.0.1-SNAPSHOT
-APP_MAIN_CLASS=com.ef.jcpt.wi.trade.app.TradeWiStartApplication
+APP_MAIN_CLASS=com.ef.jcpt.wi.manage.app.ManageWiStartApplication
 
 #set java home
 export JAVA_HOME=/usr/local/java/jdk1.8.0_144
