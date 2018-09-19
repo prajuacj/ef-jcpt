@@ -16,13 +16,15 @@ public class FlowProduct {
 
 	private String productInstruction;
 
-	private Integer productTerm;
+	private Short productTerm;
 
 	private BigDecimal preferentialPrice;
 
 	private String useArea;
 
 	private String productStatus;
+
+	private String backFile;
 
 	private String remark;
 
@@ -78,11 +80,11 @@ public class FlowProduct {
 		this.productInstruction = productInstruction == null ? null : productInstruction.trim();
 	}
 
-	public Integer getProductTerm() {
+	public Short getProductTerm() {
 		return productTerm;
 	}
 
-	public void setProductTerm(Integer productTerm) {
+	public void setProductTerm(Short productTerm) {
 		this.productTerm = productTerm;
 	}
 
@@ -108,6 +110,14 @@ public class FlowProduct {
 
 	public void setProductStatus(String productStatus) {
 		this.productStatus = productStatus == null ? null : productStatus.trim();
+	}
+
+	public String getBackFile() {
+		return backFile;
+	}
+
+	public void setBackFile(String backFile) {
+		this.backFile = backFile == null ? null : backFile.trim();
 	}
 
 	public String getRemark() {

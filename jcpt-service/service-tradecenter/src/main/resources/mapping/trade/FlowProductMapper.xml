@@ -1,78 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ef.jcpt.trade.dao.FlowProductMapper">
-	<resultMap id="BaseResultMap"
-		type="com.ef.jcpt.trade.dao.model.FlowProduct">
+	<resultMap id="BaseResultMap" type="com.ef.jcpt.trade.dao.model.FlowProduct">
 		<id column="id" jdbcType="INTEGER" property="id" />
-		<result column="product_name" jdbcType="VARCHAR"
-			property="productName" />
-		<result column="product_num" jdbcType="INTEGER"
-			property="productNum" />
+		<result column="product_name" jdbcType="VARCHAR" property="productName" />
+		<result column="product_num" jdbcType="INTEGER" property="productNum" />
 		<result column="price" jdbcType="DECIMAL" property="price" />
-		<result column="product_type" jdbcType="VARCHAR"
-			property="productType" />
+		<result column="product_type" jdbcType="VARCHAR" property="productType" />
 		<result column="product_instruction" jdbcType="VARCHAR"
 			property="productInstruction" />
-		<result column="product_term" jdbcType="INTEGER"
-			property="productTerm" />
+		<result column="product_term" jdbcType="SMALLINT" property="productTerm" />
 		<result column="preferential_price" jdbcType="DECIMAL"
 			property="preferentialPrice" />
 		<result column="use_area" jdbcType="VARCHAR" property="useArea" />
-		<result column="product_status" jdbcType="VARCHAR"
-			property="productStatus" />
+		<result column="product_status" jdbcType="VARCHAR" property="productStatus" />
+		<result column="back_file" jdbcType="VARCHAR" property="backFile" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
-		<result column="create_time" jdbcType="TIMESTAMP"
-			property="createTime" />
-		<result column="update_time" jdbcType="TIMESTAMP"
-			property="updateTime" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, product_name, product_num, price, product_type,
-		product_instruction,
+		id, product_name, product_num, price, product_type, product_instruction,
 		product_term,
-		preferential_price, use_area,
-		product_status, remark, create_time, update_time
+		preferential_price, use_area, product_status, back_file, remark, create_time, update_time
 	</sql>
-	<select id="selectByPrimaryKey"
-		parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from ef_flow_product
 		where id = #{id,jdbcType=INTEGER}
 	</select>
-	<delete id="deleteByPrimaryKey"
-		parameterType="java.lang.Integer">
-		delete from
-		ef_flow_product
-		where id =
-		#{id,jdbcType=INTEGER}
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from ef_flow_product
+		where id = #{id,jdbcType=INTEGER}
 	</delete>
-	<insert id="insert"
-		parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
-		insert into ef_flow_product
-		(id, product_name,
-		product_num,
-		price, product_type,
-		product_instruction,
-		product_term,
-		preferential_price, use_area,
-		product_status, remark, create_time,
-		update_time)
-		values
-		(#{id,jdbcType=INTEGER},
-		#{productName,jdbcType=VARCHAR},
+	<insert id="insert" parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
+		insert into ef_flow_product (id, product_name, product_num,
+		price, product_type, product_instruction,
+		product_term, preferential_price, use_area,
+		product_status, back_file, remark,
+		create_time, update_time)
+		values (#{id,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR},
 		#{productNum,jdbcType=INTEGER},
-		#{price,jdbcType=DECIMAL},
-		#{productType,jdbcType=VARCHAR},
+		#{price,jdbcType=DECIMAL}, #{productType,jdbcType=VARCHAR},
 		#{productInstruction,jdbcType=VARCHAR},
-		#{productTerm,jdbcType=INTEGER},
+		#{productTerm,jdbcType=SMALLINT},
 		#{preferentialPrice,jdbcType=DECIMAL}, #{useArea,jdbcType=VARCHAR},
-		#{productStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
-		#{createTime,jdbcType=TIMESTAMP},
-		#{updateTime,jdbcType=TIMESTAMP})
+		#{productStatus,jdbcType=VARCHAR}, #{backFile,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
-	<insert id="insertSelective"
-		parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
+	<insert id="insertSelective" keyColumn="id"
+		parameterType="com.ef.jcpt.trade.dao.model.FlowProduct"
+		useGeneratedKeys="true">
 		insert into ef_flow_product
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -105,6 +86,9 @@
 			<if test="productStatus != null">
 				product_status,
 			</if>
+			<if test="backFile != null">
+				back_file,
+			</if>
 			<if test="remark != null">
 				remark,
 			</if>
@@ -135,7 +119,7 @@
 				#{productInstruction,jdbcType=VARCHAR},
 			</if>
 			<if test="productTerm != null">
-				#{productTerm,jdbcType=INTEGER},
+				#{productTerm,jdbcType=SMALLINT},
 			</if>
 			<if test="preferentialPrice != null">
 				#{preferentialPrice,jdbcType=DECIMAL},
@@ -145,6 +129,9 @@
 			</if>
 			<if test="productStatus != null">
 				#{productStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="backFile != null">
+				#{backFile,jdbcType=VARCHAR},
 			</if>
 			<if test="remark != null">
 				#{remark,jdbcType=VARCHAR},
@@ -157,8 +144,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective"
-		parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
+	<update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
 		update ef_flow_product
 		<set>
 			<if test="productName != null">
@@ -174,21 +160,22 @@
 				product_type = #{productType,jdbcType=VARCHAR},
 			</if>
 			<if test="productInstruction != null">
-				product_instruction =
-				#{productInstruction,jdbcType=VARCHAR},
+				product_instruction = #{productInstruction,jdbcType=VARCHAR},
 			</if>
 			<if test="productTerm != null">
-				product_term = #{productTerm,jdbcType=INTEGER},
+				product_term = #{productTerm,jdbcType=SMALLINT},
 			</if>
 			<if test="preferentialPrice != null">
-				preferential_price =
-				#{preferentialPrice,jdbcType=DECIMAL},
+				preferential_price = #{preferentialPrice,jdbcType=DECIMAL},
 			</if>
 			<if test="useArea != null">
 				use_area = #{useArea,jdbcType=VARCHAR},
 			</if>
 			<if test="productStatus != null">
 				product_status = #{productStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="backFile != null">
+				back_file = #{backFile,jdbcType=VARCHAR},
 			</if>
 			<if test="remark != null">
 				remark = #{remark,jdbcType=VARCHAR},
@@ -202,32 +189,21 @@
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKey"
-		parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
-		update
-		ef_flow_product
-		set product_name =
-		#{productName,jdbcType=VARCHAR},
-		product_num =
-		#{productNum,jdbcType=INTEGER},
-		price =
-		#{price,jdbcType=DECIMAL},
-		product_type =
-		#{productType,jdbcType=VARCHAR},
-		product_instruction =
-		#{productInstruction,jdbcType=VARCHAR},
-		product_term =
-		#{productTerm,jdbcType=INTEGER},
-		preferential_price =
-		#{preferentialPrice,jdbcType=DECIMAL},
-		use_area =
-		#{useArea,jdbcType=VARCHAR},
-		product_status =
-		#{productStatus,jdbcType=VARCHAR},
+	<update id="updateByPrimaryKey" parameterType="com.ef.jcpt.trade.dao.model.FlowProduct">
+		update ef_flow_product
+		set product_name = #{productName,jdbcType=VARCHAR},
+		product_num = #{productNum,jdbcType=INTEGER},
+		price = #{price,jdbcType=DECIMAL},
+		product_type = #{productType,jdbcType=VARCHAR},
+		product_instruction = #{productInstruction,jdbcType=VARCHAR},
+		product_term = #{productTerm,jdbcType=SMALLINT},
+		preferential_price = #{preferentialPrice,jdbcType=DECIMAL},
+		use_area = #{useArea,jdbcType=VARCHAR},
+		product_status = #{productStatus,jdbcType=VARCHAR},
+		back_file = #{backFile,jdbcType=VARCHAR},
 		remark = #{remark,jdbcType=VARCHAR},
 		create_time = #{createTime,jdbcType=TIMESTAMP},
-		update_time =
-		#{updateTime,jdbcType=TIMESTAMP}
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
@@ -279,13 +255,16 @@
 		WHERE
 		product.id = price.product_id
 
-		and price.user_nation_code =
+		and
+		price.user_nation_code =
 		#{userNationCode,jdbcType=VARCHAR}
 
-		and price.product_nation_code =
+		and
+		price.product_nation_code =
 		#{buyNationCode,jdbcType=VARCHAR}
 
-		and product.id = #{productId,jdbcType=INTEGER}
+		and
+		product.id = #{productId,jdbcType=INTEGER}
 
 	</select>
 

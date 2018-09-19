@@ -31,6 +31,8 @@ public class FlowProductBo implements Serializable {
 
 	private String productStatus;
 
+	private String backFile;
+
 	private String remark;
 
 	private Date createTime;
@@ -139,5 +141,13 @@ public class FlowProductBo implements Serializable {
 
 	public void setProductTerm(int productTerm) {
 		this.productTerm = productTerm;
+	}
+
+	public String getBackFile() {
+		return backFile;
+	}
+
+	public void setBackFile(String backFile) {
+		this.backFile = backFile;
 	}
 }

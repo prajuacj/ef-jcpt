@@ -30,6 +30,7 @@ import com.ef.jcpt.trade.component.PhoneSupportOperatorComponent;
 import com.ef.jcpt.trade.dao.OperatorInfoMapper;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
 import com.ef.jcpt.trade.dao.PayInfoMapper;
+import com.ef.jcpt.trade.dao.model.FlowProduct;
 import com.ef.jcpt.trade.dao.model.OperatorInfo;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 import com.ef.jcpt.trade.dao.model.PayInfo;
@@ -360,6 +361,19 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		bsm.setCode(ReqStatusConst.FAIL);
 		bsm.setMsg("修改失败");
 
+		return bsm;
+	}
+
+	@Override
+	public BasicServiceModel<String> publishProduct(FlowProductBo bo) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		FlowProduct info = new FlowProduct();
+		BeanUtils.copyProperties(bo, info);
+		info = flowProductComponent.publishProduct(info);
+		int key = info.getId();
+		bsm.setCode(ReqStatusConst.OK);
+		bsm.setData(String.valueOf(key));
 		return bsm;
 	}
 }

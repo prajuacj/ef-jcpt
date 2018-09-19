@@ -1,6 +1,7 @@
 package com.ef.jcpt.trade.service;
 
 import com.ef.jcpt.common.entity.BasicServiceModel;
+import com.ef.jcpt.trade.service.bo.FlowProductBo;
 import com.ef.jcpt.trade.service.bo.OrderInfoBo;
 import com.ef.jcpt.trade.service.bo.PayInfoBo;
 
@@ -30,4 +31,6 @@ public interface IOrderPayService {
 
 	BasicServiceModel<String> updateWXPayResult(String sn, String orderAmt, String settleAmt, String wxorderid,
 			String endTime, String bankType);
+
+	BasicServiceModel<String> publishProduct(FlowProductBo bo);
 }

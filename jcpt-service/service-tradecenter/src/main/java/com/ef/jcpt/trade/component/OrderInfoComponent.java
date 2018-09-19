@@ -10,6 +10,7 @@ import com.ef.jcpt.common.constant.FlowKeyConst;
 import com.ef.jcpt.common.constant.OrderStatusConst;
 import com.ef.jcpt.core.redis.IDProvider;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
+import com.ef.jcpt.trade.dao.model.FlowProduct;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 
 @Component
@@ -53,5 +54,10 @@ public class OrderInfoComponent {
 	public void updateOrderInfo(OrderInfo retOrder) {
 		// TODO Auto-generated method stub
 		orderInfoMapper.updateByPrimaryKeySelective(retOrder);
+	}
+
+	public FlowProduct publishProduct(FlowProduct info) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

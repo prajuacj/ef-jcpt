@@ -31,4 +31,14 @@ public class FlowProductComponent {
 		return flowProductMapper.selectProductAndPrice(userNationCode, buyNationCode, productId);
 	}
 
+	public FlowProduct publishProduct(FlowProduct info) {
+		// TODO Auto-generated method stub
+		int ret = flowProductMapper.insertSelective(info);
+		if (ret == 1) {
+			return info;
+		} else {
+			return null;
+		}
+	}
+
 }

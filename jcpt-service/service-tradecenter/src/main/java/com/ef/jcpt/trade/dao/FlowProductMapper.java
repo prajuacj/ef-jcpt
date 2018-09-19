@@ -10,6 +10,7 @@ import com.ef.jcpt.trade.dao.model.FlowProduct;
 
 @Repository
 public interface FlowProductMapper {
+
 	int deleteByPrimaryKey(Integer id);
 
 	int insert(FlowProduct record);
