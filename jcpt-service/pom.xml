@@ -13,5 +13,6 @@
   <modules>
   	<module>service-user</module>
   	<module>service-tradecenter</module>
+  	<module>service-manage</module>
   </modules>
 </project>

@@ -5,61 +5,71 @@ import java.util.Date;
 public class OperatorInfo {
     private Integer id;
 
-    private String nationCode;
+	private String nationCode;
 
-    private String operatorName;
+	private String operatorName;
 
-    private String remark;
+	private String networkStandard;
 
-    private Date createTime;
+	private String remark;
 
-    private Date updateTime;
+	private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+	private Date updateTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getNationCode() {
-        return nationCode;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setNationCode(String nationCode) {
-        this.nationCode = nationCode == null ? null : nationCode.trim();
-    }
+	public String getNationCode() {
+		return nationCode;
+	}
 
-    public String getOperatorName() {
-        return operatorName;
-    }
+	public void setNationCode(String nationCode) {
+		this.nationCode = nationCode == null ? null : nationCode.trim();
+	}
 
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName == null ? null : operatorName.trim();
-    }
+	public String getOperatorName() {
+		return operatorName;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName == null ? null : operatorName.trim();
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public String getNetworkStandard() {
+		return networkStandard;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setNetworkStandard(String networkStandard) {
+		this.networkStandard = networkStandard == null ? null : networkStandard.trim();
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

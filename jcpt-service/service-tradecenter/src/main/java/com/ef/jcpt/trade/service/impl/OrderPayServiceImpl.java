@@ -370,7 +370,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		FlowProduct info = new FlowProduct();
 		BeanUtils.copyProperties(bo, info);
-		info = flowProductComponent.publishProduct(info);
+		info=flowProductComponent.publishProduct(info);
 		int key = info.getId();
 		bsm.setCode(ReqStatusConst.OK);
 		bsm.setData(String.valueOf(key));

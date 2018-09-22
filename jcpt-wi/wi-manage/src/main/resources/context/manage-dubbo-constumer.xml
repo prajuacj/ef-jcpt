@@ -22,4 +22,8 @@
 	<dubbo:reference check="false"
 		interface="com.ef.jcpt.trade.service.IOrderPayService"
 		id="orderPayServiceImpl" />
+
+	<dubbo:reference check="false"
+		interface="com.ef.jcpt.manage.service.IManageService"
+		id="manageServiceImpl" />
 </beans>

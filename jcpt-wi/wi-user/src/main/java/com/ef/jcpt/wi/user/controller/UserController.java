@@ -21,6 +21,7 @@ import com.ef.jcpt.common.util.StringUtil;
 import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.entity.TokenVo;
 import com.ef.jcpt.core.sms.ToolSendSMSUtil;
+import com.ef.jcpt.manage.service.IManageService;
 import com.ef.jcpt.user.service.IUserService;
 import com.ef.jcpt.user.service.bo.LoginBo;
 import com.ef.jcpt.user.service.bo.UpdatePwdBo;
@@ -32,6 +33,9 @@ public class UserController extends BaseController {
 
 	@Autowired
 	IUserService userServiceImpl;
+
+	@Autowired
+	IManageService manageServiceImpl;
 
 	@Autowired
 	private CacheUtil cacheUtil;
@@ -177,6 +181,7 @@ public class UserController extends BaseController {
 					String userName = bo.getUserName();
 					String loginType = bo.getLoginType();
 					String password = bo.getPassword();
+					String phoneModel = bo.getPhoneModel();
 
 					BasicServiceModel<UserInfoBo> logBsm = userServiceImpl.login(userName, password, loginType);
 					if ((null != logBsm) && (ReqStatusConst.OK.equals(logBsm.getCode()))) {

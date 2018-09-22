@@ -12,5 +12,6 @@
   <modules>
   	<module>api-user</module>
   	<module>api-tradecenter</module>
+  	<module>api-manage</module>
   </modules>
 </project>

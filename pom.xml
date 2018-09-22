@@ -296,6 +296,11 @@
 				<artifactId>api-user</artifactId>
 				<version>${ef.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.ef</groupId>
+				<artifactId>api-manage</artifactId>
+				<version>${ef.version}</version>
+			</dependency>
 			<!-- end ef -->
 			<dependency>
 				<groupId>org.apache.activemq</groupId>

@@ -5,12 +5,13 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="nation_code" jdbcType="VARCHAR" property="nationCode" />
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="network_standard" jdbcType="VARCHAR" property="networkStandard" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, nation_code, operator_name, remark, create_time, update_time
+    id, nation_code, operator_name, network_standard, remark, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="com.ef.jcpt.trade.dao.model.OperatorInfo">
     insert into ef_operator_info (id, nation_code, operator_name, 
-      remark, create_time, update_time
-      )
+      network_standard, remark, create_time, 
+      update_time)
     values (#{id,jdbcType=INTEGER}, #{nationCode,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{networkStandard,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.trade.dao.model.OperatorInfo">
     insert into ef_operator_info
@@ -41,6 +42,9 @@
       </if>
       <if test="operatorName != null">
         operator_name,
+      </if>
+      <if test="networkStandard != null">
+        network_standard,
       </if>
       <if test="remark != null">
         remark,
@@ -62,6 +66,9 @@
       <if test="operatorName != null">
         #{operatorName,jdbcType=VARCHAR},
       </if>
+      <if test="networkStandard != null">
+        #{networkStandard,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -82,6 +89,9 @@
       <if test="operatorName != null">
         operator_name = #{operatorName,jdbcType=VARCHAR},
       </if>
+      <if test="networkStandard != null">
+        network_standard = #{networkStandard,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -98,6 +108,7 @@
     update ef_operator_info
     set nation_code = #{nationCode,jdbcType=VARCHAR},
       operator_name = #{operatorName,jdbcType=VARCHAR},
+      network_standard = #{networkStandard,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
