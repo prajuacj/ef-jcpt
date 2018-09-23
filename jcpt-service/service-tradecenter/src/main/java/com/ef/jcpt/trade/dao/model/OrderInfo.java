@@ -9,6 +9,8 @@ public class OrderInfo {
 
 	private String mobile;
 
+	private String deviceId;
+
 	private String userId;
 
 	private String productId;
@@ -39,6 +41,8 @@ public class OrderInfo {
 
 	private Date validTime;
 
+	private Integer validDay;
+
 	private BigDecimal remainFlow;
 
 	private String remark;
@@ -61,6 +65,14 @@ public class OrderInfo {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile == null ? null : mobile.trim();
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId == null ? null : deviceId.trim();
 	}
 
 	public String getUserId() {
@@ -181,6 +193,14 @@ public class OrderInfo {
 
 	public void setValidTime(Date validTime) {
 		this.validTime = validTime;
+	}
+
+	public Integer getValidDay() {
+		return validDay;
+	}
+
+	public void setValidDay(Integer validDay) {
+		this.validDay = validDay;
 	}
 
 	public BigDecimal getRemainFlow() {

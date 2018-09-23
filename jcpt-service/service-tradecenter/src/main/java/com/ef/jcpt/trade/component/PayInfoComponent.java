@@ -29,6 +29,7 @@ public class PayInfoComponent {
 		payInfo.setOrderId(orderInfo.getOrderId());
 		payInfo.setPayAmount(orderInfo.getPayAmount());
 		payInfo.setPayStatus(PayStatusConst.INIT);
+		payInfo.setUsedNationCode(orderInfo.getOperatorNationCode());
 		payInfo.setCreateTime(currDate);
 		payInfo.setUpdateTime(currDate);
 		payInfoMapper.insertSelective(payInfo);

@@ -52,12 +52,11 @@ public class ManageController extends BaseController {
 	@RequestMapping(value = "/publishProduct.json", method = RequestMethod.POST)
 	@ResponseBody
 	public BasicServiceModel<String> publishProduct(HttpServletRequest req, @RequestParam("tokenKey") String tokenKey,
-			@RequestParam("preferentialPrice") BigDecimal preferentialPrice, @RequestParam("price") BigDecimal price,
-			@RequestParam("productInstruction") String productInstruction,
+			@RequestParam("prices") String prices, @RequestParam("productInstruction") String productInstruction,
 			@RequestParam("productName") String productName, @RequestParam("productNum") int productNum,
-			@RequestParam("productStatus") String productStatus, @RequestParam("productTerm") int productTerm,
+			@RequestParam("productStatus") String productStatus, @RequestParam("productTerm") short productTerm,
 			@RequestParam("productType") String productType, @RequestParam("remark") String remark,
-			@RequestParam("useArea") String useArea, @RequestParam("backFile") MultipartFile backFile) {
+			@RequestParam("backFile") MultipartFile backFile) {
 		String cmd = "ManageController:publishProduct";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
@@ -77,18 +76,16 @@ public class ManageController extends BaseController {
 			FlowProductBo bo = new FlowProductBo();
 
 			bo.setBackFile(backFilePath);
-			bo.setPreferentialPrice(preferentialPrice);
-			bo.setPrice(price);
 			bo.setProductInstruction(productInstruction);
 			bo.setProductName(productName);
 			bo.setProductNum(productNum);
 			bo.setProductStatus(productStatus);
 			bo.setProductTerm(productTerm);
 			bo.setProductType(productType);
+			bo.setPrices(prices);
 			bo.setRemark(remark);
 			bo.setUpdateTime(curTime);
 			bo.setCreateTime(curTime);
-			bo.setUseArea(useArea);
 
 			bsm = orderPayServiceImpl.publishProduct(bo);
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
@@ -254,7 +251,7 @@ public class ManageController extends BaseController {
 					JSONObject phoneObj = (JSONObject) phoneModelStr;
 
 					String operatorName = phoneObj.getString("operator");
-					String nationCode=phoneObj.getString("nationCode");
+					String nationCode = phoneObj.getString("nationCode");
 					String standards = phoneObj.getString("standards");
 					if (StringUtil.isNotEmpty(standards)) {
 						String[] standardStrs = standards.split("\\,");

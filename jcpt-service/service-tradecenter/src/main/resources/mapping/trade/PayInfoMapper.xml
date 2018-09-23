@@ -9,6 +9,7 @@
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="pay_channel" jdbcType="VARCHAR" property="payChannel" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="used_nation_code" jdbcType="VARCHAR" property="usedNationCode" />
     <result column="hand_fee" jdbcType="DECIMAL" property="handFee" />
     <result column="request_param" jdbcType="VARCHAR" property="requestParam" />
     <result column="response_content" jdbcType="VARCHAR" property="responseContent" />
@@ -19,8 +20,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    flow_id, order_id, user_id, order_content, pay_amount, pay_channel, pay_status, hand_fee, 
-    request_param, response_content, pay_memo, fail_reason, return_flow, create_time, 
+    flow_id, order_id, user_id, order_content, pay_amount, pay_channel, pay_status, used_nation_code, 
+    hand_fee, request_param, response_content, pay_memo, fail_reason, return_flow, create_time, 
     update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -36,16 +37,16 @@
   <insert id="insert" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
     insert into ef_pay_info (flow_id, order_id, user_id, 
       order_content, pay_amount, pay_channel, 
-      pay_status, hand_fee, request_param, 
-      response_content, pay_memo, fail_reason, 
-      return_flow, create_time, update_time
-      )
+      pay_status, used_nation_code, hand_fee, 
+      request_param, response_content, pay_memo, 
+      fail_reason, return_flow, create_time, 
+      update_time)
     values (#{flowId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
       #{orderContent,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, #{payChannel,jdbcType=VARCHAR}, 
-      #{payStatus,jdbcType=VARCHAR}, #{handFee,jdbcType=DECIMAL}, #{requestParam,jdbcType=VARCHAR}, 
-      #{responseContent,jdbcType=VARCHAR}, #{payMemo,jdbcType=VARCHAR}, #{failReason,jdbcType=VARCHAR}, 
-      #{returnFlow,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{payStatus,jdbcType=VARCHAR}, #{usedNationCode,jdbcType=VARCHAR}, #{handFee,jdbcType=DECIMAL}, 
+      #{requestParam,jdbcType=VARCHAR}, #{responseContent,jdbcType=VARCHAR}, #{payMemo,jdbcType=VARCHAR}, 
+      #{failReason,jdbcType=VARCHAR}, #{returnFlow,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.trade.dao.model.PayInfo">
     insert into ef_pay_info
@@ -70,6 +71,9 @@
       </if>
       <if test="payStatus != null">
         pay_status,
+      </if>
+      <if test="usedNationCode != null">
+        used_nation_code,
       </if>
       <if test="handFee != null">
         hand_fee,
@@ -118,6 +122,9 @@
       <if test="payStatus != null">
         #{payStatus,jdbcType=VARCHAR},
       </if>
+      <if test="usedNationCode != null">
+        #{usedNationCode,jdbcType=VARCHAR},
+      </if>
       <if test="handFee != null">
         #{handFee,jdbcType=DECIMAL},
       </if>
@@ -165,6 +172,9 @@
       <if test="payStatus != null">
         pay_status = #{payStatus,jdbcType=VARCHAR},
       </if>
+      <if test="usedNationCode != null">
+        used_nation_code = #{usedNationCode,jdbcType=VARCHAR},
+      </if>
       <if test="handFee != null">
         hand_fee = #{handFee,jdbcType=DECIMAL},
       </if>
@@ -200,6 +210,7 @@
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       pay_channel = #{payChannel,jdbcType=VARCHAR},
       pay_status = #{payStatus,jdbcType=VARCHAR},
+      used_nation_code = #{usedNationCode,jdbcType=VARCHAR},
       hand_fee = #{handFee,jdbcType=DECIMAL},
       request_param = #{requestParam,jdbcType=VARCHAR},
       response_content = #{responseContent,jdbcType=VARCHAR},

@@ -20,10 +20,12 @@ public class FlowProductBo implements Serializable {
 	private BigDecimal price;
 
 	private String productType;
+	
+	private String prices;
 
 	private String productInstruction;
 
-	private int productTerm;
+	private short productTerm;
 
 	private BigDecimal preferentialPrice;
 
@@ -135,11 +137,11 @@ public class FlowProductBo implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public int getProductTerm() {
+	public short getProductTerm() {
 		return productTerm;
 	}
 
-	public void setProductTerm(int productTerm) {
+	public void setProductTerm(short productTerm) {
 		this.productTerm = productTerm;
 	}
 
@@ -149,5 +151,13 @@ public class FlowProductBo implements Serializable {
 
 	public void setBackFile(String backFile) {
 		this.backFile = backFile;
+	}
+
+	public String getPrices() {
+		return prices;
+	}
+
+	public void setPrices(String prices) {
+		this.prices = prices;
 	}
 }

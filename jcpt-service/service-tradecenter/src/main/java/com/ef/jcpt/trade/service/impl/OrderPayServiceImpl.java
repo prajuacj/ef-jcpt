@@ -13,28 +13,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.FlowKeyConst;
 import com.ef.jcpt.common.constant.OrderStatusConst;
 import com.ef.jcpt.common.constant.PayChannelConst;
 import com.ef.jcpt.common.constant.PayStatusConst;
+import com.ef.jcpt.common.constant.ProductPriceStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.BeanUtil;
 import com.ef.jcpt.common.util.DateUtil;
+import com.ef.jcpt.common.util.StringUtil;
 import com.ef.jcpt.core.redis.IDProvider;
 import com.ef.jcpt.trade.component.FlowProductComponent;
 import com.ef.jcpt.trade.component.OrderInfoComponent;
 import com.ef.jcpt.trade.component.PayInfoComponent;
 import com.ef.jcpt.trade.component.PhoneSupportOperatorComponent;
+import com.ef.jcpt.trade.dao.ChargingOrderMapper;
 import com.ef.jcpt.trade.dao.OperatorInfoMapper;
 import com.ef.jcpt.trade.dao.OrderInfoMapper;
 import com.ef.jcpt.trade.dao.PayInfoMapper;
+import com.ef.jcpt.trade.dao.ProductPriceMapper;
+import com.ef.jcpt.trade.dao.model.ChargingOrder;
 import com.ef.jcpt.trade.dao.model.FlowProduct;
 import com.ef.jcpt.trade.dao.model.OperatorInfo;
 import com.ef.jcpt.trade.dao.model.OrderInfo;
 import com.ef.jcpt.trade.dao.model.PayInfo;
 import com.ef.jcpt.trade.dao.model.PhoneSupportOperator;
+import com.ef.jcpt.trade.dao.model.ProductPrice;
 import com.ef.jcpt.trade.service.IOrderPayService;
 import com.ef.jcpt.trade.service.IWechatpayh5Service;
 import com.ef.jcpt.trade.service.bo.FlowProductBo;
@@ -67,6 +74,12 @@ public class OrderPayServiceImpl implements IOrderPayService {
 
 	@Autowired
 	private PayInfoMapper payInfoMapper;
+
+	@Autowired
+	private ChargingOrderMapper chargingOrderMapper;
+
+	@Autowired
+	private ProductPriceMapper productPriceMapper;
 
 	@Autowired
 	private IWechatpayh5Service wechathpayh5ServiceImpl;
@@ -155,6 +168,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				info.setTotalAmount(totalAmount);
 				info.setUserId(userId);
 				// info.setValidTime(validTime);
+				info.setValidDay(productTerm);
 
 				OrderInfo retOrder = null;
 				try {
@@ -231,7 +245,8 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				bo.setProductType((String) map.get("product_type"));
 				bo.setPrice((BigDecimal) map.get("price"));
 				bo.setPreferentialPrice((BigDecimal) map.get("discount_price"));
-				bo.setProductTerm((int) map.get("product_term"));
+				Integer productTerm = (Integer) map.get("product_term");
+				bo.setProductTerm(productTerm.shortValue());
 				bo.setProductInstruction((String) map.get("product_instruction"));
 				bo.setRemark((String) map.get("remark"));
 				boList.add(bo);
@@ -324,6 +339,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			String wxorderid, String endTime, String bankType) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		Date curTime = new Date(System.currentTimeMillis());
 
 		OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(sn);
 		PayInfo payInfo = payInfoMapper.selectByOrderId(sn);
@@ -338,15 +354,35 @@ public class OrderPayServiceImpl implements IOrderPayService {
 				if (payAmt.compareTo(settleAmt) == 0) {
 					payInfo.setPayChannel(PayChannelConst.WX);
 					payInfo.setReturnFlow(wxorderid);
-					payInfo.setUpdateTime(new Date(System.currentTimeMillis()));
+					payInfo.setUpdateTime(curTime);
 					payInfo.setPayStatus(PayStatusConst.SUCCESS);
 					payInfo.setPayMemo(bankType);
 
 					payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
 					orderInfo.setOrderStatus(OrderStatusConst.PAYED);
-					orderInfo.setPayTime(new Date(System.currentTimeMillis()));
+					orderInfo.setPayTime(curTime);
 					orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+
+					try {
+						ChargingOrder co = new ChargingOrder();
+						co.setCreateTime(curTime);
+						co.setDeviceId(orderInfo.getDeviceId());
+						co.setEndTime(DateUtil.addDay(curTime, orderInfo.getValidDay()));
+						co.setInitFlow(orderInfo.getRemainFlow().intValue());
+						co.setOperatorId(orderInfo.getOperatorId());
+						co.setOperatorName(orderInfo.getOperatorName());
+						co.setOperatorNationCode(orderInfo.getOperatorNationCode());
+						co.setOrderId(orderInfo.getOrderId());
+						co.setPayFlow(payInfo.getFlowId());
+						co.setStartTime(curTime);
+						co.setUsedFlow(0);
+						co.setUserName(orderInfo.getUserId());
+						co.setUpdateTime(curTime);
+						chargingOrderMapper.insert(co);
+					} catch (Exception e) {
+
+					}
 
 					bsm.setCode(ReqStatusConst.OK);
 					return bsm;
@@ -368,10 +404,42 @@ public class OrderPayServiceImpl implements IOrderPayService {
 	public BasicServiceModel<String> publishProduct(FlowProductBo bo) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		Date curTime = new Date(System.currentTimeMillis());
 		FlowProduct info = new FlowProduct();
 		BeanUtils.copyProperties(bo, info);
-		info=flowProductComponent.publishProduct(info);
+		info.setCreateTime(curTime);
+		info.setUpdateTime(curTime);
+		info = flowProductComponent.publishProduct(info);
 		int key = info.getId();
+
+		String prices = bo.getPrices();
+		if (StringUtil.isNotEmpty(prices)) {
+			JSONArray jsonArray = JSONObject.parseArray(prices);
+			if (null != jsonArray) {
+				for (Object obj : jsonArray) {
+					JSONObject jsonObj = (JSONObject) obj;
+					BigDecimal price = jsonObj.getBigDecimal("price");
+					BigDecimal preferentialPrice = jsonObj.getBigDecimal("preferentialPrice");
+					String productNationCode = jsonObj.getString("productNationCode");
+					String userNationCode = jsonObj.getString("userNationCode");
+
+					ProductPrice record = new ProductPrice();
+					record.setCreateTime(curTime);
+					record.setDiscountPrice(preferentialPrice);
+					record.setPrice(price);
+					record.setPriceStatus(ProductPriceStatusConst.USE);
+					record.setProductId(key);
+					record.setProductNationCode(productNationCode);
+					record.setUpdateTime(curTime);
+					record.setUserNationCode(userNationCode);
+					try {
+						productPriceMapper.insertSelective(record);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 		bsm.setCode(ReqStatusConst.OK);
 		bsm.setData(String.valueOf(key));
 		return bsm;

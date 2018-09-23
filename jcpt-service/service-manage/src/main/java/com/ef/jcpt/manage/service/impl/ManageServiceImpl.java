@@ -41,12 +41,19 @@ public class ManageServiceImpl implements IManageService {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		try {
-			PhoneSupportStandard info = new PhoneSupportStandard();
-			BeanUtil.copyProperties(bo, info);
-			phoneSupportStandardMapper.insertSelective(info);
-			bsm.setCode(ReqStatusConst.OK);
-			bsm.setData(info.getPhoneModel());
-			return bsm;
+			String phoneModel = bo.getPhoneModel();
+			int phoneModelCount = phoneSupportStandardMapper.selectPhoneSupportStandard(phoneModel);
+			if (phoneModelCount > 0) {
+				bsm.setCode(ReqStatusConst.OK);
+				return bsm;
+			} else {
+				PhoneSupportStandard info = new PhoneSupportStandard();
+				BeanUtil.copyProperties(bo, info);
+				phoneSupportStandardMapper.insertSelective(info);
+				bsm.setCode(ReqStatusConst.OK);
+				bsm.setData(info.getPhoneModel());
+				return bsm;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);

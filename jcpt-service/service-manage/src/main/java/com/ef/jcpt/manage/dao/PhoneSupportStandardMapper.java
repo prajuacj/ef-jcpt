@@ -29,4 +29,6 @@ public interface PhoneSupportStandardMapper {
 			@Param("pageSize") int pageSize);
 
 	int countPhoneModelSupportStandardByPage();
+
+	int selectPhoneSupportStandard(@Param("phoneModel") String phoneModel);
 }

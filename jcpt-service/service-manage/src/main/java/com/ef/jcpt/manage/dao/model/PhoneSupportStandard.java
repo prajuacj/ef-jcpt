@@ -3,53 +3,63 @@ package com.ef.jcpt.manage.dao.model;
 import java.util.Date;
 
 public class PhoneSupportStandard {
-    private String phoneModel;
+    private Integer id;
 
-    private String mobileNetworkStandard;
+	private String phoneModel;
 
-    private String remark;
+	private String mobileNetworkStandard;
 
-    private Date createTime;
+	private String remark;
 
-    private Date updateTime;
+	private Date createTime;
 
-    public String getPhoneModel() {
-        return phoneModel;
-    }
+	private Date updateTime;
 
-    public void setPhoneModel(String phoneModel) {
-        this.phoneModel = phoneModel == null ? null : phoneModel.trim();
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getMobileNetworkStandard() {
-        return mobileNetworkStandard;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setMobileNetworkStandard(String mobileNetworkStandard) {
-        this.mobileNetworkStandard = mobileNetworkStandard == null ? null : mobileNetworkStandard.trim();
-    }
+	public String getPhoneModel() {
+		return phoneModel;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public void setPhoneModel(String phoneModel) {
+		this.phoneModel = phoneModel == null ? null : phoneModel.trim();
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public String getMobileNetworkStandard() {
+		return mobileNetworkStandard;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setMobileNetworkStandard(String mobileNetworkStandard) {
+		this.mobileNetworkStandard = mobileNetworkStandard == null ? null : mobileNetworkStandard.trim();
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

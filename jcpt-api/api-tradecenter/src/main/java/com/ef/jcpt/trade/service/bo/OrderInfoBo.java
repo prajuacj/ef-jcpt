@@ -44,6 +44,8 @@ public class OrderInfoBo implements Serializable {
 	private Date payTime;
 
 	private Date validTime;
+	
+	private Integer validDay;
 
 	private BigDecimal remainFlow;
 
@@ -239,5 +241,13 @@ public class OrderInfoBo implements Serializable {
 
 	public void setProductNationCode(String productNationCode) {
 		this.productNationCode = productNationCode;
+	}
+
+	public Integer getValidDay() {
+		return validDay;
+	}
+
+	public void setValidDay(Integer validDay) {
+		this.validDay = validDay;
 	}
 }

@@ -1,5 +1,6 @@
 package com.ef.jcpt.wi.user.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.entity.TokenVo;
 import com.ef.jcpt.core.sms.ToolSendSMSUtil;
 import com.ef.jcpt.manage.service.IManageService;
+import com.ef.jcpt.manage.service.bo.PhoneSupportStandardBo;
 import com.ef.jcpt.user.service.IUserService;
 import com.ef.jcpt.user.service.bo.LoginBo;
 import com.ef.jcpt.user.service.bo.UpdatePwdBo;
@@ -170,18 +172,18 @@ public class UserController extends BaseController {
 						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
 				return result;
 			} else {
-				LoginBo bo = JSON.parseObject(params, LoginBo.class);
-				String reuslt = bo.validateFiled();
+				LoginBo login = JSON.parseObject(params, LoginBo.class);
+				String reuslt = login.validateFiled();
 				if (StringUtil.isNotEmpty(reuslt)) {
 					bsm = new BasicServiceModel<>(ReqStatusConst.INVALID_VALUE, reuslt);
 					logger.error(
 							LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
 					return bsm;
 				} else {
-					String userName = bo.getUserName();
-					String loginType = bo.getLoginType();
-					String password = bo.getPassword();
-					String phoneModel = bo.getPhoneModel();
+					String userName = login.getUserName();
+					String loginType = login.getLoginType();
+					String password = login.getPassword();
+					String phoneModel = login.getPhoneModel();
 
 					BasicServiceModel<UserInfoBo> logBsm = userServiceImpl.login(userName, password, loginType);
 					if ((null != logBsm) && (ReqStatusConst.OK.equals(logBsm.getCode()))) {
@@ -194,6 +196,19 @@ public class UserController extends BaseController {
 						String retStr = JSON.toJSONString(map);
 						result.setCode(ReqStatusConst.OK);
 						result.setData(retStr);
+						
+						try {
+							PhoneSupportStandardBo bo = new PhoneSupportStandardBo();
+							Date curTime = new Date(System.currentTimeMillis());
+
+							bo.setCreateTime(curTime);
+							bo.setPhoneModel(phoneModel);
+							bo.setUpdateTime(curTime);
+							manageServiceImpl.savePhoneSupportStandard(bo);
+						}catch(Exception e) {
+							e.printStackTrace();
+							logger.info("手机模型信息已经存在！");
+						}
 						return result;
 					} else {
 						result.setCode(ReqStatusConst.FAIL);

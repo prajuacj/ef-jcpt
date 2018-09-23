@@ -19,6 +19,8 @@ public class PayInfo {
 
 	private String payStatus;
 
+	private String usedNationCode;
+
 	private BigDecimal handFee;
 
 	private String requestParam;
@@ -89,6 +91,14 @@ public class PayInfo {
 
 	public void setPayStatus(String payStatus) {
 		this.payStatus = payStatus == null ? null : payStatus.trim();
+	}
+
+	public String getUsedNationCode() {
+		return usedNationCode;
+	}
+
+	public void setUsedNationCode(String usedNationCode) {
+		this.usedNationCode = usedNationCode == null ? null : usedNationCode.trim();
 	}
 
 	public BigDecimal getHandFee() {
