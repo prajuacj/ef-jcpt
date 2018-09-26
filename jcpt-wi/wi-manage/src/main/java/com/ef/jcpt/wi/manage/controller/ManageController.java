@@ -242,9 +242,9 @@ public class ManageController extends BaseController {
 				String tokenKey = jsonObj.getString("tokenKey");
 				TokenVo token = cacheUtil.getToken(tokenKey);
 //				if (null != token) {
-				UserInfoBo user = token.getUser();
-				String userName = user.getMobile();
-				String userNationCode = user.getNationCode();
+//				UserInfoBo user = token.getUser();
+//				String userName = user.getMobile();
+//				String userNationCode = user.getNationCode();
 
 				JSONArray phoneModels = jsonObj.getJSONArray("operators");
 				for (Object phoneModelStr : phoneModels) {
