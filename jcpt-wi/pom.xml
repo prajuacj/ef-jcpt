@@ -13,5 +13,6 @@
   	<module>wi-user</module>
   	<module>wi-trade</module>
   	<module>wi-manage</module>
+  	<module>wi-authen</module>
   </modules>
 </project>
