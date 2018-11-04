@@ -181,9 +181,9 @@ public class ManageController extends BaseController {
 				String tokenKey = jsonObj.getString("tokenKey");
 				TokenVo token = cacheUtil.getToken(tokenKey);
 //				if (null != token) {
-				UserInfoBo user = token.getUser();
-				String userName = user.getMobile();
-				String userNationCode = user.getNationCode();
+//				UserInfoBo user = token.getUser();
+//				String userName = user.getMobile();
+//				String userNationCode = user.getNationCode();
 
 				JSONArray phoneModels = jsonObj.getJSONArray("phoneModels");
 				for (Object phoneModelStr : phoneModels) {
@@ -219,7 +219,7 @@ public class ManageController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("支付失败！" + e.getMessage());
+			bsm.setMsg("配置失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}

@@ -360,7 +360,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 
 					payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
-					orderInfo.setOrderStatus(OrderStatusConst.PAYED);
+					orderInfo.setOrderStatus(OrderStatusConst.USEING);
 					orderInfo.setPayTime(curTime);
 					orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 
