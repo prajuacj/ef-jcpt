@@ -37,4 +37,8 @@
 	<dubbo:service
 		interface="com.ef.jcpt.trade.service.IOrderPayService"
 		ref="orderPayServiceImpl" />
+		
+	<dubbo:service
+		interface="com.ef.jcpt.trade.service.ITaskService"
+		ref="taskServiceImpl" />
 </beans>
