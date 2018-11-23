@@ -37,4 +37,7 @@
 	<dubbo:service
 		interface="com.ef.jcpt.manage.service.IManageService"
 		ref="manageServiceImpl" />
+		
+	<dubbo:service interface="com.ef.jcpt.manage.service.IAdspopService"
+	ref="adspopServiceImpl" />
 </beans>
