@@ -21,10 +21,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.log.LogTemplate;
+import com.ef.jcpt.common.util.StringUtil;
 import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.entity.TokenVo;
 import com.ef.jcpt.manage.service.IAdspopService;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
+import com.ef.jcpt.user.service.bo.UserInfoBo;
 
 @Controller
 @RequestMapping("/adspop")
@@ -47,7 +49,9 @@ public class AdsPopManageController extends BaseController {
 			@RequestParam("taskDesc") String taskDesc, @RequestParam("taskUrl") String taskUrl,
 			@RequestParam("publishUser") String publishUser, @RequestParam("publishPhone") String publishPhone,
 			@RequestParam("popMode") String popMode, @RequestParam("remark") String remark,
-			@RequestParam("taskImageFile") MultipartFile taskImageFile) {
+			@RequestParam("intervalTime") String intervalTime, @RequestParam("validEndTime") String validEndTime,
+			@RequestParam("validStartTime") String validStartTime, @RequestParam("province") String province,
+			@RequestParam("city") String city, @RequestParam("taskImageFile") MultipartFile taskImageFile) {
 		String cmd = "AdsPopManageController:publish";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
@@ -80,6 +84,11 @@ public class AdsPopManageController extends BaseController {
 			bo.setTaskImageFilePath(taskImageFilePath);
 			bo.setTaskName(taskName);
 			bo.setTaskUrl(taskUrl);
+			bo.setIntervalTime(intervalTime);
+			bo.setValidEndTime(validEndTime);
+			bo.setValidStartTime(validStartTime);
+			bo.setProvince(province);
+			bo.setCity(city);
 
 			bsm = adspopServiceImpl.publishAdspop(bo);
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
@@ -155,7 +164,7 @@ public class AdsPopManageController extends BaseController {
 				// UserInfoBo bo = token.getUser();
 				// String userName = bo.getMobile();
 
-				return adspopServiceImpl.audit(Integer.parseInt(popadsId), auditUser, auditAdvise);
+				return adspopServiceImpl.audit(Integer.parseInt(popadsId), auditResult, auditUser, auditAdvise);
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
@@ -168,7 +177,7 @@ public class AdsPopManageController extends BaseController {
 	@RequestMapping(value = "/realse.json", method = RequestMethod.POST)
 	@ResponseBody
 	public BasicServiceModel<String> realse(HttpServletRequest req, String sign, String params) {
-		String cmd = "AdsPopManageController:audit";
+		String cmd = "AdsPopManageController:realse";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {
@@ -199,6 +208,141 @@ public class AdsPopManageController extends BaseController {
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg("获取信息失败！" + e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/listPopads.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> listPopads(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:listPopads";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			BasicServiceModel<String> result = validateSign(sign, params);
+			if (ReqStatusConst.FAIL.equals(result.getCode())) {
+				logger.error(
+						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
+				return result;
+			} else {
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String tokenKey = jsonObj.getString("tokenKey");
+//				TokenVo token = cacheUtil.getToken(tokenKey);
+//				if (null != token) {
+//					UserInfoBo bo = token.getUser();
+//				String userName = bo.getMobile();
+
+				String taskName = jsonObj.getString("taskName");
+				String taskStatus = jsonObj.getString("taskStatus");
+				String modelIdStr = jsonObj.getString("modelId");
+				int modelId = -1;
+				if (StringUtil.isNotEmpty(modelIdStr)) {
+					modelId = Integer.parseInt(modelIdStr);
+				}
+				int pageIndex = jsonObj.getIntValue("pageIndex");
+				int pageSize = jsonObj.getIntValue("pageSize");
+				int total = 0;
+				if (pageIndex == 1) {
+					total = adspopServiceImpl.countPopadsByPage(taskName, taskStatus, modelId);
+				}
+				BasicServiceModel<String> orderBsm = adspopServiceImpl.listPopadsByPage(taskName, taskStatus, modelId,
+						pageIndex, pageSize);
+				if ((null != orderBsm) && (ReqStatusConst.OK.equals(orderBsm.getCode()))) {
+					String listProStr = orderBsm.getData();
+					JSONObject listjson = JSONObject.parseObject(listProStr);
+					String arrays = listjson.getString("data");
+					JSONObject data = new JSONObject();
+					data.put("total", total);
+					data.put("popadsList", arrays);
+					bsm.setCode(ReqStatusConst.OK);
+					bsm.setData(data.toJSONString());
+					return bsm;
+				} else {
+					bsm.setCode(orderBsm.getCode());
+					bsm.setMsg(orderBsm.getMsg());
+					return bsm;
+				}
+//				} else {
+//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+//					bsm.setMsg("会话已过期，请重新登录！");
+//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//					return bsm;
+//				}
+			}
+		} catch (Exception e) {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("获取订单信息失败！" + e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/updatePopads.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> updatePopads(HttpServletRequest req, @RequestParam("popadsId") int popadsId,
+			@RequestParam("tokenKey") String tokenKey, @RequestParam("modelId") String modelId,
+			@RequestParam("taskName") String taskName, @RequestParam("taskDesc") String taskDesc,
+			@RequestParam("taskUrl") String taskUrl, @RequestParam("publishUser") String publishUser,
+			@RequestParam("publishPhone") String publishPhone, @RequestParam("popMode") String popMode,
+			@RequestParam("remark") String remark, @RequestParam("intervalTime") String intervalTime,
+			@RequestParam("validEndTime") String validEndTime, @RequestParam("validStartTime") String validStartTime,
+			@RequestParam("province") String province, @RequestParam("city") String city,
+			@RequestParam("taskImageFile") MultipartFile taskImageFile) {
+		String cmd = "AdsPopManageController:updatePopads";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			// TokenVo tokenVo = RedisUtil.getToken(token);
+			// if (null != tokenVo) {
+			String taskImageFileName = taskImageFile.getOriginalFilename();
+
+			long curTime = System.currentTimeMillis();
+
+			File pathDir = new File(path);
+			if (!pathDir.exists()) {// 如果文件夹不存在
+				pathDir.mkdirs();// 创建文件夹
+			}
+
+			String taskImageFilePath = path + curTime + "_" + taskImageFileName;
+
+			File saveBackFile = new File(taskImageFilePath);
+			// 通过CommonsMultipartFile的方法直接写文件（注意这个时候）
+			taskImageFile.transferTo(saveBackFile);
+
+			AdspopPublishBo bo = new AdspopPublishBo();
+
+			bo.setId(popadsId);
+			bo.setModelId(modelId);
+			bo.setModelId(modelId);
+			bo.setPopMode(popMode);
+			bo.setPublishPhone(publishPhone);
+			bo.setPublishUser(publishUser);
+			bo.setRemark(remark);
+			bo.setTaskDesc(taskDesc);
+			bo.setTaskImageFilePath(taskImageFilePath);
+			bo.setTaskName(taskName);
+			bo.setTaskUrl(taskUrl);
+			bo.setIntervalTime(intervalTime);
+			bo.setValidEndTime(validEndTime);
+			bo.setValidStartTime(validStartTime);
+			bo.setProvince(province);
+			bo.setCity(city);
+
+			bsm = adspopServiceImpl.updatePopads(bo);
+			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
+			return bsm;
+			// } else {
+			// bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+			// bsm.setMsg("token已过期，请重新申请！");
+			// logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()
+			// + ",data=" + params));
+			// return bsm;
+			// }
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("上传文件失败！");
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
 			return bsm;
 		}
 	}

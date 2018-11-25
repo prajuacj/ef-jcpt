@@ -5,141 +5,201 @@ import java.util.Date;
 public class PopadsInfo {
     private Integer id;
 
-    private Integer modelId;
+	private Integer modelId;
 
-    private String taskName;
+	private String taskName;
 
-    private String taskDesc;
+	private String taskDesc;
 
-    private String taskImgs;
+	private String taskImgs;
 
-    private String taskUrl;
+	private String taskUrl;
 
-    private String taskStatus;
+	private String taskStatus;
 
-    private String publishUser;
+	private String publishUser;
 
-    private String auditingUser;
+	private String auditingUser;
 
-    private String auditingAdvise;
+	private String auditingAdvise;
 
-    private String taskContent;
+	private String publishPhone;
 
-    private String publishPhone;
+	private Integer popMode;
 
-    private Date createTime;
+	private Date validStartTime;
 
-    private Date updateTime;
+	private Date validEndTime;
 
-    public Integer getId() {
-        return id;
-    }
+	private Integer intervalTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	private String province;
 
-    public Integer getModelId() {
-        return modelId;
-    }
+	private String city;
 
-    public void setModelId(Integer modelId) {
-        this.modelId = modelId;
-    }
+	private Date createTime;
 
-    public String getTaskName() {
-        return taskName;
-    }
+	private Date updateTime;
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName == null ? null : taskName.trim();
-    }
+	private String taskContent;
 
-    public String getTaskDesc() {
-        return taskDesc;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setTaskDesc(String taskDesc) {
-        this.taskDesc = taskDesc == null ? null : taskDesc.trim();
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getTaskImgs() {
-        return taskImgs;
-    }
+	public Integer getModelId() {
+		return modelId;
+	}
 
-    public void setTaskImgs(String taskImgs) {
-        this.taskImgs = taskImgs == null ? null : taskImgs.trim();
-    }
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
+	}
 
-    public String getTaskUrl() {
-        return taskUrl;
-    }
+	public String getTaskName() {
+		return taskName;
+	}
 
-    public void setTaskUrl(String taskUrl) {
-        this.taskUrl = taskUrl == null ? null : taskUrl.trim();
-    }
+	public void setTaskName(String taskName) {
+		this.taskName = taskName == null ? null : taskName.trim();
+	}
 
-    public String getTaskStatus() {
-        return taskStatus;
-    }
+	public String getTaskDesc() {
+		return taskDesc;
+	}
 
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus == null ? null : taskStatus.trim();
-    }
+	public void setTaskDesc(String taskDesc) {
+		this.taskDesc = taskDesc == null ? null : taskDesc.trim();
+	}
 
-    public String getPublishUser() {
-        return publishUser;
-    }
+	public String getTaskImgs() {
+		return taskImgs;
+	}
 
-    public void setPublishUser(String publishUser) {
-        this.publishUser = publishUser == null ? null : publishUser.trim();
-    }
+	public void setTaskImgs(String taskImgs) {
+		this.taskImgs = taskImgs == null ? null : taskImgs.trim();
+	}
 
-    public String getAuditingUser() {
-        return auditingUser;
-    }
+	public String getTaskUrl() {
+		return taskUrl;
+	}
 
-    public void setAuditingUser(String auditingUser) {
-        this.auditingUser = auditingUser == null ? null : auditingUser.trim();
-    }
+	public void setTaskUrl(String taskUrl) {
+		this.taskUrl = taskUrl == null ? null : taskUrl.trim();
+	}
 
-    public String getAuditingAdvise() {
-        return auditingAdvise;
-    }
+	public String getTaskStatus() {
+		return taskStatus;
+	}
 
-    public void setAuditingAdvise(String auditingAdvise) {
-        this.auditingAdvise = auditingAdvise == null ? null : auditingAdvise.trim();
-    }
+	public void setTaskStatus(String taskStatus) {
+		this.taskStatus = taskStatus == null ? null : taskStatus.trim();
+	}
 
-    public String getTaskContent() {
-        return taskContent;
-    }
+	public String getPublishUser() {
+		return publishUser;
+	}
 
-    public void setTaskContent(String taskContent) {
-        this.taskContent = taskContent == null ? null : taskContent.trim();
-    }
+	public void setPublishUser(String publishUser) {
+		this.publishUser = publishUser == null ? null : publishUser.trim();
+	}
 
-    public String getPublishPhone() {
-        return publishPhone;
-    }
+	public String getAuditingUser() {
+		return auditingUser;
+	}
 
-    public void setPublishPhone(String publishPhone) {
-        this.publishPhone = publishPhone == null ? null : publishPhone.trim();
-    }
+	public void setAuditingUser(String auditingUser) {
+		this.auditingUser = auditingUser == null ? null : auditingUser.trim();
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public String getAuditingAdvise() {
+		return auditingAdvise;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setAuditingAdvise(String auditingAdvise) {
+		this.auditingAdvise = auditingAdvise == null ? null : auditingAdvise.trim();
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public String getPublishPhone() {
+		return publishPhone;
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public void setPublishPhone(String publishPhone) {
+		this.publishPhone = publishPhone == null ? null : publishPhone.trim();
+	}
+
+	public Integer getPopMode() {
+		return popMode;
+	}
+
+	public void setPopMode(Integer popMode) {
+		this.popMode = popMode;
+	}
+
+	public Date getValidStartTime() {
+		return validStartTime;
+	}
+
+	public void setValidStartTime(Date validStartTime) {
+		this.validStartTime = validStartTime;
+	}
+
+	public Date getValidEndTime() {
+		return validEndTime;
+	}
+
+	public void setValidEndTime(Date validEndTime) {
+		this.validEndTime = validEndTime;
+	}
+
+	public Integer getIntervalTime() {
+		return intervalTime;
+	}
+
+	public void setIntervalTime(Integer intervalTime) {
+		this.intervalTime = intervalTime;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province == null ? null : province.trim();
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city == null ? null : city.trim();
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getTaskContent() {
+		return taskContent;
+	}
+
+	public void setTaskContent(String taskContent) {
+		this.taskContent = taskContent == null ? null : taskContent.trim();
+	}
 }

@@ -9,6 +9,7 @@ public class AdspopPublishBo implements Serializable {
 	 */
 	private static final long serialVersionUID = -233462572345779911L;
 	
+	private int id;
 	private String modelId;
 	private String taskName;
 	private String taskDesc;
@@ -16,6 +17,11 @@ public class AdspopPublishBo implements Serializable {
 	private String publishUser;
 	private String publishPhone;
 	private String popMode;
+	private String validStartTime;
+	private String validEndTime;
+	private String intervalTime;
+	private String province;
+	private String city;
 	private String remark;
 	private String taskImageFilePath;
 	public String getModelId() {
@@ -71,5 +77,43 @@ public class AdspopPublishBo implements Serializable {
 	}
 	public void setTaskImageFilePath(String taskImageFilePath) {
 		this.taskImageFilePath = taskImageFilePath;
+	}
+	public String getValidStartTime() {
+		return validStartTime;
+	}
+	public void setValidStartTime(String validStartTime) {
+		this.validStartTime = validStartTime;
+	}
+	public String getValidEndTime() {
+		return validEndTime;
+	}
+	public void setValidEndTime(String validEndTime) {
+		this.validEndTime = validEndTime;
+	}
+	public String getIntervalTime() {
+		return intervalTime;
+	}
+	public void setIntervalTime(String intervalTime) {
+		this.intervalTime = intervalTime;
+	}
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
