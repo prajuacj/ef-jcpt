@@ -60,7 +60,7 @@ public class AdsPopManageController extends BaseController {
 
 			File pathDir = new File(path);
 			if (!pathDir.exists()) {// 如果文件夹不存在
-				pathDir.mkdir();// 创建文件夹
+				pathDir.mkdirs();// 创建文件夹
 			}
 
 			String taskImageFilePath = path + curTime + "_" + taskImageFileName;
