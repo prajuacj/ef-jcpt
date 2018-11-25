@@ -428,4 +428,24 @@ public class AdspopServiceImpl implements IAdspopService {
 			return bsm;
 		}
 	}
+
+	@Override
+	public BasicServiceModel<String> getPopadsById(String popadsId) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		// TODO Auto-generated method stub
+		int popid = -1;
+		if (StringUtil.isNotEmpty(popadsId)) {
+			popid = Integer.parseInt(popadsId);
+		}
+		PopadsInfo info = popadsInfoMapper.selectByPrimaryKey(popid);
+		if (null != info) {
+			JSONObject data = new JSONObject();
+			data.put("data", info);
+			bsm.setData(data.toJSONString());
+		}
+		bsm.setCode(ReqStatusConst.OK);
+
+		return bsm;
+	}
 }

@@ -19,4 +19,6 @@ public interface IAdspopService {
 			int pageSize);
 
 	BasicServiceModel<String> updatePopads(AdspopPublishBo bo);
+
+	BasicServiceModel<String> getPopadsById(String popadsId);
 }

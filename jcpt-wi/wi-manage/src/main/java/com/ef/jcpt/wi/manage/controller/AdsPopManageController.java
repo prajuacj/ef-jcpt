@@ -271,7 +271,46 @@ public class AdsPopManageController extends BaseController {
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("获取订单信息失败！" + e.getMessage());
+			bsm.setMsg("获取广告信息失败！" + e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/getPopadsById.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> getPopadsById(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:getPopadsById";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			BasicServiceModel<String> result = validateSign(sign, params);
+			if (ReqStatusConst.FAIL.equals(result.getCode())) {
+				logger.error(
+						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
+				return result;
+			} else {
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String tokenKey = jsonObj.getString("tokenKey");
+//				TokenVo token = cacheUtil.getToken(tokenKey);
+//				if (null != token) {
+//					UserInfoBo bo = token.getUser();
+//				String userName = bo.getMobile();
+
+				String popadsId = jsonObj.getString("popadsId");
+
+				return adspopServiceImpl.getPopadsById(popadsId);
+
+//				} else {
+//					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+//					bsm.setMsg("会话已过期，请重新登录！");
+//					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+//					return bsm;
+//				}
+			}
+		} catch (Exception e) {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg(e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
@@ -342,6 +381,44 @@ public class AdsPopManageController extends BaseController {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg("上传文件失败！");
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/viewpop.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> viewpop(HttpServletRequest req, @RequestParam("mac") String mac,
+			@RequestParam("taskId") String taskId) {
+		String cmd = "AdsPopManageController:updatePopads";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			return bsm;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg(e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/clickpop.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> clickpop(HttpServletRequest req, @RequestParam("mac") String mac,
+			@RequestParam("taskId") String taskId) {
+		String cmd = "AdsPopManageController:updatePopads";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			return bsm;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg(e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
 			return bsm;
 		}
