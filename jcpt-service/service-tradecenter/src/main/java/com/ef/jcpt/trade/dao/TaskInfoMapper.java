@@ -7,17 +7,20 @@ import com.ef.jcpt.trade.dao.model.TaskInfo;
 
 @Repository
 public interface TaskInfoMapper {
-	int deleteByPrimaryKey(Integer id);
 
-	int insert(TaskInfo record);
+    int deleteByPrimaryKey(Integer id);
 
-	int insertSelective(TaskInfo record);
+    int insert(TaskInfo record);
 
-	TaskInfo selectByPrimaryKey(Integer id);
+    int insertSelective(TaskInfo record);
 
-	int updateByPrimaryKeySelective(TaskInfo record);
+    TaskInfo selectByPrimaryKey(Integer id);
 
-	int updateByPrimaryKey(TaskInfo record);
+    int updateByPrimaryKeySelective(TaskInfo record);
 
-	TaskInfo obtainTask(@Param("userName") String userName, @Param("next") int next);
+    int updateByPrimaryKeyWithBLOBs(TaskInfo record);
+
+    int updateByPrimaryKey(TaskInfo record);
+    
+    TaskInfo obtainTask(@Param("userName") String userName, @Param("next") int next);
 }

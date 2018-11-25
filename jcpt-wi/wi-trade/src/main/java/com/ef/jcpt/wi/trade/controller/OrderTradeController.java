@@ -323,7 +323,7 @@ public class OrderTradeController extends BaseController {
 					String endTime = retData.get("time_end");
 
 					BasicServiceModel<String> bsm = orderPayServiceImpl.updateWXPayResult(sn, orderAmt, orderAmt,
-							wxorderid, endTime,bankType);// 公共平台支付
+							wxorderid, endTime, bankType);// 公共平台支付
 					if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
 						out.print("SUCCESS");
 					} else {

@@ -187,7 +187,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 						json.put("package", map.get("package"));
 						json.put("signType", map.get("signType"));
 						json.put("paySign", map.get("paySign"));
-						bsm.setData(json.toString());
+						bsm.setData(json.toJSONString());
 
 						Date curDate = new Date(System.currentTimeMillis());
 						retOrder.setPayTime(curDate);
@@ -253,7 +253,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			}
 			JSONObject data = new JSONObject();
 			data.put("data", boList);
-			bsm.setData(data.toString());
+			bsm.setData(data.toJSONString());
 		}
 		bsm.setCode(ReqStatusConst.OK);
 
@@ -286,7 +286,7 @@ public class OrderPayServiceImpl implements IOrderPayService {
 			}
 			JSONObject data = new JSONObject();
 			data.put("data", boList);
-			bsm.setData(data.toString());
+			bsm.setData(data.toJSONString());
 		}
 		bsm.setCode(ReqStatusConst.OK);
 

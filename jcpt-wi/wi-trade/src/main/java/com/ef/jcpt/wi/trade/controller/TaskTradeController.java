@@ -68,6 +68,42 @@ public class TaskTradeController extends BaseController {
 			return bsm;
 		}
 	}
+	
+	@RequestMapping(value = "/queryTask.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> queryTask(HttpServletRequest req, String sign, String params) {
+		String cmd = "TaskTradeController:queryTask";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			BasicServiceModel<String> result = validateSign(sign, params);
+			if (ReqStatusConst.FAIL.equals(result.getCode())) {
+				logger.error(
+						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
+				return result;
+			} else {
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String tokenKey = jsonObj.getString("tokenKey");
+				TokenVo token = cacheUtil.getToken(tokenKey);
+				if (null != token) {
+					UserInfoBo bo = token.getUser();
+					String userName = bo.getMobile();
+					int next = jsonObj.getIntValue("next");
+					return taskServiceImpl.getTask(userName, next);
+				} else {
+					bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+					bsm.setMsg("会话已过期，请重新登录！");
+					logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+					return bsm;
+				}
+			}
+		} catch (Exception e) {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("获取产品信息失败！" + e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
+			return bsm;
+		}
+	}
 
 	@RequestMapping(value = "/submitTask.json", method = RequestMethod.POST)
 	@ResponseBody
@@ -87,7 +123,7 @@ public class TaskTradeController extends BaseController {
 				rtbo.setReceivedUser(userName);
 				rtbo.setTaskId(Integer.parseInt(taskId));
 				rtbo.setTaskStatus("2");
-				rtbo.setValidImgs(validImgs);
+				//rtbo.setValidImgs(validImgs);
 				return taskServiceImpl.submitTask(rtbo);
 			} else {
 				bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
@@ -127,7 +163,7 @@ public class TaskTradeController extends BaseController {
 				rtbo.setRemark("");
 				rtbo.setRewardType(RewardType.REWARD_FLOW);
 				rtbo.setTaskDesc(taskDesc);
-				rtbo.setTaskImgs(taskImgs);
+				//rtbo.setTaskImgs(taskImgs);
 				rtbo.setTaskNum(taskNum);
 				rtbo.setTaskReward(taskReward);
 				rtbo.setTaskStatus("0");

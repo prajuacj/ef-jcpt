@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ef.jcpt.manage.dao.PopadsInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ef.jcpt.manage.dao.model.PopadsInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="model_id" jdbcType="INTEGER" property="modelId" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="task_desc" jdbcType="VARCHAR" property="taskDesc" />
+    <result column="task_imgs" jdbcType="VARCHAR" property="taskImgs" />
+    <result column="task_url" jdbcType="VARCHAR" property="taskUrl" />
+    <result column="task_status" jdbcType="VARCHAR" property="taskStatus" />
+    <result column="publish_user" jdbcType="VARCHAR" property="publishUser" />
+    <result column="auditing_user" jdbcType="VARCHAR" property="auditingUser" />
+    <result column="auditing_advise" jdbcType="VARCHAR" property="auditingAdvise" />
+    <result column="task_content" jdbcType="VARCHAR" property="taskContent" />
+    <result column="publish_phone" jdbcType="VARCHAR" property="publishPhone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, model_id, task_name, task_desc, task_imgs, task_url, task_status, publish_user, 
+    auditing_user, auditing_advise, task_content, publish_phone, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ef_popads_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ef_popads_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+    insert into ef_popads_info (id, model_id, task_name, 
+      task_desc, task_imgs, task_url, 
+      task_status, publish_user, auditing_user, 
+      auditing_advise, task_content, publish_phone, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{modelId,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, 
+      #{taskDesc,jdbcType=VARCHAR}, #{taskImgs,jdbcType=VARCHAR}, #{taskUrl,jdbcType=VARCHAR}, 
+      #{taskStatus,jdbcType=VARCHAR}, #{publishUser,jdbcType=VARCHAR}, #{auditingUser,jdbcType=VARCHAR}, 
+      #{auditingAdvise,jdbcType=VARCHAR}, #{taskContent,jdbcType=VARCHAR}, #{publishPhone,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo"
+	keyProperty="id" useGeneratedKeys="true">
+	insert into ef_popads_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="modelId != null">
+        model_id,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="taskDesc != null">
+        task_desc,
+      </if>
+      <if test="taskImgs != null">
+        task_imgs,
+      </if>
+      <if test="taskUrl != null">
+        task_url,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="publishUser != null">
+        publish_user,
+      </if>
+      <if test="auditingUser != null">
+        auditing_user,
+      </if>
+      <if test="auditingAdvise != null">
+        auditing_advise,
+      </if>
+      <if test="taskContent != null">
+        task_content,
+      </if>
+      <if test="publishPhone != null">
+        publish_phone,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="modelId != null">
+        #{modelId,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDesc != null">
+        #{taskDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taskImgs != null">
+        #{taskImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUrl != null">
+        #{taskUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="publishUser != null">
+        #{publishUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditingUser != null">
+        #{auditingUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditingAdvise != null">
+        #{auditingAdvise,jdbcType=VARCHAR},
+      </if>
+      <if test="taskContent != null">
+        #{taskContent,jdbcType=VARCHAR},
+      </if>
+      <if test="publishPhone != null">
+        #{publishPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+    update ef_popads_info
+    <set>
+      <if test="modelId != null">
+        model_id = #{modelId,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDesc != null">
+        task_desc = #{taskDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="taskImgs != null">
+        task_imgs = #{taskImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUrl != null">
+        task_url = #{taskUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="publishUser != null">
+        publish_user = #{publishUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditingUser != null">
+        auditing_user = #{auditingUser,jdbcType=VARCHAR},
+      </if>
+      <if test="auditingAdvise != null">
+        auditing_advise = #{auditingAdvise,jdbcType=VARCHAR},
+      </if>
+      <if test="taskContent != null">
+        task_content = #{taskContent,jdbcType=VARCHAR},
+      </if>
+      <if test="publishPhone != null">
+        publish_phone = #{publishPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+    update ef_popads_info
+    set model_id = #{modelId,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      task_desc = #{taskDesc,jdbcType=VARCHAR},
+      task_imgs = #{taskImgs,jdbcType=VARCHAR},
+      task_url = #{taskUrl,jdbcType=VARCHAR},
+      task_status = #{taskStatus,jdbcType=VARCHAR},
+      publish_user = #{publishUser,jdbcType=VARCHAR},
+      auditing_user = #{auditingUser,jdbcType=VARCHAR},
+      auditing_advise = #{auditingAdvise,jdbcType=VARCHAR},
+      task_content = #{taskContent,jdbcType=VARCHAR},
+      publish_phone = #{publishPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="audit">
+  	update ef_popads_info set task_status = '02',auditing_user = #{auditUser,jdbcType=VARCHAR},auditing_advise = #{auditAdvise,jdbcType=VARCHAR} where id = #{popadsId,jdbcType=INTEGER}
+  </update>
+</mapper>
