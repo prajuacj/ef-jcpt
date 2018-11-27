@@ -176,8 +176,7 @@ public class AdspopServiceImpl implements IAdspopService {
 	/**
 	 * 将图片转换成Base64编码
 	 * 
-	 * @param imgFile
-	 *            待处理图片
+	 * @param imgFile 待处理图片
 	 * @return
 	 */
 	public static String getImgStr(String imgFile) {
@@ -266,7 +265,8 @@ public class AdspopServiceImpl implements IAdspopService {
 				map.put("durl", durl);
 				map.put("signature", signature);
 
-				sendHttpRequest(map);
+				String sendStr = sendHttpRequest(map);
+				logger.info("推送返回的结果是： " + sendStr);
 
 				bsm.setCode(ReqStatusConst.OK);
 				return bsm;
@@ -283,13 +283,14 @@ public class AdspopServiceImpl implements IAdspopService {
 		}
 	}
 
-	private void sendHttpRequest(Map<String, String> params) {
+	private String sendHttpRequest(Map<String, String> params) {
 		// TODO Auto-generated method stub
 		try {
-			String retStr = HttpClientUtils.requestPost(realseUrl, params);
+			return HttpClientUtils.requestPost(realseUrl, params);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 	}
 
