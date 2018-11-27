@@ -19,6 +19,8 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,8 @@ import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
 
 @Service
 public class AdspopServiceImpl implements IAdspopService {
+
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private PopadsModelMapper popadsModelMapper;
@@ -142,19 +146,25 @@ public class AdspopServiceImpl implements IAdspopService {
 			record.setValidEndTime(validEndTime);
 			record.setValidStartTime(validStartTime);
 
-			int keyId = popadsInfoMapper.insertSelective(record);
+			int ret = popadsInfoMapper.insertSelective(record);
+			if (ret == 1) {
+				int keyId = record.getId();
+				try {
+					BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + keyId + ".txt"));
+					adspopContent = adspopContent.replaceAll("\\$\\|taskId\\|\\$", String.valueOf(keyId));
+					bw.write(adspopContent);
+					bw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + keyId + ".txt"));
-				adspopContent = adspopContent.replaceAll("\\$\\|taskId\\|\\$", String.valueOf(keyId));
-				bw.write(adspopContent);
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+				bsm.setCode(ReqStatusConst.OK);
+				return bsm;
+			} else {
+				bsm.setCode(ReqStatusConst.FAIL);
+				bsm.setMsg("发布数据保存失败。");
+				return bsm;
 			}
-
-			bsm.setCode(ReqStatusConst.OK);
-			return bsm;
 		} catch (Exception e) {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
@@ -246,9 +256,11 @@ public class AdspopServiceImpl implements IAdspopService {
 				String targzipFileName = targzipFilePath + ".gz";
 				CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
 
-				String durl = tarDomain + curTime + ".tar.gz";
-				String signature = SHA1Util.getSha1(curTime + ADV_PUSH_KEY + durl);
+				String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
+				String signStr = curTime + ADV_PUSH_KEY + durl;
+				String signature = SHA1Util.getSha1(signStr);
 
+				logger.info("发布的签名数据是：" + signStr);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("timestamp", String.valueOf(curTime));
 				map.put("durl", durl);
