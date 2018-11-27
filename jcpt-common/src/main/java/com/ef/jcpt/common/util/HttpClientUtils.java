@@ -30,6 +30,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -108,8 +109,7 @@ public class HttpClientUtils {
 	/**
 	 * 流数据请求
 	 * 
-	 * @param url
-	 *            地址（请求参数都写在地址里）
+	 * @param url 地址（请求参数都写在地址里）
 	 * @return
 	 */
 	public static BasicServiceModel<byte[]> getPdfToPic(String reqUrl) {
@@ -147,8 +147,7 @@ public class HttpClientUtils {
 	/**
 	 * 流数据请求
 	 * 
-	 * @param url
-	 *            地址（请求参数都写在地址里）
+	 * @param url 地址（请求参数都写在地址里）
 	 * @return
 	 */
 	public static BasicServiceModel<byte[]> getInputStream(String reqUrl) {
@@ -324,6 +323,63 @@ public class HttpClientUtils {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+		}
+		try {
+			CloseableHttpResponse response = null;
+			response = httpclient.execute(httppost);
+			if (null != response) {
+				HttpEntity entity = null;
+				try {
+					entity = response.getEntity();
+					if (entity != null) {
+						String ret = new String(IOUtils.toByteArray(entity.getContent()),
+								getResCharset(response, "utf-8"));
+						return ret;
+					}
+					EntityUtils.consume(entity);
+				} finally {
+					response.close();
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+
+	public static String requestJsonPost(String url, String jsonStr) {
+		CloseableHttpClient httpclient = null;
+		if (url.startsWith("https://")) {
+			try {
+				SSLContext sslcontext = SSLContexts.createDefault();
+				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" },
+						null, new HostnameVerifier() {
+							@Override
+							public boolean verify(String hostname, SSLSession arg1) {
+								return true;
+							}
+						});
+				httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+			} catch (Exception e) {
+				logger.error("证书异常" + e.getMessage());
+				return null;
+			}
+		} else {
+			httpclient = HttpClients.custom().build();
+		}
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(30000) // 设置连接超时时间，单位毫秒
+				.setConnectionRequestTimeout(6000) // 设置从connect Manager获取Connection
+													// 超时时间，单位毫秒。这个属性是新加的属性,因为目前版本是可以共享连接池的
+				.setSocketTimeout(30000) // 请求获取数据的超时时间，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用
+				.build();
+		HttpPost httppost = new HttpPost(url);
+		httppost.setConfig(requestConfig);
+		if (StringUtil.isNotEmpty(jsonStr)) {
+			StringEntity requestEntity = new StringEntity(jsonStr, "utf-8");
+			requestEntity.setContentEncoding("UTF-8");
+			httppost.setHeader("Content-type", "application/json");
+			httppost.setEntity(requestEntity);
 		}
 		try {
 			CloseableHttpResponse response = null;

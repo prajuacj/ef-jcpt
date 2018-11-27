@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.PopadsStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
+import com.ef.jcpt.common.util.DateUtil;
 import com.ef.jcpt.common.util.HttpClientUtils;
 import com.ef.jcpt.common.util.StringUtil;
 import com.ef.jcpt.core.sign.SHA1Util;
@@ -256,16 +258,19 @@ public class AdspopServiceImpl implements IAdspopService {
 				CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
 
 				String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
-				String signStr = curTime + ADV_PUSH_KEY + durl;
+				String timestamp=DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
+				String signStr = timestamp + ADV_PUSH_KEY + durl;
 				String signature = SHA1Util.getSha1(signStr);
 
 				logger.info("发布的签名数据是：" + signStr);
 				Map<String, String> map = new HashMap<String, String>();
-				map.put("timestamp", String.valueOf(curTime));
+				map.put("timestamp", timestamp);
 				map.put("durl", durl);
 				map.put("signature", signature);
 
-				String sendStr = sendHttpRequest(map);
+				String params = JSONObject.toJSONString(map);
+
+				String sendStr = sendHttpRequest(params);
 				logger.info("推送返回的结果是： " + sendStr);
 
 				bsm.setCode(ReqStatusConst.OK);
@@ -283,10 +288,10 @@ public class AdspopServiceImpl implements IAdspopService {
 		}
 	}
 
-	private String sendHttpRequest(Map<String, String> params) {
+	private String sendHttpRequest(String params) {
 		// TODO Auto-generated method stub
 		try {
-			return HttpClientUtils.requestPost(realseUrl, params);
+			return HttpClientUtils.requestJsonPost(realseUrl, params);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -465,5 +470,27 @@ public class AdspopServiceImpl implements IAdspopService {
 		bsm.setCode(ReqStatusConst.OK);
 
 		return bsm;
+	}
+
+	public static void main(String[] args) {
+		String curTime = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
+		String url = "http://47.107.145.219:36059/adv/push";
+
+		String durl = "https://www.vsimdata.com/realse/1543318762557/1543318762557.tar.gz";
+		String signStr = curTime + "111111" + durl;
+		String signature = SHA1Util.getSha1(signStr);
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("timestamp", curTime);
+		map.put("signature", signature);
+		map.put("durl", durl);
+
+		String params = JSONObject.toJSONString(map);
+
+		// String sendStr = HttpClientUtils.requestJsonPost(url, "{ \"durl\":
+		// \"http://www.myurl.com.cn/adv/wbpxy002.tgz\",\"signature\":
+		// \"4d0b8d1fed566699f53fbc48e6c01f3fe0fb84fa\",\"timestamp\":
+		// \"20181117113245\"}");
+		String sendStr = HttpClientUtils.requestJsonPost(url, params);
 	}
 }
