@@ -55,6 +55,9 @@ public class AdspopServiceImpl implements IAdspopService {
 	@Value("${adspop.adv.push.key}")
 	private String ADV_PUSH_KEY;
 
+	@Value("${adspop.image.domain}")
+	private String imageDomain;
+
 	@Value("${adspop.tar.domain}")
 	private String tarDomain;
 
@@ -128,7 +131,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			record.setPublishUser(bo.getPublishUser());
 			record.setTaskContent(adspopContent);
 			record.setTaskDesc(bo.getTaskDesc());
-			record.setTaskImgs(bo.getTaskImageFilePath());
+			record.setTaskImgs(imageDomain + bo.getTaskImageFileName());
 			record.setTaskName(bo.getTaskName());
 			record.setTaskStatus(PopadsStatusConst.SUBMIT);
 			record.setTaskUrl(bo.getTaskUrl());
@@ -143,6 +146,7 @@ public class AdspopServiceImpl implements IAdspopService {
 
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + keyId + ".txt"));
+				adspopContent = adspopContent.replaceAll("\\$\\|taskId\\|\\$", String.valueOf(keyId));
 				bw.write(adspopContent);
 				bw.close();
 			} catch (IOException e) {
@@ -162,7 +166,8 @@ public class AdspopServiceImpl implements IAdspopService {
 	/**
 	 * 将图片转换成Base64编码
 	 * 
-	 * @param imgFile 待处理图片
+	 * @param imgFile
+	 *            待处理图片
 	 * @return
 	 */
 	public static String getImgStr(String imgFile) {
@@ -400,7 +405,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			record.setTaskDesc(bo.getTaskDesc());
 			record.setTaskImgs(bo.getTaskImageFilePath());
 			record.setTaskName(bo.getTaskName());
-//			record.setTaskStatus(PopadsStatusConst.SUBMIT);
+			// record.setTaskStatus(PopadsStatusConst.SUBMIT);
 			record.setTaskUrl(bo.getTaskUrl());
 			record.setUpdateTime(curTime);
 			record.setIntervalTime(intervalTime);
