@@ -11,6 +11,7 @@ public class AdspopPublishBo implements Serializable {
 
 	private int id;
 	private String modelId;
+	private String modelName;
 	private String taskName;
 	private String taskDesc;
 	private String taskUrl;
@@ -32,6 +33,14 @@ public class AdspopPublishBo implements Serializable {
 
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	public String getTaskName() {

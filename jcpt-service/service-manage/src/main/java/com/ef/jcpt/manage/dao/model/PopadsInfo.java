@@ -7,6 +7,8 @@ public class PopadsInfo {
 
 	private Integer modelId;
 
+	private String modelName;
+
 	private String taskName;
 
 	private String taskDesc;
@@ -23,6 +25,8 @@ public class PopadsInfo {
 
 	private String auditingAdvise;
 
+	private String taskContent;
+
 	private String publishPhone;
 
 	private Integer popMode;
@@ -37,11 +41,11 @@ public class PopadsInfo {
 
 	private String city;
 
+	private String remark;
+
 	private Date createTime;
 
 	private Date updateTime;
-
-	private String taskContent;
 
 	public Integer getId() {
 		return id;
@@ -57,6 +61,14 @@ public class PopadsInfo {
 
 	public void setModelId(Integer modelId) {
 		this.modelId = modelId;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName == null ? null : modelName.trim();
 	}
 
 	public String getTaskName() {
@@ -123,6 +135,14 @@ public class PopadsInfo {
 		this.auditingAdvise = auditingAdvise == null ? null : auditingAdvise.trim();
 	}
 
+	public String getTaskContent() {
+		return taskContent;
+	}
+
+	public void setTaskContent(String taskContent) {
+		this.taskContent = taskContent == null ? null : taskContent.trim();
+	}
+
 	public String getPublishPhone() {
 		return publishPhone;
 	}
@@ -179,6 +199,14 @@ public class PopadsInfo {
 		this.city = city == null ? null : city.trim();
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -193,13 +221,5 @@ public class PopadsInfo {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
-	}
-
-	public String getTaskContent() {
-		return taskContent;
-	}
-
-	public void setTaskContent(String taskContent) {
-		this.taskContent = taskContent == null ? null : taskContent.trim();
 	}
 }

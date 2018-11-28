@@ -44,13 +44,14 @@ public class AdsPopManageController extends BaseController {
 	@RequestMapping(value = "/publish.json", method = RequestMethod.POST)
 	@ResponseBody
 	public BasicServiceModel<String> publish(HttpServletRequest req, @RequestParam("tokenKey") String tokenKey,
-			@RequestParam("modelId") String modelId, @RequestParam("taskName") String taskName,
-			@RequestParam("taskDesc") String taskDesc, @RequestParam("taskUrl") String taskUrl,
-			@RequestParam("publishUser") String publishUser, @RequestParam("publishPhone") String publishPhone,
-			@RequestParam("popMode") String popMode, @RequestParam("remark") String remark,
-			@RequestParam("intervalTime") String intervalTime, @RequestParam("validEndTime") String validEndTime,
-			@RequestParam("validStartTime") String validStartTime, @RequestParam("province") String province,
-			@RequestParam("city") String city, @RequestParam("taskImageFile") MultipartFile taskImageFile) {
+			@RequestParam("modelId") String modelId, @RequestParam("modelName") String modelName,
+			@RequestParam("taskName") String taskName, @RequestParam("taskDesc") String taskDesc,
+			@RequestParam("taskUrl") String taskUrl, @RequestParam("publishUser") String publishUser,
+			@RequestParam("publishPhone") String publishPhone, @RequestParam("popMode") String popMode,
+			@RequestParam("remark") String remark, @RequestParam("intervalTime") String intervalTime,
+			@RequestParam("validEndTime") String validEndTime, @RequestParam("validStartTime") String validStartTime,
+			@RequestParam("province") String province, @RequestParam("city") String city,
+			@RequestParam("taskImageFile") MultipartFile taskImageFile) {
 		String cmd = "AdsPopManageController:publish";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
@@ -77,12 +78,14 @@ public class AdsPopManageController extends BaseController {
 			AdspopPublishBo bo = new AdspopPublishBo();
 
 			bo.setModelId(modelId);
+			bo.setModelName(modelName);
 			bo.setPopMode(popMode);
 			bo.setPublishPhone(publishPhone);
 			bo.setPublishUser(publishUser);
 			bo.setRemark(remark);
 			bo.setTaskDesc(taskDesc);
 			bo.setTaskImageFilePath(taskImageFilePath);
+			bo.setTaskImageFileName(taskImageFileName);
 			bo.setTaskName(taskName);
 			bo.setTaskUrl(taskUrl);
 			bo.setIntervalTime(intervalTime);
@@ -90,7 +93,6 @@ public class AdsPopManageController extends BaseController {
 			bo.setValidStartTime(validStartTime);
 			bo.setProvince(province);
 			bo.setCity(city);
-			bo.setTaskImageFileName(taskImageFileName);
 
 			bsm = adspopServiceImpl.publishAdspop(bo);
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
@@ -334,52 +336,82 @@ public class AdsPopManageController extends BaseController {
 	@ResponseBody
 	public BasicServiceModel<String> updatePopads(HttpServletRequest req, @RequestParam("popadsId") int popadsId,
 			@RequestParam("tokenKey") String tokenKey, @RequestParam("modelId") String modelId,
-			@RequestParam("taskName") String taskName, @RequestParam("taskDesc") String taskDesc,
-			@RequestParam("taskUrl") String taskUrl, @RequestParam("publishUser") String publishUser,
-			@RequestParam("publishPhone") String publishPhone, @RequestParam("popMode") String popMode,
-			@RequestParam("remark") String remark, @RequestParam("intervalTime") String intervalTime,
-			@RequestParam("validEndTime") String validEndTime, @RequestParam("validStartTime") String validStartTime,
-			@RequestParam("province") String province, @RequestParam("city") String city,
-			@RequestParam("taskImageFile") MultipartFile taskImageFile) {
+			@RequestParam("modelName") String modelName, @RequestParam("taskName") String taskName,
+			@RequestParam("taskDesc") String taskDesc, @RequestParam("taskUrl") String taskUrl,
+			@RequestParam("publishUser") String publishUser, @RequestParam("publishPhone") String publishPhone,
+			@RequestParam("popMode") String popMode, @RequestParam("remark") String remark,
+			@RequestParam("intervalTime") String intervalTime, @RequestParam("validEndTime") String validEndTime,
+			@RequestParam("validStartTime") String validStartTime, @RequestParam("province") String province,
+			@RequestParam("city") String city, @RequestParam("taskImageFile") MultipartFile taskImageFile) {
 		String cmd = "AdsPopManageController:updatePopads";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {
 			// TokenVo tokenVo = RedisUtil.getToken(token);
 			// if (null != tokenVo) {
-			String taskImageFileName = taskImageFile.getOriginalFilename();
+			AdspopPublishBo bo = new AdspopPublishBo();
+			bo.setId(popadsId);
+			if (null != taskImageFile) {
+				String taskImageFileName = taskImageFile.getOriginalFilename();
 
-			long curTime = System.currentTimeMillis();
+				long curTime = System.currentTimeMillis();
 
-			File pathDir = new File(path);
-			if (!pathDir.exists()) {// 如果文件夹不存在
-				pathDir.mkdirs();// 创建文件夹
+				File pathDir = new File(path);
+				if (!pathDir.exists()) {// 如果文件夹不存在
+					pathDir.mkdirs();// 创建文件夹
+				}
+
+				String taskImageFilePath = path + curTime + "_" + taskImageFileName;
+
+				File saveBackFile = new File(taskImageFilePath);
+				// 通过CommonsMultipartFile的方法直接写文件（注意这个时候）
+				taskImageFile.transferTo(saveBackFile);
+				bo.setTaskImageFilePath(taskImageFilePath);
+				bo.setTaskImageFileName(taskImageFileName);
 			}
 
-			String taskImageFilePath = path + curTime + "_" + taskImageFileName;
-
-			File saveBackFile = new File(taskImageFilePath);
-			// 通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-			taskImageFile.transferTo(saveBackFile);
-
-			AdspopPublishBo bo = new AdspopPublishBo();
-
-			bo.setId(popadsId);
-			bo.setModelId(modelId);
-			bo.setModelId(modelId);
-			bo.setPopMode(popMode);
-			bo.setPublishPhone(publishPhone);
-			bo.setPublishUser(publishUser);
-			bo.setRemark(remark);
-			bo.setTaskDesc(taskDesc);
-			bo.setTaskImageFilePath(taskImageFilePath);
-			bo.setTaskName(taskName);
-			bo.setTaskUrl(taskUrl);
-			bo.setIntervalTime(intervalTime);
-			bo.setValidEndTime(validEndTime);
-			bo.setValidStartTime(validStartTime);
-			bo.setProvince(province);
-			bo.setCity(city);
+			if (StringUtil.isNotEmpty(modelId)) {
+				bo.setModelId(modelId);
+			}
+			if (StringUtil.isNotEmpty(modelName)) {
+				bo.setModelName(modelName);
+			}
+			if (StringUtil.isNotEmpty(popMode)) {
+				bo.setPopMode(popMode);
+			}
+			if (StringUtil.isNotEmpty(publishPhone)) {
+				bo.setPublishPhone(publishPhone);
+			}
+			if (StringUtil.isNotEmpty(publishUser)) {
+				bo.setPublishUser(publishUser);
+			}
+			if (StringUtil.isNotEmpty(remark)) {
+				bo.setRemark(remark);
+			}
+			if (StringUtil.isNotEmpty(taskDesc)) {
+				bo.setTaskDesc(taskDesc);
+			}
+			if (StringUtil.isNotEmpty(taskName)) {
+				bo.setTaskName(taskName);
+			}
+			if (StringUtil.isNotEmpty(taskUrl)) {
+				bo.setTaskUrl(taskUrl);
+			}
+			if (StringUtil.isNotEmpty(intervalTime)) {
+				bo.setIntervalTime(intervalTime);
+			}
+			if (StringUtil.isNotEmpty(validEndTime)) {
+				bo.setValidEndTime(validEndTime);
+			}
+			if (StringUtil.isNotEmpty(validStartTime)) {
+				bo.setValidStartTime(validStartTime);
+			}
+			if (StringUtil.isNotEmpty(province)) {
+				bo.setProvince(province);
+			}
+			if (StringUtil.isNotEmpty(city)) {
+				bo.setCity(city);
+			}
 
 			bsm = adspopServiceImpl.updatePopads(bo);
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));

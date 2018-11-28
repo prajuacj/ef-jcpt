@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -133,8 +132,10 @@ public class AdspopServiceImpl implements IAdspopService {
 
 			record.setCreateTime(curTime);
 			record.setModelId(modelId);
+			record.setModelName(bo.getModelName());
 			record.setPublishPhone(bo.getPublishPhone());
 			record.setPublishUser(bo.getPublishUser());
+			record.setRemark(bo.getRemark());
 			record.setTaskContent(adspopContent);
 			record.setTaskDesc(bo.getTaskDesc());
 			record.setTaskImgs(imageDomain + bo.getTaskImageFileName());
@@ -178,7 +179,8 @@ public class AdspopServiceImpl implements IAdspopService {
 	/**
 	 * 将图片转换成Base64编码
 	 * 
-	 * @param imgFile 待处理图片
+	 * @param imgFile
+	 *            待处理图片
 	 * @return
 	 */
 	public static String getImgStr(String imgFile) {
@@ -258,7 +260,7 @@ public class AdspopServiceImpl implements IAdspopService {
 				CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
 
 				String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
-				String timestamp=DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
+				String timestamp = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
 				String signStr = timestamp + ADV_PUSH_KEY + durl;
 				String signature = SHA1Util.getSha1(signStr);
 
@@ -377,17 +379,31 @@ public class AdspopServiceImpl implements IAdspopService {
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		Date curTime = new Date(System.currentTimeMillis());
 		try {
-			int modelId = Integer.parseInt(bo.getModelId());
-			PopadsModel model = popadsModelMapper.selectByPrimaryKey(modelId);
-			String modelContent = model.getModelContent();
-			String popUrl = bo.getTaskUrl();
-			String imgsBase64 = getImgStr(bo.getTaskImageFilePath());
-			String adspopContent = modelContent.replaceAll("\\$\\|linkurl\\|\\$", popUrl)
-					.replaceAll("\\$\\|linkimg\\|\\$", imgsBase64);
+			PopadsInfo record = new PopadsInfo();
+			String modelIdStr = bo.getModelId();
+			int modelId = 0;
+			int id = bo.getId();
+			if (StringUtil.isNotEmpty(modelIdStr)) {
+				modelId = Integer.parseInt(modelIdStr);
+				PopadsModel model = popadsModelMapper.selectByPrimaryKey(modelId);
+				String modelContent = model.getModelContent();
+				String popUrl = bo.getTaskUrl();
+				String imgsBase64 = getImgStr(bo.getTaskImageFilePath());
+				String adspopContent = modelContent.replaceAll("\\$\\|linkurl\\|\\$", popUrl)
+						.replaceAll("\\$\\|linkimg\\|\\$", imgsBase64);
 
-			File pathDir = new File(jspath);
-			if (!pathDir.exists()) {// 如果文件夹不存在
-				pathDir.mkdirs();// 创建文件夹
+				File pathDir = new File(jspath);
+				if (!pathDir.exists()) {// 如果文件夹不存在
+					pathDir.mkdirs();// 创建文件夹
+				}
+				try {
+					BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + id + ".txt"));
+					bw.write(adspopContent);
+					bw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				record.setTaskContent(adspopContent);
 			}
 
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -413,13 +429,11 @@ public class AdspopServiceImpl implements IAdspopService {
 				e.printStackTrace();
 			}
 
-			PopadsInfo record = new PopadsInfo();
-
-			record.setId(bo.getId());
+			record.setId(id);
 			record.setModelId(modelId);
 			record.setPublishPhone(bo.getPublishPhone());
 			record.setPublishUser(bo.getPublishUser());
-			record.setTaskContent(adspopContent);
+
 			record.setTaskDesc(bo.getTaskDesc());
 			record.setTaskImgs(bo.getTaskImageFilePath());
 			record.setTaskName(bo.getTaskName());
@@ -432,15 +446,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			record.setValidEndTime(validEndTime);
 			record.setValidStartTime(validStartTime);
 
-			int keyId = popadsInfoMapper.updateByPrimaryKeySelective(record);
-
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + keyId + ".txt"));
-				bw.write(adspopContent);
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			popadsInfoMapper.updateByPrimaryKeySelective(record);
 
 			bsm.setCode(ReqStatusConst.OK);
 			return bsm;
@@ -476,8 +482,8 @@ public class AdspopServiceImpl implements IAdspopService {
 		String curTime = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
 		String url = "http://47.107.145.219:36059/adv/push";
 
-		String durl = "https://www.vsimdata.com/realse/1543318762557/1543318762557.tar.gz";
-		String signStr = curTime + "111111" + durl;
+		String durl = "http://120.79.184.183:36058/adv/wbpxydiv02.tgz";
+		String signStr = curTime + "abc$ov4Eb56#T2^y" + durl;
 		String signature = SHA1Util.getSha1(signStr);
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -492,5 +498,6 @@ public class AdspopServiceImpl implements IAdspopService {
 		// \"4d0b8d1fed566699f53fbc48e6c01f3fe0fb84fa\",\"timestamp\":
 		// \"20181117113245\"}");
 		String sendStr = HttpClientUtils.requestJsonPost(url, params);
+		System.out.println(sendStr);
 	}
 }
