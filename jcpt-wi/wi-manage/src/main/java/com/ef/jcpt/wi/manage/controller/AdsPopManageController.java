@@ -353,7 +353,7 @@ public class AdsPopManageController extends BaseController {
 			AdspopPublishBo bo = new AdspopPublishBo();
 			bo.setId(popadsId);
 			if (null != taskImageFile) {
-				String taskImageFileName = taskImageFile.getOriginalFilename();
+				String origTaskImageFileName = taskImageFile.getOriginalFilename();
 
 				long curTime = System.currentTimeMillis();
 
@@ -362,7 +362,8 @@ public class AdsPopManageController extends BaseController {
 					pathDir.mkdirs();// 创建文件夹
 				}
 
-				String taskImageFilePath = path + curTime + "_" + taskImageFileName;
+				String taskImageFileName = curTime + "_" + origTaskImageFileName;
+				String taskImageFilePath = path + taskImageFileName;
 
 				File saveBackFile = new File(taskImageFilePath);
 				// 通过CommonsMultipartFile的方法直接写文件（注意这个时候）
