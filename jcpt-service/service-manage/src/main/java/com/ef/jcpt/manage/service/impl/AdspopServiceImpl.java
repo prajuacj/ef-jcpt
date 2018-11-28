@@ -429,13 +429,17 @@ public class AdspopServiceImpl implements IAdspopService {
 				e.printStackTrace();
 			}
 
+			String imageFileName = bo.getTaskImageFileName();
+			if (StringUtil.isNotEmpty(imageFileName)) {
+				record.setTaskImgs(imageDomain + imageFileName);
+			}
+
 			record.setId(id);
 			record.setModelId(modelId);
 			record.setPublishPhone(bo.getPublishPhone());
 			record.setPublishUser(bo.getPublishUser());
 
 			record.setTaskDesc(bo.getTaskDesc());
-			record.setTaskImgs(bo.getTaskImageFilePath());
 			record.setTaskName(bo.getTaskName());
 			// record.setTaskStatus(PopadsStatusConst.SUBMIT);
 			record.setTaskUrl(bo.getTaskUrl());

@@ -342,7 +342,8 @@ public class AdsPopManageController extends BaseController {
 			@RequestParam("popMode") String popMode, @RequestParam("remark") String remark,
 			@RequestParam("intervalTime") String intervalTime, @RequestParam("validEndTime") String validEndTime,
 			@RequestParam("validStartTime") String validStartTime, @RequestParam("province") String province,
-			@RequestParam("city") String city, @RequestParam("taskImageFile") MultipartFile taskImageFile) {
+			@RequestParam("city") String city,
+			@RequestParam(value = "taskImageFile", required = false) MultipartFile taskImageFile) {
 		String cmd = "AdsPopManageController:updatePopads";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
