@@ -22,6 +22,7 @@
 		<setting name="aggressiveLazyLoading" value="false" />
 		<setting name="jdbcTypeForNull" value="NULL" />
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="callSettersOnNulls" value="true" />
 	</settings>
 	<typeHandlers>
 		<typeHandler handler="org.apache.ibatis.type.ObjectTypeHandler" />
