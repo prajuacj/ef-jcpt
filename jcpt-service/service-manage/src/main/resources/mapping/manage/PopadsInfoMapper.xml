@@ -325,6 +325,7 @@
 				and model_id = #{modelId,jdbcType=INTEGER}
 			</if>
 		</where>
+		order by update_time desc 
 		<if test="pageSize != 0 and start !=-1 ">
 			limit #{start},#{pageSize}
 		</if>

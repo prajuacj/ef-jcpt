@@ -245,7 +245,7 @@ public class AdspopServiceImpl implements IAdspopService {
 				String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
 				FileWriter issue = new FileWriter(issueFileName);
 				for (int popadsId : popadsIds) {
-					issue.write(popadsId + ".txt");
+					issue.write("1 "+popadsId + ".txt");
 					issue.write(System.getProperty("line.separator"));
 				}
 				issue.close();
