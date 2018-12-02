@@ -447,6 +447,7 @@ public class AdsPopManageController extends BaseController {
 			if ((null != viewCount) && (viewCount > 0)) {
 				cacheUtil.set(key, viewCount + 1, intervalTime);
 			} else {
+				cacheUtil.set(key, 1, intervalTime);
 				viewCount = 0;
 			}
 			bsm.setCode(ReqStatusConst.OK);
@@ -474,6 +475,7 @@ public class AdsPopManageController extends BaseController {
 			if ((null != clickCount) && (clickCount > 0)) {
 				cacheUtil.set(key, clickCount + 1, intervalTime);
 			} else {
+				cacheUtil.set(key, 1, intervalTime);
 				clickCount = 0;
 			}
 			bsm.setCode(ReqStatusConst.OK);
