@@ -197,7 +197,7 @@ public class AdspopServiceImpl implements IAdspopService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new String(Base64.encodeBase64(data));
+		return "data:image/jpeg;base64,"+new String(Base64.encodeBase64(data));
 	}
 
 	@Override
@@ -486,7 +486,7 @@ public class AdspopServiceImpl implements IAdspopService {
 		String curTime = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
 		String url = "http://47.107.145.219:36059/adv/push";
 
-		String durl = "http://120.79.184.183:36058/adv/wbpxydiv02.tgz";
+		String durl = "https://www.vsimdata.com/realse/1543736387602/1543736387602.tar.gz";
 		String signStr = curTime + "abc$ov4Eb56#T2^y" + durl;
 		String signature = SHA1Util.getSha1(signStr);
 
