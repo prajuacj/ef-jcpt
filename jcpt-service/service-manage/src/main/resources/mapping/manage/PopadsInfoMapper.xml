@@ -27,7 +27,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, model_id, model_name, task_name, task_desc, task_imgs, task_url, task_status, 
-    publish_user, auditing_user, auditing_advise, task_content, publish_phone, pop_mode, 
+    publish_user, auditing_user, auditing_advise, publish_phone, pop_mode, 
     valid_start_time, valid_end_time, interval_time, province, city, remark, create_time, 
     update_time
   </sql>
