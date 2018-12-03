@@ -35,8 +35,10 @@ import com.ef.jcpt.common.util.StringUtil;
 import com.ef.jcpt.core.sign.SHA1Util;
 import com.ef.jcpt.manage.dao.PopadsInfoMapper;
 import com.ef.jcpt.manage.dao.PopadsModelMapper;
+import com.ef.jcpt.manage.dao.PopadsViewandclickLogMapper;
 import com.ef.jcpt.manage.dao.model.PopadsInfo;
 import com.ef.jcpt.manage.dao.model.PopadsModel;
+import com.ef.jcpt.manage.dao.model.PopadsViewandclickLog;
 import com.ef.jcpt.manage.service.IAdspopService;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
 
@@ -50,6 +52,9 @@ public class AdspopServiceImpl implements IAdspopService {
 
 	@Autowired
 	private PopadsInfoMapper popadsInfoMapper;
+
+	@Autowired
+	private PopadsViewandclickLogMapper popadsViewandclickLogMapper;
 
 	@Value("${adspop.js.path}")
 	private String jspath;
@@ -197,7 +202,7 @@ public class AdspopServiceImpl implements IAdspopService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "data:image/jpeg;base64,"+new String(Base64.encodeBase64(data));
+		return "data:image/jpeg;base64," + new String(Base64.encodeBase64(data));
 	}
 
 	@Override
@@ -245,7 +250,7 @@ public class AdspopServiceImpl implements IAdspopService {
 				String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
 				FileWriter issue = new FileWriter(issueFileName);
 				for (int popadsId : popadsIds) {
-					issue.write("1 "+popadsId + ".txt");
+					issue.write("1 " + popadsId + ".txt");
 					issue.write(System.getProperty("line.separator"));
 				}
 				issue.close();
@@ -480,6 +485,28 @@ public class AdspopServiceImpl implements IAdspopService {
 		bsm.setCode(ReqStatusConst.OK);
 
 		return bsm;
+	}
+
+	@Override
+	public BasicServiceModel<String> addViewAndClickCountLog(String taskId, String mac, int countType) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		// TODO Auto-generated method stub
+		PopadsViewandclickLog record = new PopadsViewandclickLog();
+		record.setCountType(countType);
+		record.setCreateTime(new Date(System.currentTimeMillis()));
+		record.setMac(mac);
+		record.setTaskId(Integer.parseInt(taskId));
+		int ret = popadsViewandclickLogMapper.insertSelective(record);
+		if (ret == 1) {
+			bsm.setCode(ReqStatusConst.OK);
+			return bsm;
+		} else {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("插入数据失败:" + ret);
+			;
+			return bsm;
+		}
 	}
 
 	public static void main(String[] args) {
