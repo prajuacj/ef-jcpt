@@ -31,6 +31,8 @@ public class PopadsInfo {
 
 	private Integer popMode;
 
+	private Integer execType;
+
 	private Date validStartTime;
 
 	private Date validEndTime;
@@ -157,6 +159,14 @@ public class PopadsInfo {
 
 	public void setPopMode(Integer popMode) {
 		this.popMode = popMode;
+	}
+
+	public Integer getExecType() {
+		return execType;
+	}
+
+	public void setExecType(Integer execType) {
+		this.execType = execType;
 	}
 
 	public Date getValidStartTime() {

@@ -16,6 +16,7 @@
     <result column="task_content" jdbcType="VARCHAR" property="taskContent" />
     <result column="publish_phone" jdbcType="VARCHAR" property="publishPhone" />
     <result column="pop_mode" jdbcType="INTEGER" property="popMode" />
+    <result column="exec_type" jdbcType="INTEGER" property="execType" />
     <result column="valid_start_time" jdbcType="TIMESTAMP" property="validStartTime" />
     <result column="valid_end_time" jdbcType="TIMESTAMP" property="validEndTime" />
     <result column="interval_time" jdbcType="INTEGER" property="intervalTime" />
@@ -28,8 +29,8 @@
   <sql id="Base_Column_List">
     id, model_id, model_name, task_name, task_desc, task_imgs, task_url, task_status, 
     publish_user, auditing_user, auditing_advise, publish_phone, pop_mode, 
-    valid_start_time, valid_end_time, interval_time, province, city, remark, create_time, 
-    update_time
+    exec_type, valid_start_time, valid_end_time, interval_time, province, city, remark, 
+    create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -46,18 +47,18 @@
       task_name, task_desc, task_imgs, 
       task_url, task_status, publish_user, 
       auditing_user, auditing_advise, task_content, 
-      publish_phone, pop_mode, valid_start_time, 
-      valid_end_time, interval_time, province, 
-      city, remark, create_time, 
-      update_time)
+      publish_phone, pop_mode, exec_type, 
+      valid_start_time, valid_end_time, interval_time, 
+      province, city, remark, 
+      create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{modelId,jdbcType=INTEGER}, #{modelName,jdbcType=VARCHAR}, 
       #{taskName,jdbcType=VARCHAR}, #{taskDesc,jdbcType=VARCHAR}, #{taskImgs,jdbcType=VARCHAR}, 
       #{taskUrl,jdbcType=VARCHAR}, #{taskStatus,jdbcType=VARCHAR}, #{publishUser,jdbcType=VARCHAR}, 
       #{auditingUser,jdbcType=VARCHAR}, #{auditingAdvise,jdbcType=VARCHAR}, #{taskContent,jdbcType=VARCHAR}, 
-      #{publishPhone,jdbcType=VARCHAR}, #{popMode,jdbcType=INTEGER}, #{validStartTime,jdbcType=TIMESTAMP}, 
-      #{validEndTime,jdbcType=TIMESTAMP}, #{intervalTime,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{publishPhone,jdbcType=VARCHAR}, #{popMode,jdbcType=INTEGER}, #{execType,jdbcType=INTEGER}, 
+      #{validStartTime,jdbcType=TIMESTAMP}, #{validEndTime,jdbcType=TIMESTAMP}, #{intervalTime,jdbcType=INTEGER}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo" keyProperty="id" useGeneratedKeys="true">
     insert into ef_popads_info
@@ -103,6 +104,9 @@
       </if>
       <if test="popMode != null">
         pop_mode,
+      </if>
+      <if test="execType != null">
+        exec_type,
       </if>
       <if test="validStartTime != null">
         valid_start_time,
@@ -172,6 +176,9 @@
       <if test="popMode != null">
         #{popMode,jdbcType=INTEGER},
       </if>
+      <if test="execType != null">
+        #{execType,jdbcType=INTEGER},
+      </if>
       <if test="validStartTime != null">
         #{validStartTime,jdbcType=TIMESTAMP},
       </if>
@@ -240,6 +247,9 @@
       <if test="popMode != null">
         pop_mode = #{popMode,jdbcType=INTEGER},
       </if>
+      <if test="execType != null">
+        exec_type = #{execType,jdbcType=INTEGER},
+      </if>
       <if test="validStartTime != null">
         valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
       </if>
@@ -282,6 +292,7 @@
       task_content = #{taskContent,jdbcType=VARCHAR},
       publish_phone = #{publishPhone,jdbcType=VARCHAR},
       pop_mode = #{popMode,jdbcType=INTEGER},
+      exec_type = #{execType,jdbcType=INTEGER},
       valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
       valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
       interval_time = #{intervalTime,jdbcType=INTEGER},
@@ -344,5 +355,9 @@
 				and model_id = #{modelId,jdbcType=INTEGER}
 			</if>
 		</where>
+	</select>
+	
+	<select id="getExeTypeById" resultType="java.lang.Integer">
+		select exec_type from ef_popads_info where  id = #{popadsId,jdbcType=INTEGER}
 	</select>
 </mapper>

@@ -1,6 +1,8 @@
 package com.ef.jcpt.wi.manage.controller;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.PopadsCountKeyConst;
+import com.ef.jcpt.common.constant.PopadsCountTypeConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.log.LogTemplate;
@@ -115,8 +118,8 @@ public class AdsPopManageController extends BaseController {
 
 	@RequestMapping(value = "/getModelIdAndNamePair.json", method = RequestMethod.POST)
 	@ResponseBody
-	public BasicServiceModel<String> publish(HttpServletRequest req, String sign, String params) {
-		String cmd = "AdsPopManageController:publish";
+	public BasicServiceModel<String> getModelIdAndNamePair(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:getModelIdAndNamePair";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {
@@ -450,6 +453,11 @@ public class AdsPopManageController extends BaseController {
 				cacheUtil.set(key, 1, intervalTime);
 				viewCount = 0;
 			}
+			try {
+				adspopServiceImpl.addViewAndClickCountLog(taskId, mac, PopadsCountTypeConst.VIEW);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			bsm.setCode(ReqStatusConst.OK);
 			bsm.setData(String.valueOf(viewCount + 1));
 			return bsm;
@@ -478,10 +486,55 @@ public class AdsPopManageController extends BaseController {
 				cacheUtil.set(key, 1, intervalTime);
 				clickCount = 0;
 			}
+			try {
+				adspopServiceImpl.addViewAndClickCountLog(taskId, mac, PopadsCountTypeConst.CLICK);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			bsm.setCode(ReqStatusConst.OK);
 			bsm.setData(String.valueOf(clickCount + 1));
 			return bsm;
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg(e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/getViewAndClickCount.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> getViewAndClickCount(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:getViewAndClickCount";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		try {
+			BasicServiceModel<String> result = validateSign(sign, params);
+			if (ReqStatusConst.FAIL.equals(result.getCode())) {
+				logger.error(
+						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
+				return result;
+			} else {
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String tokenKey = jsonObj.getString("tokenKey");
+				String taskId = jsonObj.getString("taskId");
+				// TokenVo token = cacheUtil.getToken(tokenKey);
+				// if (null != token) {
+				// UserInfoBo bo = token.getUser();
+				// String userName = bo.getMobile();
+
+				String viewKey = PopadsCountKeyConst.VIEW + taskId;
+				String clickKey = PopadsCountKeyConst.CLICK + taskId;
+				Integer viewCount = cacheUtil.get(viewKey, Integer.TYPE);
+				Integer clickCount = cacheUtil.get(clickKey, Integer.TYPE);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("viewCount", String.valueOf(viewCount));
+				map.put("clickCount", String.valueOf(clickCount));
+				bsm.setCode(ReqStatusConst.OK);
+				bsm.setData(JSONObject.toJSONString(map));
+				return bsm;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
