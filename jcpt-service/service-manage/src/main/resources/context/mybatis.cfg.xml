@@ -22,6 +22,9 @@
 		<setting name="aggressiveLazyLoading" value="false" />
 		<setting name="jdbcTypeForNull" value="NULL" />
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="LOG4J" />
 	</settings>
 	<typeHandlers>
 		<typeHandler handler="org.apache.ibatis.type.ObjectTypeHandler" />
