@@ -5,71 +5,81 @@ import java.util.Date;
 public class PopadsModel {
     private Integer id;
 
-    private String modelName;
+	private String modelName;
 
-    private String modelDesc;
+	private String modelDesc;
 
-    private String modelContent;
+	private String modelContent;
 
-    private String modelStatus;
+	private String modelStatus;
 
-    private Date createTime;
+	private Integer modelType;
 
-    private Date updateTime;
+	private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+	private Date updateTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getModelName() {
-        return modelName;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName == null ? null : modelName.trim();
-    }
+	public String getModelName() {
+		return modelName;
+	}
 
-    public String getModelDesc() {
-        return modelDesc;
-    }
+	public void setModelName(String modelName) {
+		this.modelName = modelName == null ? null : modelName.trim();
+	}
 
-    public void setModelDesc(String modelDesc) {
-        this.modelDesc = modelDesc == null ? null : modelDesc.trim();
-    }
+	public String getModelDesc() {
+		return modelDesc;
+	}
 
-    public String getModelContent() {
-        return modelContent;
-    }
+	public void setModelDesc(String modelDesc) {
+		this.modelDesc = modelDesc == null ? null : modelDesc.trim();
+	}
 
-    public void setModelContent(String modelContent) {
-        this.modelContent = modelContent == null ? null : modelContent.trim();
-    }
+	public String getModelContent() {
+		return modelContent;
+	}
 
-    public String getModelStatus() {
-        return modelStatus;
-    }
+	public void setModelContent(String modelContent) {
+		this.modelContent = modelContent == null ? null : modelContent.trim();
+	}
 
-    public void setModelStatus(String modelStatus) {
-        this.modelStatus = modelStatus == null ? null : modelStatus.trim();
-    }
+	public String getModelStatus() {
+		return modelStatus;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setModelStatus(String modelStatus) {
+		this.modelStatus = modelStatus == null ? null : modelStatus.trim();
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Integer getModelType() {
+		return modelType;
+	}
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+	public void setModelType(Integer modelType) {
+		this.modelType = modelType;
+	}
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

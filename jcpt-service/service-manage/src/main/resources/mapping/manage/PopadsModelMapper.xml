@@ -7,11 +7,13 @@
     <result column="model_desc" jdbcType="VARCHAR" property="modelDesc" />
     <result column="model_content" jdbcType="VARCHAR" property="modelContent" />
     <result column="model_status" jdbcType="VARCHAR" property="modelStatus" />
+    <result column="model_type" jdbcType="INTEGER" property="modelType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, model_name, model_desc, model_content, model_status, create_time, update_time
+    id, model_name, model_desc, model_content, model_status, model_type, create_time, 
+    update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.ef.jcpt.manage.dao.model.PopadsModel">
     insert into ef_popads_model (id, model_name, model_desc, 
-      model_content, model_status, create_time, 
-      update_time)
+      model_content, model_status, model_type, 
+      create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{modelName,jdbcType=VARCHAR}, #{modelDesc,jdbcType=VARCHAR}, 
-      #{modelContent,jdbcType=VARCHAR}, #{modelStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{modelContent,jdbcType=VARCHAR}, #{modelStatus,jdbcType=VARCHAR}, #{modelType,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsModel">
     insert into ef_popads_model
@@ -48,6 +50,9 @@
       </if>
       <if test="modelStatus != null">
         model_status,
+      </if>
+      <if test="modelType != null">
+        model_type,
       </if>
       <if test="createTime != null">
         create_time,
@@ -72,6 +77,9 @@
       <if test="modelStatus != null">
         #{modelStatus,jdbcType=VARCHAR},
       </if>
+      <if test="modelType != null">
+        #{modelType,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -95,6 +103,9 @@
       <if test="modelStatus != null">
         model_status = #{modelStatus,jdbcType=VARCHAR},
       </if>
+      <if test="modelType != null">
+        model_type = #{modelType,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -110,12 +121,13 @@
       model_desc = #{modelDesc,jdbcType=VARCHAR},
       model_content = #{modelContent,jdbcType=VARCHAR},
       model_status = #{modelStatus,jdbcType=VARCHAR},
+      model_type = #{modelType,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
   <select id="getModelIdNamePair" resultType="java.util.Map">
-		SELECT id,model_name from ef_popads_model
+		SELECT id,model_name from ef_popads_model where model_status='01'
 	</select>
 </mapper>

@@ -118,8 +118,8 @@ public class AdsPopManageController extends BaseController {
 
 	@RequestMapping(value = "/getModelIdAndNamePair.json", method = RequestMethod.POST)
 	@ResponseBody
-	public BasicServiceModel<String> publish(HttpServletRequest req, String sign, String params) {
-		String cmd = "AdsPopManageController:publish";
+	public BasicServiceModel<String> getModelIdAndNamePair(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:getModelIdAndNamePair";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 
 		try {

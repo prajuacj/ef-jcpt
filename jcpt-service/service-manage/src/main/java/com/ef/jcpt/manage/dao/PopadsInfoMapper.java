@@ -32,4 +32,6 @@ public interface PopadsInfoMapper {
 
 	List<PopadsInfo> listPopadsByPage(@Param("taskName") String taskName, @Param("taskStatus") String taskStatus,
 			@Param("modelId") int modelId, @Param("start") int start, @Param("pageSize") int pageSize);
+
+	int getExeTypeById(@Param("popadsId") int popadsId);
 }
