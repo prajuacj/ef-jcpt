@@ -202,10 +202,13 @@ public class AdsPopManageController extends BaseController {
 				JSONArray popadsIds = jsonObj.getJSONArray("popadsIds");
 				JSONArray mixjss = jsonObj.getJSONArray("mixjss");
 
-				int len = popadsIds.size();
-				int[] ids = new int[len];
-				for (int i = 0; i < len; i++) {
-					ids[i] = (int) popadsIds.get(i);
+				int[] ids = null;
+				if ((null != popadsIds) && (popadsIds.size() > 0)) {
+					int len = popadsIds.size();
+					ids = new int[len];
+					for (int i = 0; i < len; i++) {
+						ids[i] = (int) popadsIds.get(i);
+					}
 				}
 
 				List<MixJSBo> list = null;

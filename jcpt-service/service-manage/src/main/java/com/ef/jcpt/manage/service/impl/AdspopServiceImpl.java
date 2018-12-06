@@ -242,6 +242,10 @@ public class AdspopServiceImpl implements IAdspopService {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		long curTime = System.currentTimeMillis();
+		
+		if(null==popadsIds) {
+			popadsIds=new int[0];
+		}
 
 		List<Integer> list = new ArrayList<Integer>();
 		for (Integer popadsId : popadsIds) {
