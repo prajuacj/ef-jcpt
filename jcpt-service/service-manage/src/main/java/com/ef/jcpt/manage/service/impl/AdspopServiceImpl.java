@@ -178,83 +178,9 @@ public class AdspopServiceImpl implements IAdspopService {
 					return bsm;
 				}
 			} else {
-				if (0 == modelType) {
-					String adspopContent = null;
-
-					File pathDir = new File(jspath);
-					if (!pathDir.exists()) {// 如果文件夹不存在
-						pathDir.mkdirs();// 创建文件夹
-					}
-
-					SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-
-					int intervalTime = -1;
-					Date validStartTime = curTime;
-					Date validEndTime = curTime;
-					String intervalTimeStr = bo.getIntervalTime();
-					String validStartTimeStr = bo.getValidStartTime();
-					String validEndTimeStr = bo.getValidEndTime();
-
-					try {
-						if (StringUtil.isNotEmpty(intervalTimeStr)) {
-							intervalTime = Integer.parseInt(intervalTimeStr);
-						}
-						if (StringUtil.isNotEmpty(validStartTimeStr)) {
-							validStartTime = sf.parse(validStartTimeStr);
-						}
-						if (StringUtil.isNotEmpty(validEndTimeStr)) {
-							validEndTime = sf.parse(validEndTimeStr);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					PopadsInfo record = new PopadsInfo();
-
-					record.setCreateTime(curTime);
-					record.setExecType(modelType);
-					record.setModelId(modelId);
-					record.setModelName(bo.getModelName());
-					record.setPublishPhone(bo.getPublishPhone());
-					record.setPublishUser(bo.getPublishUser());
-					record.setRemark(bo.getRemark());
-					// record.setTaskContent(adspopContent);
-					record.setTaskDesc(bo.getTaskDesc());
-					record.setTaskImgs(imageDomain + bo.getTaskImageFileName());
-					record.setTaskName(bo.getTaskName());
-					record.setTaskStatus(PopadsStatusConst.SUBMIT);
-					record.setTaskUrl(bo.getTaskUrl());
-					record.setUpdateTime(curTime);
-					record.setIntervalTime(intervalTime);
-					record.setProvince(bo.getProvince());
-					record.setCity(bo.getCity());
-					record.setValidEndTime(validEndTime);
-					record.setValidStartTime(validStartTime);
-
-					int ret = popadsInfoMapper.insertSelective(record);
-					if (ret == 1) {
-						int keyId = record.getId();
-						try {
-							BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + keyId + ".txt"));
-							adspopContent = adspopContent.replaceAll("\\$\\|taskId\\|\\$", String.valueOf(keyId));
-							bw.write(adspopContent);
-							bw.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-
-						bsm.setCode(ReqStatusConst.OK);
-						return bsm;
-					} else {
-						bsm.setCode(ReqStatusConst.FAIL);
-						bsm.setMsg("发布数据保存失败。");
-						return bsm;
-					}
-				}else {
-					bsm.setCode(ReqStatusConst.FAIL);
-					bsm.setMsg("不支持的模板类型.");
-					return bsm;
-				}
+				bsm.setCode(ReqStatusConst.FAIL);
+				bsm.setMsg("不支持的模板类型.");
+				return bsm;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
