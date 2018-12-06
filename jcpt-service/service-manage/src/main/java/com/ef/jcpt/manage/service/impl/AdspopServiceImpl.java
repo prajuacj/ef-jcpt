@@ -41,6 +41,7 @@ import com.ef.jcpt.manage.dao.model.PopadsModel;
 import com.ef.jcpt.manage.dao.model.PopadsViewandclickLog;
 import com.ef.jcpt.manage.service.IAdspopService;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
+import com.ef.jcpt.manage.service.bo.MixJSBo;
 
 @Service
 public class AdspopServiceImpl implements IAdspopService {
@@ -237,72 +238,84 @@ public class AdspopServiceImpl implements IAdspopService {
 	}
 
 	@Override
-	public BasicServiceModel<String> realse(int[] popadsIds) {
+	public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> mixList) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		long curTime = System.currentTimeMillis();
 
-		if ((null != popadsIds) && (popadsIds.length > 0)) {
+		List<Integer> list = new ArrayList<Integer>();
+		for (Integer popadsId : popadsIds) {
+			list.add(popadsId);
+		}
 
-			List<Integer> list = new ArrayList<Integer>();
-			for (Integer popadsId : popadsIds) {
-				list.add(popadsId);
-			}
-
+		if (list.size() > 0) {
 			popadsInfoMapper.updateRealseStatusByBatch(list);
+		}
 
-			File pathDir = new File(realsePath + curTime + System.getProperty("file.separator"));
-			if (!pathDir.exists()) {// 如果文件夹不存在
-				pathDir.mkdirs();// 创建文件夹
+		File pathDir = new File(realsePath + curTime + System.getProperty("file.separator"));
+		if (!pathDir.exists()) {// 如果文件夹不存在
+			pathDir.mkdirs();// 创建文件夹
+		}
+		try {
+			String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
+			FileWriter issue = new FileWriter(issueFileName);
+			for (int popadsId : popadsIds) {
+				int exeType = popadsInfoMapper.getExeTypeById(popadsId);
+				issue.write(exeType + " " + popadsId + ".txt");
+				issue.write(System.getProperty("line.separator"));
 			}
-			try {
-				String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
-				FileWriter issue = new FileWriter(issueFileName);
-				for (int popadsId : popadsIds) {
-					int exeType = popadsInfoMapper.getExeTypeById(popadsId);
-					issue.write(exeType + " " + popadsId + ".txt");
-					issue.write(System.getProperty("line.separator"));
+			if ((null != mixList) && (mixList.size() > 0)) {
+				for (MixJSBo mixBo : mixList) {
+					if (null != mixBo) {
+						int jsCount = mixBo.getJsCount();
+						String jsUrl = mixBo.getJsUrl();
+						for (int k = 0; k < jsCount; k++) {
+							issue.write("0 " + jsUrl);
+							issue.write(System.getProperty("line.separator"));
+						}
+					}
 				}
-				issue.close();
-
-				String[] fileNames = new String[popadsIds.length + 1];
-				fileNames[0] = issueFileName;
-				for (int i = 0; i < popadsIds.length; i++) {
-					fileNames[i + 1] = jspath + popadsIds[i] + ".txt";
-				}
-				String targzipFilePath = pathDir + System.getProperty("file.separator") + curTime + ".tar";
-				String targzipFileName = targzipFilePath + ".gz";
-				CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
-
-				String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
-				String timestamp = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
-				String signStr = timestamp + ADV_PUSH_KEY + durl;
-				String signature = SHA1Util.getSha1(signStr);
-
-				logger.info("发布的签名数据是：" + signStr);
-				Map<String, String> map = new HashMap<String, String>();
-				map.put("timestamp", timestamp);
-				map.put("durl", durl);
-				map.put("signature", signature);
-
-				String params = JSONObject.toJSONString(map);
-
-				String sendStr = sendHttpRequest(params);
-				logger.info("推送返回的结果是： " + sendStr);
-
-				bsm.setCode(ReqStatusConst.OK);
-				return bsm;
-			} catch (Exception e) {
-				e.printStackTrace();
-				bsm.setCode(ReqStatusConst.FAIL);
-				bsm.setMsg(e.getMessage());
-				return bsm;
 			}
-		} else {
+			issue.close();
+
+			String[] fileNames = new String[popadsIds.length + 1];
+			fileNames[0] = issueFileName;
+			for (int i = 0; i < popadsIds.length; i++) {
+				fileNames[i + 1] = jspath + popadsIds[i] + ".txt";
+			}
+			String targzipFilePath = pathDir + System.getProperty("file.separator") + curTime + ".tar";
+			String targzipFileName = targzipFilePath + ".gz";
+			CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
+
+			String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
+			String timestamp = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
+			String signStr = timestamp + ADV_PUSH_KEY + durl;
+			String signature = SHA1Util.getSha1(signStr);
+
+			logger.info("发布的签名数据是：" + signStr);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("timestamp", timestamp);
+			map.put("durl", durl);
+			map.put("signature", signature);
+
+			String params = JSONObject.toJSONString(map);
+
+			String sendStr = sendHttpRequest(params);
+			logger.info("推送返回的结果是： " + sendStr);
+
+			bsm.setCode(ReqStatusConst.OK);
+			return bsm;
+		} catch (Exception e) {
+			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
-			bsm.setMsg("需要发布的广告为空");
+			bsm.setMsg(e.getMessage());
 			return bsm;
 		}
+		// } else {
+		// bsm.setCode(ReqStatusConst.FAIL);
+		// bsm.setMsg("需要发布的广告为空");
+		// return bsm;
+		// }
 	}
 
 	private String sendHttpRequest(String params) {

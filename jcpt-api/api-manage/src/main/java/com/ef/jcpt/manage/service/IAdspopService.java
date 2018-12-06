@@ -1,7 +1,10 @@
 package com.ef.jcpt.manage.service;
 
+import java.util.List;
+
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
+import com.ef.jcpt.manage.service.bo.MixJSBo;
 
 public interface IAdspopService {
 
@@ -11,7 +14,7 @@ public interface IAdspopService {
 
 	BasicServiceModel<String> audit(int popadsId, String auditStatus, String auditUser, String auditAdvise);
 
-	BasicServiceModel<String> realse(int[] popadsIds);
+	BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> list);
 
 	int countPopadsByPage(String taskName, String taskStatus, int modelId);
 

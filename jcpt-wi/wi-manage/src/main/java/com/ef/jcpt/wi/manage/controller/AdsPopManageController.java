@@ -1,7 +1,9 @@
 package com.ef.jcpt.wi.manage.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.entity.TokenVo;
 import com.ef.jcpt.manage.service.IAdspopService;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
+import com.ef.jcpt.manage.service.bo.MixJSBo;
 
 @Controller
 @RequestMapping("/adspop")
@@ -197,6 +200,7 @@ public class AdsPopManageController extends BaseController {
 				JSONObject jsonObj = JSONObject.parseObject(params);
 				String tokenKey = jsonObj.getString("tokenKey");
 				JSONArray popadsIds = jsonObj.getJSONArray("popadsIds");
+				JSONArray mixjss = jsonObj.getJSONArray("mixjss");
 
 				int len = popadsIds.size();
 				int[] ids = new int[len];
@@ -204,12 +208,17 @@ public class AdsPopManageController extends BaseController {
 					ids[i] = (int) popadsIds.get(i);
 				}
 
+				List<MixJSBo> list = null;
+				if ((null != mixjss) && (mixjss.size() > 0)) {
+					list = mixjss.toJavaList(MixJSBo.class);
+				}
+
 				// TokenVo token = cacheUtil.getToken(tokenKey);
 				// if (null != token) {
 				// UserInfoBo bo = token.getUser();
 				// String userName = bo.getMobile();
 
-				return adspopServiceImpl.realse(ids);
+				return adspopServiceImpl.realse(ids, list);
 			}
 		} catch (Exception e) {
 			bsm.setCode(ReqStatusConst.FAIL);
