@@ -320,6 +320,12 @@
 			#{item,jdbcType=BIGINT}
 		</foreach>
 	</update>
+	
+	<update id="updateDownStatus">
+		update ef_popads_info
+		set task_status='04'
+		where task_status='03'
+	</update>
 
 	<select id="listPopadsByPage" resultMap="BaseResultMap">
 		select

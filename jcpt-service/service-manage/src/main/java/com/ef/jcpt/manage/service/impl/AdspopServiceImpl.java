@@ -57,6 +57,12 @@ public class AdspopServiceImpl implements IAdspopService {
 	@Autowired
 	private PopadsViewandclickLogMapper popadsViewandclickLogMapper;
 
+	private static Map<String, Object> realseMap = new HashMap<String, Object>();
+
+	private static final String POPIDSKEY = "popadsIds";
+
+	private static final String MIXJSKEY = "mixJs";
+
 	@Value("${adspop.js.path}")
 	private String jspath;
 
@@ -194,8 +200,7 @@ public class AdspopServiceImpl implements IAdspopService {
 	/**
 	 * 将图片转换成Base64编码
 	 * 
-	 * @param imgFile
-	 *            待处理图片
+	 * @param imgFile 待处理图片
 	 * @return
 	 */
 	public static String getImgStr(String imgFile) {
@@ -240,11 +245,8 @@ public class AdspopServiceImpl implements IAdspopService {
 	@Override
 	public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> mixList) {
 		// TODO Auto-generated method stub
-		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
-		long curTime = System.currentTimeMillis();
-		
-		if(null==popadsIds) {
-			popadsIds=new int[0];
+		if (null == popadsIds) {
+			popadsIds = new int[0];
 		}
 
 		List<Integer> list = new ArrayList<Integer>();
@@ -252,9 +254,25 @@ public class AdspopServiceImpl implements IAdspopService {
 			list.add(popadsId);
 		}
 
-		if (list.size() > 0) {
-			popadsInfoMapper.updateRealseStatusByBatch(list);
+		BasicServiceModel<String> bsm = sendPack(popadsIds, mixList);
+
+		if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
+			popadsInfoMapper.updateDownStatus();
+			if (list.size() > 0) {
+				popadsInfoMapper.updateRealseStatusByBatch(list);
+			}
 		}
+		return bsm;
+		// } else {
+		// bsm.setCode(ReqStatusConst.FAIL);
+		// bsm.setMsg("需要发布的广告为空");
+		// return bsm;
+		// }
+	}
+
+	public BasicServiceModel<String> sendPack(int[] popadsIds, List<MixJSBo> mixList) {
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+		long curTime = System.currentTimeMillis();
 
 		File pathDir = new File(realsePath + curTime + System.getProperty("file.separator"));
 		if (!pathDir.exists()) {// 如果文件夹不存在
@@ -305,21 +323,29 @@ public class AdspopServiceImpl implements IAdspopService {
 			String params = JSONObject.toJSONString(map);
 
 			String sendStr = sendHttpRequest(params);
-			logger.info("推送返回的结果是： " + sendStr);
 
-			bsm.setCode(ReqStatusConst.OK);
-			return bsm;
+			logger.info("推送返回的结果是： " + sendStr);
+			JSONObject sendRet = JSONObject.parseObject(sendStr);
+			Integer retCode = sendRet.getInteger("code");
+			String message = sendRet.getString("message");
+			if (0 == retCode) {
+				realseMap.put(POPIDSKEY, popadsIds);
+				realseMap.put(MIXJSKEY, mixList);
+
+				bsm.setCode(ReqStatusConst.OK);
+				bsm.setMsg(message);
+				return bsm;
+			} else {
+				bsm.setCode(ReqStatusConst.FAIL);
+				bsm.setMsg(message);
+				return bsm;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg(e.getMessage());
 			return bsm;
 		}
-		// } else {
-		// bsm.setCode(ReqStatusConst.FAIL);
-		// bsm.setMsg("需要发布的广告为空");
-		// return bsm;
-		// }
 	}
 
 	private String sendHttpRequest(String params) {

@@ -34,4 +34,6 @@ public interface PopadsInfoMapper {
 			@Param("modelId") int modelId, @Param("start") int start, @Param("pageSize") int pageSize);
 
 	int getExeTypeById(@Param("popadsId") int popadsId);
+
+	void updateDownStatus();
 }
