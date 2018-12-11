@@ -242,9 +242,9 @@ public class AdspopServiceImpl implements IAdspopService {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		long curTime = System.currentTimeMillis();
-		
-		if(null==popadsIds) {
-			popadsIds=new int[0];
+
+		if (null == popadsIds) {
+			popadsIds = new int[0];
 		}
 
 		List<Integer> list = new ArrayList<Integer>();
@@ -379,14 +379,14 @@ public class AdspopServiceImpl implements IAdspopService {
 	}
 
 	@Override
-	public int countPopadsByPage(String taskName, String taskStatus, int modelId) {
+	public int countPopadsByPage(String taskName, String taskStatus, int modelId, String publishUser) {
 		// TODO Auto-generated method stub
-		return popadsInfoMapper.countPopadsByPage(taskName, taskStatus, modelId);
+		return popadsInfoMapper.countPopadsByPage(taskName, taskStatus, modelId, publishUser);
 	}
 
 	@Override
-	public BasicServiceModel<String> listPopadsByPage(String taskName, String taskStatus, int modelId, int pageIndex,
-			int pageSize) {
+	public BasicServiceModel<String> listPopadsByPage(String taskName, String taskStatus, int modelId,
+			String publishUser, int pageIndex, int pageSize) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		// TODO Auto-generated method stub
@@ -394,7 +394,8 @@ public class AdspopServiceImpl implements IAdspopService {
 		if (start < 0) {
 			start = 0;
 		}
-		List<PopadsInfo> list = popadsInfoMapper.listPopadsByPage(taskName, taskStatus, modelId, start, pageSize);
+		List<PopadsInfo> list = popadsInfoMapper.listPopadsByPage(taskName, taskStatus, modelId, publishUser, start,
+				pageSize);
 		if (null != list) {
 			JSONObject data = new JSONObject();
 			data.put("data", list);
