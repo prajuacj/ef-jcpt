@@ -1,7 +1,6 @@
 package com.ef.jcpt.wi.manage.controller;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +98,58 @@ public class AdsPopManageController extends BaseController {
 			bo.setValidStartTime(validStartTime);
 			bo.setProvince(province);
 			bo.setCity(city);
+
+			bsm = adspopServiceImpl.publishAdspop(bo);
+			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
+			return bsm;
+			// } else {
+			// bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+			// bsm.setMsg("token已过期，请重新申请！");
+			// logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()
+			// + ",data=" + params));
+			// return bsm;
+			// }
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("上传文件失败！");
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/publishTb.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> publishTb(HttpServletRequest req, @RequestParam("tokenKey") String tokenKey,
+			@RequestParam("modelId") String modelId, @RequestParam("modelName") String modelName,
+			@RequestParam("taskName") String taskName, @RequestParam("taskDesc") String taskDesc,
+			@RequestParam("publishUser") String publishUser, @RequestParam("tbKey") String tbKey,
+			@RequestParam("publishPhone") String publishPhone, @RequestParam("popMode") String popMode,
+			@RequestParam("remark") String remark, @RequestParam("intervalTime") String intervalTime,
+			@RequestParam("validEndTime") String validEndTime, @RequestParam("validStartTime") String validStartTime,
+			@RequestParam("province") String province, @RequestParam("city") String city) {
+		String cmd = "AdsPopManageController:publishTb";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			// TokenVo tokenVo = RedisUtil.getToken(token);
+			// if (null != tokenVo) {
+			AdspopPublishBo bo = new AdspopPublishBo();
+
+			bo.setModelId(modelId);
+			bo.setModelName(modelName);
+			bo.setPopMode(popMode);
+			bo.setPublishPhone(publishPhone);
+			bo.setPublishUser(publishUser);
+			bo.setRemark(remark);
+			bo.setTaskDesc(taskDesc);
+			bo.setTaskName(taskName);
+			bo.setIntervalTime(intervalTime);
+			bo.setValidEndTime(validEndTime);
+			bo.setValidStartTime(validStartTime);
+			bo.setProvince(province);
+			bo.setCity(city);
+			bo.setTbKey(tbKey);
 
 			bsm = adspopServiceImpl.publishAdspop(bo);
 			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
