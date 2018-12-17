@@ -26,6 +26,7 @@ public class AdspopPublishBo implements Serializable {
 	private String remark;
 	private String taskImageFilePath;
 	private String taskImageFileName;
+	private String tbKey;
 
 	public String getModelId() {
 		return modelId;
@@ -161,5 +162,13 @@ public class AdspopPublishBo implements Serializable {
 
 	public void setTaskImageFileName(String taskImageFileName) {
 		this.taskImageFileName = taskImageFileName;
+	}
+
+	public String getTbKey() {
+		return tbKey;
+	}
+
+	public void setTbKey(String tbKey) {
+		this.tbKey = tbKey;
 	}
 }

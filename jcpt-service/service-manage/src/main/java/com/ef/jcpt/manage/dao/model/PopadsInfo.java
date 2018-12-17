@@ -39,6 +39,8 @@ public class PopadsInfo {
 
 	private Integer intervalTime;
 
+	private String tbKey;
+
 	private String province;
 
 	private String city;
@@ -191,6 +193,14 @@ public class PopadsInfo {
 
 	public void setIntervalTime(Integer intervalTime) {
 		this.intervalTime = intervalTime;
+	}
+
+	public String getTbKey() {
+		return tbKey;
+	}
+
+	public void setTbKey(String tbKey) {
+		this.tbKey = tbKey == null ? null : tbKey.trim();
 	}
 
 	public String getProvince() {
