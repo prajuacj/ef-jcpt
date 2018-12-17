@@ -354,6 +354,9 @@
 			<if test="modelId != -1">
 				and model_id = #{modelId,jdbcType=INTEGER}
 			</if>
+			<if test="publishUser != null">
+				and publish_user = #{publishUser,jdbcType=VARCHAR}
+			</if>
 		</where>
 		order by update_time desc 
 		<if test="pageSize != 0 and start !=-1 ">
@@ -372,6 +375,9 @@
 			</if>
 			<if test="modelId != -1">
 				and model_id = #{modelId,jdbcType=INTEGER}
+			</if>
+			<if test="publishUser != null">
+				and publish_user = #{publishUser,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>

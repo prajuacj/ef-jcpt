@@ -305,10 +305,12 @@ public class AdsPopManageController extends BaseController {
 				String taskNameParam = jsonObj.getString("taskName");
 				String taskStatusParam = jsonObj.getString("taskStatus");
 				String modelIdStr = jsonObj.getString("modelId");
+				String publishUserParam = jsonObj.getString("publishUser");
 
 				String taskName = null;
 				String taskStatus = null;
 				int modelId = -1;
+				String publishUser = null;
 				if (StringUtil.isNotEmpty(taskNameParam)) {
 					taskName = taskNameParam;
 				}
@@ -319,14 +321,17 @@ public class AdsPopManageController extends BaseController {
 				if (StringUtil.isNotEmpty(modelIdStr)) {
 					modelId = Integer.parseInt(modelIdStr);
 				}
+				if (StringUtil.isNotEmpty(publishUserParam)) {
+					publishUser = publishUserParam;
+				}
 				int pageIndex = jsonObj.getIntValue("pageIndex");
 				int pageSize = jsonObj.getIntValue("pageSize");
 				int total = 0;
 				if (pageIndex == 1) {
-					total = adspopServiceImpl.countPopadsByPage(taskName, taskStatus, modelId);
+					total = adspopServiceImpl.countPopadsByPage(taskName, taskStatus, modelId, publishUser);
 				}
 				BasicServiceModel<String> orderBsm = adspopServiceImpl.listPopadsByPage(taskName, taskStatus, modelId,
-						pageIndex, pageSize);
+						publishUser, pageIndex, pageSize);
 				if ((null != orderBsm) && (ReqStatusConst.OK.equals(orderBsm.getCode()))) {
 					String listProStr = orderBsm.getData();
 					JSONObject listjson = JSONObject.parseObject(listProStr);

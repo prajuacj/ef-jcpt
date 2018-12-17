@@ -28,10 +28,11 @@ public interface PopadsInfoMapper {
 	void updateRealseStatusByBatch(List<Integer> list);
 
 	int countPopadsByPage(@Param("taskName") String taskName, @Param("taskStatus") String taskStatus,
-			@Param("modelId") int modelId);
+			@Param("modelId") int modelId, @Param("publishUser") String publishUser);
 
 	List<PopadsInfo> listPopadsByPage(@Param("taskName") String taskName, @Param("taskStatus") String taskStatus,
-			@Param("modelId") int modelId, @Param("start") int start, @Param("pageSize") int pageSize);
+			@Param("modelId") int modelId, @Param("publishUser") String publishUser, @Param("start") int start,
+			@Param("pageSize") int pageSize);
 
 	int getExeTypeById(@Param("popadsId") int popadsId);
 
