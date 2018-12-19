@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.PopadsCountKeyConst;
 import com.ef.jcpt.common.constant.PopadsCountTypeConst;
+import com.ef.jcpt.common.constant.PopadsStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.log.LogTemplate;
@@ -118,7 +119,7 @@ public class AdsPopManageController extends BaseController {
 			return bsm;
 		}
 	}
-	
+
 	@RequestMapping(value = "/publishTb.json", method = RequestMethod.POST)
 	@ResponseBody
 	public BasicServiceModel<String> publishTb(HttpServletRequest req, @RequestParam("tokenKey") String tokenKey,
@@ -506,6 +507,88 @@ public class AdsPopManageController extends BaseController {
 		}
 	}
 
+	@RequestMapping(value = "/updateTb.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> updateTb(HttpServletRequest req, @RequestParam("popadsId") int popadsId,
+			@RequestParam("tokenKey") String tokenKey, @RequestParam("modelId") String modelId,
+			@RequestParam("modelName") String modelName, @RequestParam("taskName") String taskName,
+			@RequestParam("taskDesc") String taskDesc, @RequestParam("tbKey") String tbKey,
+			@RequestParam("publishUser") String publishUser, @RequestParam("publishPhone") String publishPhone,
+			@RequestParam("popMode") String popMode, @RequestParam("remark") String remark,
+			@RequestParam("intervalTime") String intervalTime, @RequestParam("validEndTime") String validEndTime,
+			@RequestParam("validStartTime") String validStartTime, @RequestParam("province") String province,
+			@RequestParam("city") String city) {
+		String cmd = "AdsPopManageController:updateTb";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			// TokenVo tokenVo = RedisUtil.getToken(token);
+			// if (null != tokenVo) {
+			AdspopPublishBo bo = new AdspopPublishBo();
+			bo.setId(popadsId);
+
+			if (StringUtil.isNotEmpty(modelId)) {
+				bo.setModelId(modelId);
+			}
+			if (StringUtil.isNotEmpty(modelName)) {
+				bo.setModelName(modelName);
+			}
+			if (StringUtil.isNotEmpty(popMode)) {
+				bo.setPopMode(popMode);
+			}
+			if (StringUtil.isNotEmpty(publishPhone)) {
+				bo.setPublishPhone(publishPhone);
+			}
+			if (StringUtil.isNotEmpty(publishUser)) {
+				bo.setPublishUser(publishUser);
+			}
+			if (StringUtil.isNotEmpty(remark)) {
+				bo.setRemark(remark);
+			}
+			if (StringUtil.isNotEmpty(taskDesc)) {
+				bo.setTaskDesc(taskDesc);
+			}
+			if (StringUtil.isNotEmpty(taskName)) {
+				bo.setTaskName(taskName);
+			}
+			if (StringUtil.isNotEmpty(tbKey)) {
+				bo.setTaskUrl(tbKey);
+			}
+			if (StringUtil.isNotEmpty(intervalTime)) {
+				bo.setIntervalTime(intervalTime);
+			}
+			if (StringUtil.isNotEmpty(validEndTime)) {
+				bo.setValidEndTime(validEndTime);
+			}
+			if (StringUtil.isNotEmpty(validStartTime)) {
+				bo.setValidStartTime(validStartTime);
+			}
+			if (StringUtil.isNotEmpty(province)) {
+				bo.setProvince(province);
+			}
+			if (StringUtil.isNotEmpty(city)) {
+				bo.setCity(city);
+			}
+
+			bsm = adspopServiceImpl.updatePopads(bo);
+			logger.info(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), "return=" + JSON.toJSONString(bsm)));
+			return bsm;
+			// } else {
+			// bsm.setCode(ReqStatusConst.SESSION_EXPIRED);
+			// bsm.setMsg("token已过期，请重新申请！");
+			// logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()
+			// + ",data=" + params));
+			// return bsm;
+			// }
+		} catch (Exception e) {
+			e.printStackTrace();
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("上传文件失败！");
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
 	@RequestMapping(value = "/viewpop.json", method = RequestMethod.POST)
 	@ResponseBody
 	public BasicServiceModel<String> viewpop(HttpServletRequest req, @RequestParam("mac") String mac,
@@ -609,6 +692,43 @@ public class AdsPopManageController extends BaseController {
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg(e.getMessage());
 			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg()));
+			return bsm;
+		}
+	}
+
+	@RequestMapping(value = "/onAndDownLine.json", method = RequestMethod.POST)
+	@ResponseBody
+	public BasicServiceModel<String> onAndDownLine(HttpServletRequest req, String sign, String params) {
+		String cmd = "AdsPopManageController:onAndDownLine";
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		try {
+			BasicServiceModel<String> result = validateSign(sign, params);
+			if (ReqStatusConst.FAIL.equals(result.getCode())) {
+				logger.error(
+						LogTemplate.genCommonSysLogStr(cmd, result.getCode(), result.getMsg() + ",data=" + params));
+				return result;
+			} else {
+				JSONObject jsonObj = JSONObject.parseObject(params);
+				String tokenKey = jsonObj.getString("tokenKey");
+				JSONArray popadsIds = jsonObj.getJSONArray("popadsIds");
+				String onAndDown = jsonObj.getString("onAndDown");
+
+				int[] ids = null;
+				if ((null != popadsIds) && (popadsIds.size() > 0)) {
+					int len = popadsIds.size();
+					ids = new int[len];
+					for (int i = 0; i < len; i++) {
+						ids[i] = (int) popadsIds.get(i);
+					}
+				}
+
+				return adspopServiceImpl.updateOnAndDownLine(ids, onAndDown);
+			}
+		} catch (Exception e) {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("获取信息失败！" + e.getMessage());
+			logger.error(LogTemplate.genCommonSysLogStr(cmd, bsm.getCode(), bsm.getMsg() + ",data=" + params));
 			return bsm;
 		}
 	}

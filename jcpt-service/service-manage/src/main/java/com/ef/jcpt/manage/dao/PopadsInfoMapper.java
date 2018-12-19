@@ -35,4 +35,8 @@ public interface PopadsInfoMapper {
 			@Param("pageSize") int pageSize);
 
 	int getExeTypeById(@Param("popadsId") int popadsId);
+
+	void updateOnStatusByBatch(@Param("list") List<Integer> list);
+	
+	void updateDownStatusByBatch(@Param("list") List<Integer> list);
 }

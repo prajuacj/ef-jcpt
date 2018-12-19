@@ -492,27 +492,47 @@ public class AdspopServiceImpl implements IAdspopService {
 			String modelIdStr = bo.getModelId();
 			int modelId = 0;
 			int id = bo.getId();
+			String tbKey = bo.getTbKey();
 			if (StringUtil.isNotEmpty(modelIdStr)) {
 				modelId = Integer.parseInt(modelIdStr);
 				PopadsModel model = popadsModelMapper.selectByPrimaryKey(modelId);
+				int modelType = model.getModelType();
 				String modelContent = model.getModelContent();
-				String popUrl = bo.getTaskUrl();
-				String imgsBase64 = getImgStr(bo.getTaskImageFilePath());
-				String adspopContent = modelContent.replaceAll("\\$\\|linkurl\\|\\$", popUrl)
-						.replaceAll("\\$\\|linkimg\\|\\$", imgsBase64);
+				if (1 == modelType) {
+					String popUrl = bo.getTaskUrl();
+					String imgsBase64 = getImgStr(bo.getTaskImageFilePath());
+					String adspopContent = modelContent.replaceAll("\\$\\|linkurl\\|\\$", popUrl)
+							.replaceAll("\\$\\|linkimg\\|\\$", imgsBase64);
 
-				File pathDir = new File(jspath);
-				if (!pathDir.exists()) {// 如果文件夹不存在
-					pathDir.mkdirs();// 创建文件夹
+					File pathDir = new File(jspath);
+					if (!pathDir.exists()) {// 如果文件夹不存在
+						pathDir.mkdirs();// 创建文件夹
+					}
+					try {
+						BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + id + ".txt"));
+						bw.write(adspopContent);
+						bw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					// record.setTaskContent(adspopContent);
+				} else {
+					if (2 == modelType) {
+						String adspopContent = modelContent.replaceAll("\\$\\|tbKey\\|\\$", tbKey);
+
+						File pathDir = new File(jspath);
+						if (!pathDir.exists()) {// 如果文件夹不存在
+							pathDir.mkdirs();// 创建文件夹
+						}
+						try {
+							BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + id + ".txt"));
+							bw.write(adspopContent);
+							bw.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-				try {
-					BufferedWriter bw = new BufferedWriter(new FileWriter(pathDir + "/" + id + ".txt"));
-					bw.write(adspopContent);
-					bw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				record.setTaskContent(adspopContent);
 			}
 
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -558,6 +578,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			record.setCity(bo.getCity());
 			record.setValidEndTime(validEndTime);
 			record.setValidStartTime(validStartTime);
+			record.setTbKey(bo.getTbKey());
 
 			popadsInfoMapper.updateByPrimaryKeySelective(record);
 
@@ -608,9 +629,42 @@ public class AdspopServiceImpl implements IAdspopService {
 		} else {
 			bsm.setCode(ReqStatusConst.FAIL);
 			bsm.setMsg("插入数据失败:" + ret);
-			;
 			return bsm;
 		}
+	}
+
+	@Override
+	public BasicServiceModel<String> updateOnAndDownLine(int[] popadsIds, String onAndDown) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		if (null == popadsIds) {
+			popadsIds = new int[0];
+		}
+
+		List<Integer> list = new ArrayList<Integer>();
+		for (Integer popadsId : popadsIds) {
+			list.add(popadsId);
+		}
+
+		if (list.size() > 0) {
+			if (PopadsStatusConst.ONLINE.equals(onAndDown)) {
+				popadsInfoMapper.updateOnStatusByBatch(list);
+				bsm.setCode(ReqStatusConst.OK);
+				return bsm;
+			}
+			if (PopadsStatusConst.FINISH.equals(onAndDown)) {
+				popadsInfoMapper.updateDownStatusByBatch(list);
+				bsm.setCode(ReqStatusConst.OK);
+				return bsm;
+			}
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("上下线的状态不对！");
+			return bsm;
+		}
+		bsm.setCode(ReqStatusConst.FAIL);
+		bsm.setMsg("修改上下线状态，参数为空！");
+		return bsm;
 	}
 
 	public static void main(String[] args) {

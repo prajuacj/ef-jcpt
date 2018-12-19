@@ -26,4 +26,6 @@ public interface IAdspopService {
 	BasicServiceModel<String> getPopadsById(String popadsId);
 
 	BasicServiceModel<String> addViewAndClickCountLog(String taskId, String mac, int countType);
+
+	BasicServiceModel<String> updateOnAndDownLine(int[] ids, String finish);
 }

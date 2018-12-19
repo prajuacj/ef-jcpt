@@ -334,6 +334,24 @@
 		</foreach>
 	</update>
 	
+	<update id="updateOnStatusByBatch" parameterType="java.util.List">
+		update ef_popads_info
+		set task_status='03'
+		where id in
+		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+	</update>
+	
+	<update id="updateDownStatusByBatch" parameterType="java.util.List">
+		update ef_popads_info
+		set task_status='04'
+		where id in
+		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+	</update>
+	
 	<update id="updateDownStatus">
 		update ef_popads_info
 		set task_status='04'
