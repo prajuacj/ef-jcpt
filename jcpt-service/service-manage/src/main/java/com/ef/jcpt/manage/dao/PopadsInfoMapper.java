@@ -36,6 +36,8 @@ public interface PopadsInfoMapper {
 
 	int getExeTypeById(@Param("popadsId") int popadsId);
 
+	void updateDownStatus();
+
 	void updateOnStatusByBatch(@Param("list") List<Integer> list);
 	
 	void updateDownStatusByBatch(@Param("list") List<Integer> list);
