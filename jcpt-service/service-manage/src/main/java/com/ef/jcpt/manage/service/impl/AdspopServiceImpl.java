@@ -26,12 +26,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ef.jcpt.common.constant.PopadsCountKeyConst;
 import com.ef.jcpt.common.constant.PopadsStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.util.DateUtil;
 import com.ef.jcpt.common.util.HttpClientUtils;
 import com.ef.jcpt.common.util.StringUtil;
+import com.ef.jcpt.core.cache.CacheUtil;
 import com.ef.jcpt.core.sign.SHA1Util;
 import com.ef.jcpt.manage.dao.PopadsInfoMapper;
 import com.ef.jcpt.manage.dao.PopadsModelMapper;
@@ -49,6 +51,9 @@ public class AdspopServiceImpl implements IAdspopService {
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
+	private CacheUtil cacheUtil;
+
+	@Autowired
 	private PopadsModelMapper popadsModelMapper;
 
 	@Autowired
@@ -56,6 +61,12 @@ public class AdspopServiceImpl implements IAdspopService {
 
 	@Autowired
 	private PopadsViewandclickLogMapper popadsViewandclickLogMapper;
+
+	private static Map<String, List<?>> realseMap = new HashMap<String, List<?>>();
+
+	private static final String POPIDSKEY = "popadsIds";
+
+	private static final String MIXJSKEY = "mixJs";
 
 	@Value("${adspop.js.path}")
 	private String jspath;
@@ -313,91 +324,183 @@ public class AdspopServiceImpl implements IAdspopService {
 		}
 	}
 
-//	@Override
-//	public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> mixList) {
-//		// TODO Auto-generated method stub
-//		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
-//		long curTime = System.currentTimeMillis();
-//
-//		if (null == popadsIds) {
-//			popadsIds = new int[0];
-//		}
-//
-//		List<Integer> list = new ArrayList<Integer>();
-//		for (Integer popadsId : popadsIds) {
-//			list.add(popadsId);
-//		}
-//
-//		if (list.size() > 0) {
-//			popadsInfoMapper.updateRealseStatusByBatch(list);
-//		}
-//
-//		File pathDir = new File(realsePath + curTime + System.getProperty("file.separator"));
-//		if (!pathDir.exists()) {// 如果文件夹不存在
-//			pathDir.mkdirs();// 创建文件夹
-//		}
-//		try {
-//			String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
-//			FileWriter issue = new FileWriter(issueFileName);
-//			for (int popadsId : popadsIds) {
-//				int exeType = popadsInfoMapper.getExeTypeById(popadsId);
-//				issue.write(exeType + " " + popadsId + ".txt");
-//				issue.write(System.getProperty("line.separator"));
-//			}
-//			if ((null != mixList) && (mixList.size() > 0)) {
-//				for (MixJSBo mixBo : mixList) {
-//					if (null != mixBo) {
-//						int jsCount = mixBo.getJsCount();
-//						String jsUrl = mixBo.getJsUrl();
-//						for (int k = 0; k < jsCount; k++) {
-//							issue.write("0 " + jsUrl);
-//							issue.write(System.getProperty("line.separator"));
-//						}
-//					}
-//				}
-//			}
-//			issue.close();
-//
-//			String[] fileNames = new String[popadsIds.length + 1];
-//			fileNames[0] = issueFileName;
-//			for (int i = 0; i < popadsIds.length; i++) {
-//				fileNames[i + 1] = jspath + popadsIds[i] + ".txt";
-//			}
-//			String targzipFilePath = pathDir + System.getProperty("file.separator") + curTime + ".tar";
-//			String targzipFileName = targzipFilePath + ".gz";
-//			CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
-//
-//			String durl = tarDomain + curTime + System.getProperty("file.separator") + curTime + ".tar.gz";
-//			String timestamp = DateUtil.format(new Date(System.currentTimeMillis()), DateUtil.YMD_HMS_NUM);
-//			String signStr = timestamp + ADV_PUSH_KEY + durl;
-//			String signature = SHA1Util.getSha1(signStr);
-//
-//			logger.info("发布的签名数据是：" + signStr);
-//			Map<String, String> map = new HashMap<String, String>();
-//			map.put("timestamp", timestamp);
-//			map.put("durl", durl);
-//			map.put("signature", signature);
-//
-//			String params = JSONObject.toJSONString(map);
-//
-//			String sendStr = sendHttpRequest(params);
-//			logger.info("推送返回的结果是： " + sendStr);
-//
-//			bsm.setCode(ReqStatusConst.OK);
-//			return bsm;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			bsm.setCode(ReqStatusConst.FAIL);
-//			bsm.setMsg(e.getMessage());
-//			return bsm;
-//		}
-//		// } else {
-//		// bsm.setCode(ReqStatusConst.FAIL);
-//		// bsm.setMsg("需要发布的广告为空");
-//		// return bsm;
-//		// }
-//	}
-	
+	@Override
+	public BasicServiceModel<String> autoReleaseTask() {
+		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+
+		List<Integer> releasingPopIdList = new ArrayList<Integer>();
+		List<PopadsInfo> list = popadsInfoMapper.selectOnlineReleaseTask();
+		if ((null != list) && (list.size() > 0)) {
+			for (PopadsInfo pop : list) {
+				if (null != pop) {
+					try {
+						int taskId = pop.getId();
+						Date startDate = pop.getValidStartTime();
+						Date endDate = pop.getValidEndTime();
+						int clickCount = pop.getClickCount();
+						long curTime = System.currentTimeMillis();
+						String key = PopadsCountKeyConst.CLICK + taskId;
+						Integer clickedCount = cacheUtil.get(key, Integer.TYPE);
+
+						boolean addCond = true;
+						if (null != startDate) {
+							long startTime = startDate.getTime();
+							if (startTime > curTime) {
+								addCond = false;
+							}
+						}
+						if (null != endDate) {
+							long endTime = endDate.getTime();
+							if (endTime < curTime) {
+								addCond = false;
+							}
+						}
+						if (clickCount > 0) {
+							if (clickCount < clickedCount) {
+								addCond = false;
+							}
+						}
+						if (addCond) {
+							releasingPopIdList.add(taskId);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		List releasedPopIdList = realseMap.get(POPIDSKEY);
+		List releasedJsList = realseMap.get(MIXJSKEY);
+
+		boolean yizhi = isListEqual(releasedPopIdList, releasingPopIdList);
+		if (!yizhi) {
+			//还要计算releasedJsList的百分比
+			
+			
+			
+			bsm = sendPack(releasingPopIdList, releasedJsList);
+			if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
+				popadsInfoMapper.updateDownStatus();
+				if (list.size() > 0) {
+					popadsInfoMapper.updateRealseStatusByBatch(releasingPopIdList);
+				}
+			}
+		}
+		return bsm;
+	}
+
+	public static boolean isListEqual(List l0, List l1) {
+		if (l0 == l1)
+			return true;
+		if (l0 == null && l1 == null)
+			return true;
+		if (l0 == null || l1 == null)
+			return false;
+		if (l0.size() != l1.size())
+			return false;
+		for (Object o : l0) {
+			if (!l1.contains(o))
+				return false;
+		}
+		for (Object o : l1) {
+			if (!l0.contains(o))
+				return false;
+		}
+		return true;
+	}
+
+	// @Override
+	// public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo>
+	// mixList) {
+	// // TODO Auto-generated method stub
+	// BasicServiceModel<String> bsm = new BasicServiceModel<String>();
+	// long curTime = System.currentTimeMillis();
+	//
+	// if (null == popadsIds) {
+	// popadsIds = new int[0];
+	// }
+	//
+	// List<Integer> list = new ArrayList<Integer>();
+	// for (Integer popadsId : popadsIds) {
+	// list.add(popadsId);
+	// }
+	//
+	// if (list.size() > 0) {
+	// popadsInfoMapper.updateRealseStatusByBatch(list);
+	// }
+	//
+	// File pathDir = new File(realsePath + curTime +
+	// System.getProperty("file.separator"));
+	// if (!pathDir.exists()) {// 如果文件夹不存在
+	// pathDir.mkdirs();// 创建文件夹
+	// }
+	// try {
+	// String issueFileName = pathDir.getAbsolutePath() +
+	// System.getProperty("file.separator") + "issue";
+	// FileWriter issue = new FileWriter(issueFileName);
+	// for (int popadsId : popadsIds) {
+	// int exeType = popadsInfoMapper.getExeTypeById(popadsId);
+	// issue.write(exeType + " " + popadsId + ".txt");
+	// issue.write(System.getProperty("line.separator"));
+	// }
+	// if ((null != mixList) && (mixList.size() > 0)) {
+	// for (MixJSBo mixBo : mixList) {
+	// if (null != mixBo) {
+	// int jsCount = mixBo.getJsCount();
+	// String jsUrl = mixBo.getJsUrl();
+	// for (int k = 0; k < jsCount; k++) {
+	// issue.write("0 " + jsUrl);
+	// issue.write(System.getProperty("line.separator"));
+	// }
+	// }
+	// }
+	// }
+	// issue.close();
+	//
+	// String[] fileNames = new String[popadsIds.length + 1];
+	// fileNames[0] = issueFileName;
+	// for (int i = 0; i < popadsIds.length; i++) {
+	// fileNames[i + 1] = jspath + popadsIds[i] + ".txt";
+	// }
+	// String targzipFilePath = pathDir + System.getProperty("file.separator") +
+	// curTime + ".tar";
+	// String targzipFileName = targzipFilePath + ".gz";
+	// CompressedFiles_Gzip(fileNames, targzipFilePath, targzipFileName);
+	//
+	// String durl = tarDomain + curTime + System.getProperty("file.separator") +
+	// curTime + ".tar.gz";
+	// String timestamp = DateUtil.format(new Date(System.currentTimeMillis()),
+	// DateUtil.YMD_HMS_NUM);
+	// String signStr = timestamp + ADV_PUSH_KEY + durl;
+	// String signature = SHA1Util.getSha1(signStr);
+	//
+	// logger.info("发布的签名数据是：" + signStr);
+	// Map<String, String> map = new HashMap<String, String>();
+	// map.put("timestamp", timestamp);
+	// map.put("durl", durl);
+	// map.put("signature", signature);
+	//
+	// String params = JSONObject.toJSONString(map);
+	//
+	// String sendStr = sendHttpRequest(params);
+	// logger.info("推送返回的结果是： " + sendStr);
+	//
+	// bsm.setCode(ReqStatusConst.OK);
+	// return bsm;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// bsm.setCode(ReqStatusConst.FAIL);
+	// bsm.setMsg(e.getMessage());
+	// return bsm;
+	// }
+	// // } else {
+	// // bsm.setCode(ReqStatusConst.FAIL);
+	// // bsm.setMsg("需要发布的广告为空");
+	// // return bsm;
+	// // }
+	// }
+
 	@Override
 	public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> mixList) {
 		// TODO Auto-generated method stub
@@ -410,7 +513,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			list.add(popadsId);
 		}
 
-		BasicServiceModel<String> bsm = sendPack(popadsIds, mixList);
+		BasicServiceModel<String> bsm = sendPack(list, mixList);
 
 		if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
 			popadsInfoMapper.updateDownStatus();
@@ -426,7 +529,7 @@ public class AdspopServiceImpl implements IAdspopService {
 		// }
 	}
 
-	public BasicServiceModel<String> sendPack(int[] popadsIds, List<MixJSBo> mixList) {
+	public BasicServiceModel<String> sendPack(List<Integer> popadsIdList, List<MixJSBo> mixList) {
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
 		long curTime = System.currentTimeMillis();
 
@@ -437,7 +540,7 @@ public class AdspopServiceImpl implements IAdspopService {
 		try {
 			String issueFileName = pathDir.getAbsolutePath() + System.getProperty("file.separator") + "issue";
 			FileWriter issue = new FileWriter(issueFileName);
-			for (int popadsId : popadsIds) {
+			for (int popadsId : popadsIdList) {
 				int exeType = popadsInfoMapper.getExeTypeById(popadsId);
 				issue.write(exeType + " " + popadsId + ".txt");
 				issue.write(System.getProperty("line.separator"));
@@ -456,10 +559,10 @@ public class AdspopServiceImpl implements IAdspopService {
 			}
 			issue.close();
 
-			String[] fileNames = new String[popadsIds.length + 1];
+			String[] fileNames = new String[popadsIdList.size() + 1];
 			fileNames[0] = issueFileName;
-			for (int i = 0; i < popadsIds.length; i++) {
-				fileNames[i + 1] = jspath + popadsIds[i] + ".txt";
+			for (int i = 0; i < popadsIdList.size(); i++) {
+				fileNames[i + 1] = jspath + popadsIdList.get(i) + ".txt";
 			}
 			String targzipFilePath = pathDir + System.getProperty("file.separator") + curTime + ".tar";
 			String targzipFileName = targzipFilePath + ".gz";
@@ -485,7 +588,7 @@ public class AdspopServiceImpl implements IAdspopService {
 			Integer retCode = sendRet.getInteger("code");
 			String message = sendRet.getString("message");
 			if (0 == retCode) {
-				realseMap.put(POPIDSKEY, popadsIds);
+				realseMap.put(POPIDSKEY, popadsIdList);
 				realseMap.put(MIXJSKEY, mixList);
 
 				bsm.setCode(ReqStatusConst.OK);

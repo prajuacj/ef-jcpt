@@ -23,6 +23,7 @@
     <result column="tb_key" jdbcType="VARCHAR" property="tbKey" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="click_count" jdbcType="INTEGER" property="clickCount" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -31,7 +32,7 @@
     id, model_id, model_name, task_name, task_desc, task_imgs, task_url, task_status, 
     publish_user, auditing_user, auditing_advise, publish_phone, pop_mode, 
     exec_type, valid_start_time, valid_end_time, interval_time, tb_key, province, city, 
-    remark, create_time, update_time
+    click_count, remark, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -51,8 +52,8 @@
       publish_phone, pop_mode, exec_type, 
       valid_start_time, valid_end_time, interval_time, 
       tb_key, province, city, 
-      remark, create_time, update_time
-      )
+      click_count, remark, create_time, 
+      update_time)
     values (#{id,jdbcType=INTEGER}, #{modelId,jdbcType=INTEGER}, #{modelName,jdbcType=VARCHAR}, 
       #{taskName,jdbcType=VARCHAR}, #{taskDesc,jdbcType=VARCHAR}, #{taskImgs,jdbcType=VARCHAR}, 
       #{taskUrl,jdbcType=VARCHAR}, #{taskStatus,jdbcType=VARCHAR}, #{publishUser,jdbcType=VARCHAR}, 
@@ -60,8 +61,8 @@
       #{publishPhone,jdbcType=VARCHAR}, #{popMode,jdbcType=INTEGER}, #{execType,jdbcType=INTEGER}, 
       #{validStartTime,jdbcType=TIMESTAMP}, #{validEndTime,jdbcType=TIMESTAMP}, #{intervalTime,jdbcType=INTEGER}, 
       #{tbKey,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{clickCount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo" keyProperty="id" useGeneratedKeys="true">
     insert into ef_popads_info
@@ -128,6 +129,9 @@
       </if>
       <if test="city != null">
         city,
+      </if>
+      <if test="clickCount != null">
+        click_count,
       </if>
       <if test="remark != null">
         remark,
@@ -203,6 +207,9 @@
       <if test="city != null">
         #{city,jdbcType=VARCHAR},
       </if>
+      <if test="clickCount != null">
+        #{clickCount,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -277,6 +284,9 @@
       <if test="city != null">
         city = #{city,jdbcType=VARCHAR},
       </if>
+      <if test="clickCount != null">
+        click_count = #{clickCount,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -311,6 +321,7 @@
       tb_key = #{tbKey,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -397,4 +408,11 @@
 	<select id="getExeTypeById" resultType="java.lang.Integer">
 		select exec_type from ef_popads_info where  id = #{popadsId,jdbcType=INTEGER}
 	</select>
+	
+	<select id="selectOnlineReleaseTask" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ef_popads_info
+    where task_status = '03'
+  </select>
 </mapper>

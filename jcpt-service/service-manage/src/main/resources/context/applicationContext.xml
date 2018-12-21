@@ -14,7 +14,20 @@
 						http://www.springframework.org/schema/aop 
 						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 	
-	<context:component-scan base-package="com.ef.jcpt.manage" />
+	<context:component-scan base-package="com.ef.jcpt.manage,com.ef.jcpt.core.cache" />
 	<import resource="classpath:context/spring-jdbc.xml"/>
     <import resource="classpath:context/manage-dubbo-provider.xml"/>
+    
+    <!-- redis集成配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	  <property name="maxTotal" value="${redis.maxActive}" />
+	  <property name="maxIdle" value="${redis.maxIdle}" />
+	  <property name="maxWaitMillis" value="${redis.maxWait}" />
+	  <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+	  <constructor-arg index="0" ref="jedisPoolConfig" />
+	  <constructor-arg index="1" value="${redis.host}" type="java.lang.String" />
+	  <constructor-arg index="2" value="${redis.port}" type="int"/>
+    </bean>
 </beans>

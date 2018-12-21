@@ -45,6 +45,8 @@ public class PopadsInfo {
 
 	private String city;
 
+	private Integer clickCount;
+
 	private String remark;
 
 	private Date createTime;
@@ -217,6 +219,14 @@ public class PopadsInfo {
 
 	public void setCity(String city) {
 		this.city = city == null ? null : city.trim();
+	}
+
+	public Integer getClickCount() {
+		return clickCount;
+	}
+
+	public void setClickCount(Integer clickCount) {
+		this.clickCount = clickCount;
 	}
 
 	public String getRemark() {

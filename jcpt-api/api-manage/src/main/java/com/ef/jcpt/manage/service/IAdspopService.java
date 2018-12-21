@@ -28,4 +28,6 @@ public interface IAdspopService {
 	BasicServiceModel<String> addViewAndClickCountLog(String taskId, String mac, int countType);
 
 	BasicServiceModel<String> updateOnAndDownLine(int[] ids, String finish);
+
+	BasicServiceModel<String> autoReleaseTask();
 }

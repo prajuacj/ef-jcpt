@@ -39,6 +39,8 @@ public interface PopadsInfoMapper {
 	void updateDownStatus();
 
 	void updateOnStatusByBatch(@Param("list") List<Integer> list);
-	
+
 	void updateDownStatusByBatch(@Param("list") List<Integer> list);
+
+	List<PopadsInfo> selectOnlineReleaseTask();
 }

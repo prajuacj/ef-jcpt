@@ -1,7 +1,6 @@
 package com.ef.jcpt.wi.manage.controller;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ef.jcpt.common.constant.PopadsCountKeyConst;
 import com.ef.jcpt.common.constant.PopadsCountTypeConst;
-import com.ef.jcpt.common.constant.PopadsStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.common.log.LogTemplate;
