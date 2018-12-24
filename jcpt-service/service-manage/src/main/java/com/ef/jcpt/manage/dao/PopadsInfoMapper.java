@@ -43,4 +43,11 @@ public interface PopadsInfoMapper {
 	void updateDownStatusByBatch(@Param("list") List<Integer> list);
 
 	List<PopadsInfo> selectOnlineReleaseTask();
+
+	int countPopadsMulStatusByPage(@Param("taskName") String taskName, @Param("taskStatus") String[] taskStatus,
+			@Param("modelId") int modelId, @Param("publishUser") String publishUser);
+
+	List<PopadsInfo> listPopadsMulStatusByPage(@Param("taskName") String taskName,
+			@Param("taskStatus") String[] taskStatus, @Param("modelId") int modelId,
+			@Param("publishUser") String publishUser, @Param("start") int start, @Param("pageSize") int pageSize);
 }

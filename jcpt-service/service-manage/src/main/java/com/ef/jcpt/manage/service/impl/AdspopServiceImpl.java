@@ -26,7 +26,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ef.jcpt.common.constant.PopadsCountKeyConst;
+import com.ef.jcpt.common.constant.PopadsExeTypeConst;
 import com.ef.jcpt.common.constant.PopadsStatusConst;
 import com.ef.jcpt.common.constant.ReqStatusConst;
 import com.ef.jcpt.common.entity.BasicServiceModel;
@@ -152,7 +154,7 @@ public class AdspopServiceImpl implements IAdspopService {
 				PopadsInfo record = new PopadsInfo();
 
 				record.setCreateTime(curTime);
-				record.setExecType(modelType);
+				record.setExecType(PopadsExeTypeConst.TXT);
 				record.setModelId(modelId);
 				record.setModelName(bo.getModelName());
 				record.setPublishPhone(bo.getPublishPhone());
@@ -225,7 +227,7 @@ public class AdspopServiceImpl implements IAdspopService {
 					PopadsInfo record = new PopadsInfo();
 
 					record.setCreateTime(curTime);
-					record.setExecType(modelType);
+					record.setExecType(PopadsExeTypeConst.TXT);
 					record.setModelId(modelId);
 					record.setModelName(bo.getModelName());
 					record.setPublishPhone(bo.getPublishPhone());
@@ -375,10 +377,8 @@ public class AdspopServiceImpl implements IAdspopService {
 
 		boolean yizhi = isListEqual(releasedPopIdList, releasingPopIdList);
 		if (!yizhi) {
-			//还要计算releasedJsList的百分比
-			
-			
-			
+			// 还要计算releasedJsList的百分比
+
 			bsm = sendPack(releasingPopIdList, releasedJsList);
 			if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
 				popadsInfoMapper.updateDownStatus();
@@ -504,21 +504,31 @@ public class AdspopServiceImpl implements IAdspopService {
 	@Override
 	public BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> mixList) {
 		// TODO Auto-generated method stub
-		if (null == popadsIds) {
-			popadsIds = new int[0];
+		List<Integer> list = new ArrayList<Integer>();
+
+		if ((null == popadsIds) || (popadsIds.length == 0)) {
+			List<PopadsInfo> onlineList = popadsInfoMapper.selectOnlineReleaseTask();
+			if ((null != onlineList) && (onlineList.size() > 0)) {
+				int size = onlineList.size();
+				popadsIds = new int[size];
+				for (int i = 0; i < size; i++) {
+					popadsIds[i] = onlineList.get(i).getId();
+				}
+			}
 		}
 
-		List<Integer> list = new ArrayList<Integer>();
 		for (Integer popadsId : popadsIds) {
 			list.add(popadsId);
 		}
 
 		BasicServiceModel<String> bsm = sendPack(list, mixList);
 
-		if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
-			popadsInfoMapper.updateDownStatus();
-			if (list.size() > 0) {
-				popadsInfoMapper.updateRealseStatusByBatch(list);
+		if ((null != popadsIds) && (popadsIds.length > 0)) {
+			if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
+				popadsInfoMapper.updateDownStatus();
+				if (list.size() > 0) {
+					popadsInfoMapper.updateRealseStatusByBatch(list);
+				}
 			}
 		}
 		return bsm;
@@ -664,31 +674,63 @@ public class AdspopServiceImpl implements IAdspopService {
 	}
 
 	@Override
-	public int countPopadsByPage(String taskName, String taskStatus, int modelId, String publishUser) {
+	public int countPopadsByPage(String taskName, String[] taskStatus, int modelId, String publishUser) {
 		// TODO Auto-generated method stub
-		return popadsInfoMapper.countPopadsByPage(taskName, taskStatus, modelId, publishUser);
+		if ((null == taskStatus) || (taskStatus.length == 0) || (taskStatus.length == 1)) {
+			String queryTaskStatus = null;
+			if ((null != taskStatus) && (taskStatus.length == 1)) {
+				queryTaskStatus = taskStatus[0];
+			}
+			return popadsInfoMapper.countPopadsByPage(taskName, queryTaskStatus, modelId, publishUser);
+		} else {
+			return popadsInfoMapper.countPopadsMulStatusByPage(taskName, taskStatus, modelId, publishUser);
+		}
+
 	}
 
 	@Override
-	public BasicServiceModel<String> listPopadsByPage(String taskName, String taskStatus, int modelId,
+	public BasicServiceModel<String> listPopadsByPage(String taskName, String[] taskStatus, int modelId,
 			String publishUser, int pageIndex, int pageSize) {
 		// TODO Auto-generated method stub
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
-		// TODO Auto-generated method stub
-		int start = (pageIndex - 1) * pageSize;
-		if (start < 0) {
-			start = 0;
-		}
-		List<PopadsInfo> list = popadsInfoMapper.listPopadsByPage(taskName, taskStatus, modelId, publishUser, start,
-				pageSize);
-		if (null != list) {
-			JSONObject data = new JSONObject();
-			data.put("data", list);
-			bsm.setData(data.toJSONString());
-		}
-		bsm.setCode(ReqStatusConst.OK);
+		if ((null == taskStatus) || (taskStatus.length == 0) || (taskStatus.length == 1)) {
+			String queryTaskStatus = null;
+			if ((null != taskStatus) && (taskStatus.length == 1)) {
+				queryTaskStatus = taskStatus[0];
+			}
+			int start = (pageIndex - 1) * pageSize;
+			if (start < 0) {
+				start = 0;
+			}
+			List<PopadsInfo> list = popadsInfoMapper.listPopadsByPage(taskName, queryTaskStatus, modelId, publishUser,
+					start, pageSize);
+			if (null != list) {
+				JSONObject data = new JSONObject();
+				data.put("data", list);
+				bsm.setData(JSONObject.toJSONString(data, SerializerFeature.WriteMapNullValue));
+			}
+			bsm.setCode(ReqStatusConst.OK);
 
-		return bsm;
+			return bsm;
+		} else {
+			int start = (pageIndex - 1) * pageSize;
+			if (start < 0) {
+				start = 0;
+			}
+			List<PopadsInfo> list = popadsInfoMapper.listPopadsMulStatusByPage(taskName, taskStatus, modelId,
+					publishUser, start, pageSize);
+			if (null != list) {
+				JSONObject data = new JSONObject();
+				data.put("data", list);
+				bsm.setData(JSONObject.toJSONString(data, SerializerFeature.WriteMapNullValue));
+			}
+			bsm.setCode(ReqStatusConst.OK);
+
+			return bsm;
+		}
+
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

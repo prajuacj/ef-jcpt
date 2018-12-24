@@ -1,332 +1,373 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ef.jcpt.manage.dao.PopadsInfoMapper">
-  <resultMap id="BaseResultMap" type="com.ef.jcpt.manage.dao.model.PopadsInfo">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="model_id" jdbcType="INTEGER" property="modelId" />
-    <result column="model_name" jdbcType="VARCHAR" property="modelName" />
-    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
-    <result column="task_desc" jdbcType="VARCHAR" property="taskDesc" />
-    <result column="task_imgs" jdbcType="VARCHAR" property="taskImgs" />
-    <result column="task_url" jdbcType="VARCHAR" property="taskUrl" />
-    <result column="task_status" jdbcType="VARCHAR" property="taskStatus" />
-    <result column="publish_user" jdbcType="VARCHAR" property="publishUser" />
-    <result column="auditing_user" jdbcType="VARCHAR" property="auditingUser" />
-    <result column="auditing_advise" jdbcType="VARCHAR" property="auditingAdvise" />
-    <result column="task_content" jdbcType="VARCHAR" property="taskContent" />
-    <result column="publish_phone" jdbcType="VARCHAR" property="publishPhone" />
-    <result column="pop_mode" jdbcType="INTEGER" property="popMode" />
-    <result column="exec_type" jdbcType="INTEGER" property="execType" />
-    <result column="valid_start_time" jdbcType="TIMESTAMP" property="validStartTime" />
-    <result column="valid_end_time" jdbcType="TIMESTAMP" property="validEndTime" />
-    <result column="interval_time" jdbcType="INTEGER" property="intervalTime" />
-    <result column="tb_key" jdbcType="VARCHAR" property="tbKey" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="click_count" jdbcType="INTEGER" property="clickCount" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, model_id, model_name, task_name, task_desc, task_imgs, task_url, task_status, 
-    publish_user, auditing_user, auditing_advise, publish_phone, pop_mode, 
-    exec_type, valid_start_time, valid_end_time, interval_time, tb_key, province, city, 
-    click_count, remark, create_time, update_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from ef_popads_info
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from ef_popads_info
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
-    insert into ef_popads_info (id, model_id, model_name, 
-      task_name, task_desc, task_imgs, 
-      task_url, task_status, publish_user, 
-      auditing_user, auditing_advise, task_content, 
-      publish_phone, pop_mode, exec_type, 
-      valid_start_time, valid_end_time, interval_time, 
-      tb_key, province, city, 
-      click_count, remark, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{modelId,jdbcType=INTEGER}, #{modelName,jdbcType=VARCHAR}, 
-      #{taskName,jdbcType=VARCHAR}, #{taskDesc,jdbcType=VARCHAR}, #{taskImgs,jdbcType=VARCHAR}, 
-      #{taskUrl,jdbcType=VARCHAR}, #{taskStatus,jdbcType=VARCHAR}, #{publishUser,jdbcType=VARCHAR}, 
-      #{auditingUser,jdbcType=VARCHAR}, #{auditingAdvise,jdbcType=VARCHAR}, #{taskContent,jdbcType=VARCHAR}, 
-      #{publishPhone,jdbcType=VARCHAR}, #{popMode,jdbcType=INTEGER}, #{execType,jdbcType=INTEGER}, 
-      #{validStartTime,jdbcType=TIMESTAMP}, #{validEndTime,jdbcType=TIMESTAMP}, #{intervalTime,jdbcType=INTEGER}, 
-      #{tbKey,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{clickCount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo" keyProperty="id" useGeneratedKeys="true">
-    insert into ef_popads_info
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="modelId != null">
-        model_id,
-      </if>
-      <if test="modelName != null">
-        model_name,
-      </if>
-      <if test="taskName != null">
-        task_name,
-      </if>
-      <if test="taskDesc != null">
-        task_desc,
-      </if>
-      <if test="taskImgs != null">
-        task_imgs,
-      </if>
-      <if test="taskUrl != null">
-        task_url,
-      </if>
-      <if test="taskStatus != null">
-        task_status,
-      </if>
-      <if test="publishUser != null">
-        publish_user,
-      </if>
-      <if test="auditingUser != null">
-        auditing_user,
-      </if>
-      <if test="auditingAdvise != null">
-        auditing_advise,
-      </if>
-      <if test="taskContent != null">
-        task_content,
-      </if>
-      <if test="publishPhone != null">
-        publish_phone,
-      </if>
-      <if test="popMode != null">
-        pop_mode,
-      </if>
-      <if test="execType != null">
-        exec_type,
-      </if>
-      <if test="validStartTime != null">
-        valid_start_time,
-      </if>
-      <if test="validEndTime != null">
-        valid_end_time,
-      </if>
-      <if test="intervalTime != null">
-        interval_time,
-      </if>
-      <if test="tbKey != null">
-        tb_key,
-      </if>
-      <if test="province != null">
-        province,
-      </if>
-      <if test="city != null">
-        city,
-      </if>
-      <if test="clickCount != null">
-        click_count,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="modelId != null">
-        #{modelId,jdbcType=INTEGER},
-      </if>
-      <if test="modelName != null">
-        #{modelName,jdbcType=VARCHAR},
-      </if>
-      <if test="taskName != null">
-        #{taskName,jdbcType=VARCHAR},
-      </if>
-      <if test="taskDesc != null">
-        #{taskDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="taskImgs != null">
-        #{taskImgs,jdbcType=VARCHAR},
-      </if>
-      <if test="taskUrl != null">
-        #{taskUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="taskStatus != null">
-        #{taskStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="publishUser != null">
-        #{publishUser,jdbcType=VARCHAR},
-      </if>
-      <if test="auditingUser != null">
-        #{auditingUser,jdbcType=VARCHAR},
-      </if>
-      <if test="auditingAdvise != null">
-        #{auditingAdvise,jdbcType=VARCHAR},
-      </if>
-      <if test="taskContent != null">
-        #{taskContent,jdbcType=VARCHAR},
-      </if>
-      <if test="publishPhone != null">
-        #{publishPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="popMode != null">
-        #{popMode,jdbcType=INTEGER},
-      </if>
-      <if test="execType != null">
-        #{execType,jdbcType=INTEGER},
-      </if>
-      <if test="validStartTime != null">
-        #{validStartTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="validEndTime != null">
-        #{validEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="intervalTime != null">
-        #{intervalTime,jdbcType=INTEGER},
-      </if>
-      <if test="tbKey != null">
-        #{tbKey,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="clickCount != null">
-        #{clickCount,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
-    update ef_popads_info
-    <set>
-      <if test="modelId != null">
-        model_id = #{modelId,jdbcType=INTEGER},
-      </if>
-      <if test="modelName != null">
-        model_name = #{modelName,jdbcType=VARCHAR},
-      </if>
-      <if test="taskName != null">
-        task_name = #{taskName,jdbcType=VARCHAR},
-      </if>
-      <if test="taskDesc != null">
-        task_desc = #{taskDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="taskImgs != null">
-        task_imgs = #{taskImgs,jdbcType=VARCHAR},
-      </if>
-      <if test="taskUrl != null">
-        task_url = #{taskUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="taskStatus != null">
-        task_status = #{taskStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="publishUser != null">
-        publish_user = #{publishUser,jdbcType=VARCHAR},
-      </if>
-      <if test="auditingUser != null">
-        auditing_user = #{auditingUser,jdbcType=VARCHAR},
-      </if>
-      <if test="auditingAdvise != null">
-        auditing_advise = #{auditingAdvise,jdbcType=VARCHAR},
-      </if>
-      <if test="taskContent != null">
-        task_content = #{taskContent,jdbcType=VARCHAR},
-      </if>
-      <if test="publishPhone != null">
-        publish_phone = #{publishPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="popMode != null">
-        pop_mode = #{popMode,jdbcType=INTEGER},
-      </if>
-      <if test="execType != null">
-        exec_type = #{execType,jdbcType=INTEGER},
-      </if>
-      <if test="validStartTime != null">
-        valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="validEndTime != null">
-        valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="intervalTime != null">
-        interval_time = #{intervalTime,jdbcType=INTEGER},
-      </if>
-      <if test="tbKey != null">
-        tb_key = #{tbKey,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="clickCount != null">
-        click_count = #{clickCount,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
-    update ef_popads_info
-    set model_id = #{modelId,jdbcType=INTEGER},
-      model_name = #{modelName,jdbcType=VARCHAR},
-      task_name = #{taskName,jdbcType=VARCHAR},
-      task_desc = #{taskDesc,jdbcType=VARCHAR},
-      task_imgs = #{taskImgs,jdbcType=VARCHAR},
-      task_url = #{taskUrl,jdbcType=VARCHAR},
-      task_status = #{taskStatus,jdbcType=VARCHAR},
-      publish_user = #{publishUser,jdbcType=VARCHAR},
-      auditing_user = #{auditingUser,jdbcType=VARCHAR},
-      auditing_advise = #{auditingAdvise,jdbcType=VARCHAR},
-      task_content = #{taskContent,jdbcType=VARCHAR},
-      publish_phone = #{publishPhone,jdbcType=VARCHAR},
-      pop_mode = #{popMode,jdbcType=INTEGER},
-      exec_type = #{execType,jdbcType=INTEGER},
-      valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
-      valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
-      interval_time = #{intervalTime,jdbcType=INTEGER},
-      tb_key = #{tbKey,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      click_count = #{clickCount,jdbcType=INTEGER},
-      remark = #{remark,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+	<resultMap id="BaseResultMap" type="com.ef.jcpt.manage.dao.model.PopadsInfo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="model_id" jdbcType="INTEGER" property="modelId" />
+		<result column="model_name" jdbcType="VARCHAR" property="modelName" />
+		<result column="task_name" jdbcType="VARCHAR" property="taskName" />
+		<result column="task_desc" jdbcType="VARCHAR" property="taskDesc" />
+		<result column="task_imgs" jdbcType="VARCHAR" property="taskImgs" />
+		<result column="task_url" jdbcType="VARCHAR" property="taskUrl" />
+		<result column="task_status" jdbcType="VARCHAR" property="taskStatus" />
+		<result column="publish_user" jdbcType="VARCHAR" property="publishUser" />
+		<result column="auditing_user" jdbcType="VARCHAR" property="auditingUser" />
+		<result column="auditing_advise" jdbcType="VARCHAR" property="auditingAdvise" />
+		<result column="task_content" jdbcType="VARCHAR" property="taskContent" />
+		<result column="publish_phone" jdbcType="VARCHAR" property="publishPhone" />
+		<result column="pop_mode" jdbcType="INTEGER" property="popMode" />
+		<result column="exec_type" jdbcType="INTEGER" property="execType" />
+		<result column="valid_start_time" jdbcType="TIMESTAMP"
+			property="validStartTime" />
+		<result column="valid_end_time" jdbcType="TIMESTAMP" property="validEndTime" />
+		<result column="interval_time" jdbcType="INTEGER" property="intervalTime" />
+		<result column="tb_key" jdbcType="VARCHAR" property="tbKey" />
+		<result column="province" jdbcType="VARCHAR" property="province" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="click_count" jdbcType="INTEGER" property="clickCount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, model_id, model_name, task_name, task_desc, task_imgs,
+		task_url,
+		task_status,
+		publish_user, auditing_user, auditing_advise,
+		publish_phone, pop_mode,
+		exec_type, valid_start_time, valid_end_time,
+		interval_time, tb_key, province,
+		city,
+		click_count, remark, create_time,
+		update_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ef_popads_info
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		ef_popads_info
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+		insert into ef_popads_info
+		(id, model_id, model_name,
+		task_name, task_desc, task_imgs,
+		task_url,
+		task_status, publish_user,
+		auditing_user, auditing_advise,
+		task_content,
+		publish_phone, pop_mode, exec_type,
+		valid_start_time,
+		valid_end_time, interval_time,
+		tb_key, province, city,
+		click_count,
+		remark, create_time,
+		update_time)
+		values (#{id,jdbcType=INTEGER},
+		#{modelId,jdbcType=INTEGER},
+		#{modelName,jdbcType=VARCHAR},
+		#{taskName,jdbcType=VARCHAR}, #{taskDesc,jdbcType=VARCHAR},
+		#{taskImgs,jdbcType=VARCHAR},
+		#{taskUrl,jdbcType=VARCHAR},
+		#{taskStatus,jdbcType=VARCHAR},
+		#{publishUser,jdbcType=VARCHAR},
+		#{auditingUser,jdbcType=VARCHAR}, #{auditingAdvise,jdbcType=VARCHAR},
+		#{taskContent,jdbcType=VARCHAR},
+		#{publishPhone,jdbcType=VARCHAR},
+		#{popMode,jdbcType=INTEGER},
+		#{execType,jdbcType=INTEGER},
+		#{validStartTime,jdbcType=TIMESTAMP},
+		#{validEndTime,jdbcType=TIMESTAMP}, #{intervalTime,jdbcType=INTEGER},
+		#{tbKey,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR},
+		#{clickCount,jdbcType=INTEGER},
+		#{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into ef_popads_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="modelId != null">
+				model_id,
+			</if>
+			<if test="modelName != null">
+				model_name,
+			</if>
+			<if test="taskName != null">
+				task_name,
+			</if>
+			<if test="taskDesc != null">
+				task_desc,
+			</if>
+			<if test="taskImgs != null">
+				task_imgs,
+			</if>
+			<if test="taskUrl != null">
+				task_url,
+			</if>
+			<if test="taskStatus != null">
+				task_status,
+			</if>
+			<if test="publishUser != null">
+				publish_user,
+			</if>
+			<if test="auditingUser != null">
+				auditing_user,
+			</if>
+			<if test="auditingAdvise != null">
+				auditing_advise,
+			</if>
+			<if test="taskContent != null">
+				task_content,
+			</if>
+			<if test="publishPhone != null">
+				publish_phone,
+			</if>
+			<if test="popMode != null">
+				pop_mode,
+			</if>
+			<if test="execType != null">
+				exec_type,
+			</if>
+			<if test="validStartTime != null">
+				valid_start_time,
+			</if>
+			<if test="validEndTime != null">
+				valid_end_time,
+			</if>
+			<if test="intervalTime != null">
+				interval_time,
+			</if>
+			<if test="tbKey != null">
+				tb_key,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="clickCount != null">
+				click_count,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="modelId != null">
+				#{modelId,jdbcType=INTEGER},
+			</if>
+			<if test="modelName != null">
+				#{modelName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskName != null">
+				#{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				#{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="taskImgs != null">
+				#{taskImgs,jdbcType=VARCHAR},
+			</if>
+			<if test="taskUrl != null">
+				#{taskUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="taskStatus != null">
+				#{taskStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="publishUser != null">
+				#{publishUser,jdbcType=VARCHAR},
+			</if>
+			<if test="auditingUser != null">
+				#{auditingUser,jdbcType=VARCHAR},
+			</if>
+			<if test="auditingAdvise != null">
+				#{auditingAdvise,jdbcType=VARCHAR},
+			</if>
+			<if test="taskContent != null">
+				#{taskContent,jdbcType=VARCHAR},
+			</if>
+			<if test="publishPhone != null">
+				#{publishPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="popMode != null">
+				#{popMode,jdbcType=INTEGER},
+			</if>
+			<if test="execType != null">
+				#{execType,jdbcType=INTEGER},
+			</if>
+			<if test="validStartTime != null">
+				#{validStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="validEndTime != null">
+				#{validEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="intervalTime != null">
+				#{intervalTime,jdbcType=INTEGER},
+			</if>
+			<if test="tbKey != null">
+				#{tbKey,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="clickCount != null">
+				#{clickCount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+		update ef_popads_info
+		<set>
+			<if test="modelId != null">
+				model_id = #{modelId,jdbcType=INTEGER},
+			</if>
+			<if test="modelName != null">
+				model_name = #{modelName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskName != null">
+				task_name = #{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDesc != null">
+				task_desc = #{taskDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="taskImgs != null">
+				task_imgs = #{taskImgs,jdbcType=VARCHAR},
+			</if>
+			<if test="taskUrl != null">
+				task_url = #{taskUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="taskStatus != null">
+				task_status = #{taskStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="publishUser != null">
+				publish_user = #{publishUser,jdbcType=VARCHAR},
+			</if>
+			<if test="auditingUser != null">
+				auditing_user = #{auditingUser,jdbcType=VARCHAR},
+			</if>
+			<if test="auditingAdvise != null">
+				auditing_advise = #{auditingAdvise,jdbcType=VARCHAR},
+			</if>
+			<if test="taskContent != null">
+				task_content = #{taskContent,jdbcType=VARCHAR},
+			</if>
+			<if test="publishPhone != null">
+				publish_phone = #{publishPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="popMode != null">
+				pop_mode = #{popMode,jdbcType=INTEGER},
+			</if>
+			<if test="execType != null">
+				exec_type = #{execType,jdbcType=INTEGER},
+			</if>
+			<if test="validStartTime != null">
+				valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="validEndTime != null">
+				valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="intervalTime != null">
+				interval_time = #{intervalTime,jdbcType=INTEGER},
+			</if>
+			<if test="tbKey != null">
+				tb_key = #{tbKey,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="clickCount != null">
+				click_count = #{clickCount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.ef.jcpt.manage.dao.model.PopadsInfo">
+		update
+		ef_popads_info
+		set model_id = #{modelId,jdbcType=INTEGER},
+		model_name =
+		#{modelName,jdbcType=VARCHAR},
+		task_name =
+		#{taskName,jdbcType=VARCHAR},
+		task_desc = #{taskDesc,jdbcType=VARCHAR},
+		task_imgs = #{taskImgs,jdbcType=VARCHAR},
+		task_url =
+		#{taskUrl,jdbcType=VARCHAR},
+		task_status =
+		#{taskStatus,jdbcType=VARCHAR},
+		publish_user =
+		#{publishUser,jdbcType=VARCHAR},
+		auditing_user =
+		#{auditingUser,jdbcType=VARCHAR},
+		auditing_advise =
+		#{auditingAdvise,jdbcType=VARCHAR},
+		task_content =
+		#{taskContent,jdbcType=VARCHAR},
+		publish_phone =
+		#{publishPhone,jdbcType=VARCHAR},
+		pop_mode =
+		#{popMode,jdbcType=INTEGER},
+		exec_type = #{execType,jdbcType=INTEGER},
+		valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+		valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+		interval_time =
+		#{intervalTime,jdbcType=INTEGER},
+		tb_key = #{tbKey,jdbcType=VARCHAR},
+		province = #{province,jdbcType=VARCHAR},
+		city =
+		#{city,jdbcType=VARCHAR},
+		click_count = #{clickCount,jdbcType=INTEGER},
+		remark = #{remark,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 
 	<update id="audit">
 		update ef_popads_info set task_status =
@@ -340,33 +381,37 @@
 		update ef_popads_info
 		set task_status='03'
 		where id in
-		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+		<foreach close=")" collection="list" index="index" item="item"
+			open="(" separator=",">
 			#{item,jdbcType=BIGINT}
 		</foreach>
 	</update>
-	
+
 	<update id="updateOnStatusByBatch" parameterType="java.util.List">
 		update ef_popads_info
 		set task_status='03'
 		where id in
-		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+		<foreach close=")" collection="list" index="index" item="item"
+			open="(" separator=",">
 			#{item,jdbcType=BIGINT}
 		</foreach>
 	</update>
-	
+
 	<update id="updateDownStatusByBatch" parameterType="java.util.List">
 		update ef_popads_info
 		set task_status='04'
 		where id in
-		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+		<foreach close=")" collection="list" index="index" item="item"
+			open="(" separator=",">
 			#{item,jdbcType=BIGINT}
 		</foreach>
 	</update>
-	
+
 	<update id="updateDownStatus">
 		update ef_popads_info
 		set task_status='04'
-		where task_status='03'
+		where
+		task_status='03'
 	</update>
 
 	<select id="listPopadsByPage" resultMap="BaseResultMap">
@@ -384,7 +429,32 @@
 				and model_id = #{modelId,jdbcType=INTEGER}
 			</if>
 		</where>
-		order by update_time desc 
+		order by update_time desc
+		<if test="pageSize != 0 and start !=-1 ">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+
+	<select id="listPopadsMulStatusByPage" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ef_popads_info
+		<where>
+			<if test="taskName != null">
+				and task_name = #{taskName,jdbcType=VARCHAR}
+			</if>
+			<if test="taskStatus != null">
+				and task_status in
+				<foreach collection="taskStatus" item="itemStatus" index="index"
+					open="(" close=")" separator=",">
+					#{itemStatus}
+				</foreach>
+			</if>
+			<if test="modelId != -1">
+				and model_id = #{modelId,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by update_time desc
 		<if test="pageSize != 0 and start !=-1 ">
 			limit #{start},#{pageSize}
 		</if>
@@ -404,15 +474,35 @@
 			</if>
 		</where>
 	</select>
-	
-	<select id="getExeTypeById" resultType="java.lang.Integer">
-		select exec_type from ef_popads_info where  id = #{popadsId,jdbcType=INTEGER}
+
+	<select id="countPopadsMulStatusByPage" resultType="java.lang.Integer">
+		select count(*) from ef_popads_info
+		<where>
+			<if test="taskName != null">
+				and task_name = #{taskName,jdbcType=VARCHAR}
+			</if>
+			<if test="taskStatus != null">
+				and task_status in
+				<foreach collection="taskStatus" item="itemStatus" index="index"
+					open="(" close=")" separator=",">
+					#{itemStatus}
+				</foreach>
+			</if>
+			<if test="modelId != -1">
+				and model_id = #{modelId,jdbcType=INTEGER}
+			</if>
+		</where>
 	</select>
-	
+
+	<select id="getExeTypeById" resultType="java.lang.Integer">
+		select exec_type from
+		ef_popads_info where id = #{popadsId,jdbcType=INTEGER}
+	</select>
+
 	<select id="selectOnlineReleaseTask" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from ef_popads_info
-    where task_status = '03'
-  </select>
+		select
+		<include refid="Base_Column_List" />
+		from ef_popads_info
+		where task_status = '03'
+	</select>
 </mapper>

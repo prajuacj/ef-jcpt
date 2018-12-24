@@ -308,14 +308,14 @@ public class AdsPopManageController extends BaseController {
 				String publishUserParam = jsonObj.getString("publishUser");
 
 				String taskName = null;
-				String taskStatus = null;
+				String[] taskStatus = null;
 				int modelId = -1;
 				String publishUser = null;
 				if (StringUtil.isNotEmpty(taskNameParam)) {
 					taskName = taskNameParam;
 				}
 				if (StringUtil.isNotEmpty(taskStatusParam)) {
-					taskStatus = taskStatusParam;
+					taskStatus = taskStatusParam.split("\\,");
 				}
 
 				if (StringUtil.isNotEmpty(modelIdStr)) {

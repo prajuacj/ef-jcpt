@@ -16,9 +16,9 @@ public interface IAdspopService {
 
 	BasicServiceModel<String> realse(int[] popadsIds, List<MixJSBo> list);
 
-	int countPopadsByPage(String taskName, String taskStatus, int modelId, String publishUser);
+	int countPopadsByPage(String taskName, String[] taskStatus, int modelId, String publishUser);
 
-	BasicServiceModel<String> listPopadsByPage(String taskName, String taskStatus, int modelId, String publishUser,
+	BasicServiceModel<String> listPopadsByPage(String taskName, String[] taskStatus, int modelId, String publishUser,
 			int pageIndex, int pageSize);
 
 	BasicServiceModel<String> updatePopads(AdspopPublishBo bo);
