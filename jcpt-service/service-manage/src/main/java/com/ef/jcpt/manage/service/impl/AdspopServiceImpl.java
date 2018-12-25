@@ -152,7 +152,7 @@ public class AdspopServiceImpl implements IAdspopService {
 				PopadsInfo record = new PopadsInfo();
 
 				record.setCreateTime(curTime);
-				record.setExecType(modelType);
+				record.setExecType(1);
 				record.setModelId(modelId);
 				record.setModelName(bo.getModelName());
 				record.setPublishPhone(bo.getPublishPhone());
@@ -225,7 +225,7 @@ public class AdspopServiceImpl implements IAdspopService {
 					PopadsInfo record = new PopadsInfo();
 
 					record.setCreateTime(curTime);
-					record.setExecType(modelType);
+					record.setExecType(1);
 					record.setModelId(modelId);
 					record.setModelName(bo.getModelName());
 					record.setPublishPhone(bo.getPublishPhone());
