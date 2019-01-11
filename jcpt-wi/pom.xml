@@ -14,5 +14,6 @@
   	<module>wi-trade</module>
   	<module>wi-manage</module>
   	<module>wi-authen</module>
+  	<module>wi-schedule</module>
   </modules>
 </project>
