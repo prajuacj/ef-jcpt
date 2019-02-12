@@ -1,6 +1,7 @@
 package com.ef.jcpt.manage.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ef.jcpt.common.entity.BasicServiceModel;
 import com.ef.jcpt.manage.service.bo.AdspopPublishBo;
@@ -30,4 +31,6 @@ public interface IAdspopService {
 	BasicServiceModel<String> updateOnAndDownLine(int[] ids, String finish);
 
 	BasicServiceModel<String> autoReleaseTask();
+
+	BasicServiceModel<Map<Integer, Long>> getViewAndClickCount(String taskId);
 }

@@ -593,23 +593,23 @@ public class AdsPopManageController extends BaseController {
 			@RequestParam("taskId") String taskId) {
 		String cmd = "AdsPopManageController:viewpop";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
-		int intervalTime = 3 * 24 * 60 * 60;
+		// int intervalTime = 3 * 24 * 60 * 60;
 		try {
-			String key = PopadsCountKeyConst.VIEW + taskId;
-			Integer viewCount = cacheUtil.get(key, Integer.TYPE);
-			if ((null != viewCount) && (viewCount > 0)) {
-				cacheUtil.set(key, viewCount + 1, intervalTime);
-			} else {
-				cacheUtil.set(key, 1, intervalTime);
-				viewCount = 0;
-			}
+//			String key = PopadsCountKeyConst.VIEW + taskId;
+//			Integer viewCount = cacheUtil.get(key, Integer.TYPE);
+//			if ((null != viewCount) && (viewCount > 0)) {
+//				cacheUtil.set(key, viewCount + 1, intervalTime);
+//			} else {
+//				cacheUtil.set(key, 1, intervalTime);
+//				viewCount = 0;
+//			}
 			try {
 				adspopServiceImpl.addViewAndClickCountLog(taskId, mac, PopadsCountTypeConst.VIEW);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			bsm.setCode(ReqStatusConst.OK);
-			bsm.setData(String.valueOf(viewCount + 1));
+			bsm.setData(String.valueOf(1));
 			return bsm;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -626,23 +626,23 @@ public class AdsPopManageController extends BaseController {
 			@RequestParam("taskId") String taskId) {
 		String cmd = "AdsPopManageController:clickpop";
 		BasicServiceModel<String> bsm = new BasicServiceModel<String>();
-		int intervalTime = 3 * 24 * 60 * 60;
+//		int intervalTime = 3 * 24 * 60 * 60;
 		try {
-			String key = PopadsCountKeyConst.CLICK + taskId;
-			Integer clickCount = cacheUtil.get(key, Integer.TYPE);
-			if ((null != clickCount) && (clickCount > 0)) {
-				cacheUtil.set(key, clickCount + 1, intervalTime);
-			} else {
-				cacheUtil.set(key, 1, intervalTime);
-				clickCount = 0;
-			}
+//			String key = PopadsCountKeyConst.CLICK + taskId;
+//			Integer clickCount = cacheUtil.get(key, Integer.TYPE);
+//			if ((null != clickCount) && (clickCount > 0)) {
+//				cacheUtil.set(key, clickCount + 1, intervalTime);
+//			} else {
+//				cacheUtil.set(key, 1, intervalTime);
+//				clickCount = 0;
+//			}
 			try {
 				adspopServiceImpl.addViewAndClickCountLog(taskId, mac, PopadsCountTypeConst.CLICK);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			bsm.setCode(ReqStatusConst.OK);
-			bsm.setData(String.valueOf(clickCount + 1));
+			bsm.setData(String.valueOf(1));
 			return bsm;
 
 		} catch (Exception e) {
@@ -674,10 +674,20 @@ public class AdsPopManageController extends BaseController {
 				// UserInfoBo bo = token.getUser();
 				// String userName = bo.getMobile();
 
-				String viewKey = PopadsCountKeyConst.VIEW + taskId;
-				String clickKey = PopadsCountKeyConst.CLICK + taskId;
-				Integer viewCount = cacheUtil.get(viewKey, Integer.TYPE);
-				Integer clickCount = cacheUtil.get(clickKey, Integer.TYPE);
+//				String viewKey = PopadsCountKeyConst.VIEW + taskId;
+//				String clickKey = PopadsCountKeyConst.CLICK + taskId;
+//				Integer viewCount = cacheUtil.get(viewKey, Integer.TYPE);
+//				Integer clickCount = cacheUtil.get(clickKey, Integer.TYPE);
+				Long viewCount = 0L;
+				Long clickCount = 0L;
+
+				BasicServiceModel<Map<Integer, Long>> rtbsm = adspopServiceImpl.getViewAndClickCount(taskId);
+				if ((null != rtbsm) && (ReqStatusConst.OK.equals(rtbsm.getCode()))) {
+					Map<Integer, Long> vcMap = rtbsm.getData();
+					viewCount = vcMap.get(PopadsCountTypeConst.VIEW);
+					clickCount = vcMap.get(PopadsCountTypeConst.CLICK);
+				}
+
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("viewCount", String.valueOf(viewCount));
 				map.put("clickCount", String.valueOf(clickCount));

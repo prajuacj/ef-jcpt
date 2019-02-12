@@ -281,8 +281,7 @@ public class AdspopServiceImpl implements IAdspopService {
 	/**
 	 * 将图片转换成Base64编码
 	 * 
-	 * @param imgFile
-	 *            待处理图片
+	 * @param imgFile 待处理图片
 	 * @return
 	 */
 	public static String getImgStr(String imgFile) {
@@ -375,10 +374,8 @@ public class AdspopServiceImpl implements IAdspopService {
 
 		boolean yizhi = isListEqual(releasedPopIdList, releasingPopIdList);
 		if (!yizhi) {
-			//还要计算releasedJsList的百分比
-			
-			
-			
+			// 还要计算releasedJsList的百分比
+
 			bsm = sendPack(releasingPopIdList, releasedJsList);
 			if ((null != bsm) && (ReqStatusConst.OK.equals(bsm.getCode()))) {
 				popadsInfoMapper.updateDownStatus();
@@ -897,5 +894,35 @@ public class AdspopServiceImpl implements IAdspopService {
 		// \"20181117113245\"}");
 		String sendStr = HttpClientUtils.requestJsonPost(url, params);
 		System.out.println(sendStr);
+	}
+
+	@Override
+	public BasicServiceModel<Map<Integer, Long>> getViewAndClickCount(String taskId) {
+		// TODO Auto-generated method stub
+		BasicServiceModel<Map<Integer, Long>> bsm = new BasicServiceModel<Map<Integer, Long>>();
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> list = popadsViewandclickLogMapper.countViewAndClick(Integer.parseInt(taskId));
+		if ((null != list) && (list.size() > 0)) {
+			Map<Integer, Long> map = new HashMap<Integer, Long>();
+			for (Map<String, Object> retMap : list) {
+				int countType = 0;
+				long count = 0;
+				for (Map.Entry<String, Object> entry : retMap.entrySet()) {
+					if ("count_type".equals(entry.getKey())) {
+						countType = (int) entry.getValue();
+					} else if ("cnt".equals(entry.getKey())) {
+						count = (long) entry.getValue();
+					}
+				}
+				map.put(countType, count);
+			}
+			bsm.setCode(ReqStatusConst.OK);
+			bsm.setData(map);
+			return bsm;
+		} else {
+			bsm.setCode(ReqStatusConst.FAIL);
+			bsm.setMsg("查询统计数据失败！");
+			return bsm;
+		}
 	}
 }
